@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/chrome-manifest",
+  "manifest_version": 3,
+  "name": "__MSG_name__",
+  "version": "2.0.0",
+  "description": "The Revamped, Rewritten version of Scratch Addons!",
+  "default_locale": "en",
+  "background": {
+    "service_worker": "background/index.js",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": {},
+    "default_popup": "popup/index.html"
+  }
+}
