@@ -6,7 +6,7 @@
   "description": "The Revamped, Rewritten version of Scratch Addons!",
   "default_locale": "en",
   "background": {
-    "service_worker": "background/index.js",
+    "service_worker": "background/index.ts",
     "type": "module"
   },
   "action": {

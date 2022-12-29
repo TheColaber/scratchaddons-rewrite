@@ -1,3 +1,4 @@
+import { RollupOptions } from "rollup";
 import {
   chromeExtension,
   simpleReloader,
@@ -28,4 +29,4 @@ export default {
     resolve(),
     commonjs(),
   ],
-};
+} as RollupOptions;

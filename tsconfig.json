@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "types": ["@types/chrome"]
+  },
+  "include": ["src/**/*", "rollup.config.ts"]
+}
