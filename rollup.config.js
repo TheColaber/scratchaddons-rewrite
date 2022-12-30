@@ -22,7 +22,7 @@ export default {
   plugins: [
     alias({
       entries: {
-        "@": path.dirname("src"),
+        "@": path.resolve(path.dirname(""), "src"),
       },
     }),
     chromeExtension(),

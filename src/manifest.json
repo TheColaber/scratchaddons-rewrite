@@ -10,10 +10,11 @@
     "type": "module"
   },
   "action": {
-    "default_icon": {
-      "16": "images/icon-blue-16.png",
-      "32": "images/icon-blue-32.png"
-    },
-    "default_popup": "popup/index.html"
+    "default_popup": "webpages/popup/index.html"
+  },
+  "icons": {
+    "16": "images/icon-blue-16.png",
+    "32": "images/icon-blue-32.png",
+    "1024": "images/icon.png"
   }
 }
