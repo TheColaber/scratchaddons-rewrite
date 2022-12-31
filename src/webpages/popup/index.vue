@@ -1,25 +1,29 @@
 <template>
-  <div class="container">
+  <div class="container" :darkTheme="false">
     <div class="header">
       <div class="title">
         <img src="@/images/icon.svg" class="logo" />
         <span class="text">
           Scratch Addons
-          <a href="https://scratchaddons.com/changelog" title="View changelog">
+          <a
+            href="https://scratchaddons.com/changelog"
+            target="_blank"
+            title="View changelog"
+          >
             v2.0.0
           </a>
         </span>
       </div>
-      <div class="settings">
+      <button class="settings">
         <Icon icon="uil:cog" />
-      </div>
+      </button>
     </div>
     <div class="popups">
       <div class="tabs">
-        <div class="tab sel">
+        <button class="tab sel">
           <Icon icon="uil:envelope" />
-          <a>Messaging</a>
-        </div>
+          <span>Messaging</span>
+        </button>
       </div>
     </div>
   </div>
@@ -28,16 +32,21 @@
 <script lang="ts">
 import { Icon } from "@iconify/vue";
 
+const { darkTheme } = await chrome.storage.sync.get("darkTheme");
+
 export default {
-  components: {
-    Icon,
+  components: { Icon },
+  data() {
+    return {
+      darkTheme: !!darkTheme,
+    };
   },
 };
 </script>
 
 <style lang="scss">
 :root {
-  --theme: #ff7b26;
+  --theme: 255, 123, 38;
   --content-background: #fff;
 }
 
@@ -50,7 +59,7 @@ body {
   margin: 0px;
   width: 400px;
   height: 600px;
-  background-color: var(--theme);
+  background-color: rgb(var(--theme));
 }
 
 .container {
@@ -96,10 +105,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    border: none;
+    background: none;
+    color: inherit;
 
     svg {
       font-size: 24px;
     }
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px #fff;
   }
 }
 
@@ -128,10 +146,28 @@ body {
       transition: 0.2s ease;
 
       &.sel {
-        background-color: var(--theme);
+        background-color: rgb(var(--theme));
         color: #fff;
       }
+
+      svg {
+        font-size: 18px;
+      }
+
+      span {
+        padding: 0px 0px 0px 5px;
+      }
     }
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--theme), 0.35);
   }
 }
 </style>

@@ -9,4 +9,13 @@ Current Features that differ from the original Scratch Addons:
 - Nested CSS
 - Easy and Fast Icon Access
 
-<!-- Planned Features: -->
+Planned Features:
+
+- Improved folder structure for addons
+- Typed Addon APIS
+
+Planned Settings Page Features:
+
+- Onboarding
+- Improved Theming
+- Hotkeys

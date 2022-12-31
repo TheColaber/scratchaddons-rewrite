@@ -16,5 +16,6 @@
     "16": "images/icon-blue-16.png",
     "32": "images/icon-blue-32.png",
     "1024": "images/icon.png"
-  }
+  },
+  "permissions": ["storage"]
 }
