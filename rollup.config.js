@@ -12,7 +12,8 @@ import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 
-let popups = await list("src/popups");
+const popups = await getAddonManifests("src/popups");
+const addons = await getAddonManifests("src/addons");
 
 export default {
   input: "src/manifest.json",
@@ -44,7 +45,9 @@ export default {
       };
     })({
       "#addons": () => {
-        return `export const popups = ${JSON.stringify(popups)}`;
+        return `
+        export const popups = ${JSON.stringify(popups)};
+        export const addons = ${JSON.stringify(addons)};`;
       },
       "#popup-components": () => {
         return popups
@@ -80,17 +83,24 @@ export default {
   ],
 };
 
-async function list(dir) {
-  const folders = await fs.readdir(dir);
-
-  return await Promise.all(
-    folders.map(async (id) => {
-      return {
-        id,
-        manifest: JSON.parse(
-          await fs.readFile(path.resolve(dir, id, "addon.json"), "utf-8")
-        ),
-      };
+async function getAddonManifests(dir, id) {
+  const dirents = await fs.readdir(dir, { withFileTypes: true });
+  const files = await Promise.all(
+    dirents.map(async (dirent) => {
+      const res = path.resolve(dir, dirent.name);
+      if (dirent.isDirectory()) {
+        return await getAddonManifests(res, dirent.name);
+      } else {
+        if (dirent.name === "addon.json") {
+          return {
+            id,
+            manifest: JSON.parse(await fs.readFile(res, "utf-8")),
+          };
+        } else {
+          return null;
+        }
+      }
     })
   );
+  return files.filter((manifest) => !!manifest).flat();
 }

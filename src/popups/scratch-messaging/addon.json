@@ -15,6 +15,6 @@
     "component": "component.vue"
   },
   "versionAdded": "1.0.0",
-  "tags": ["popup", "recommended"],
+  "tags": ["recommended"],
   "enabledByDefault": true
 }

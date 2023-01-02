@@ -55,6 +55,31 @@
       },
       "minItems": 1
     },
+    "userscripts": {
+      "type": "array",
+      "description": "An array of userscripts that run based on their url matches.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The path to the userscript.",
+            "pattern": "\\.(js|ts)$"
+          },
+          "matches": {
+            "$ref": "#/definitions/matches"
+          },
+          "runAtComplete": {
+            "type": "boolean",
+            "default": true,
+            "description": "Determines whether the addon should be run after the document is complete loading. Defaults to true, so set to false and the scripts will run earlier."
+          }
+        },
+        "required": ["url", "matches"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
     "popup": {
       "type": "object",
       "description": "Details for the popup.",
@@ -88,29 +113,7 @@
       "items": {
         "type": "string",
         "description": "A tag.",
-        "enum": [
-          "community",
-          "editor",
-          "popup",
-          "theme",
-          "beta",
-          "danger",
-          "recommended",
-          "featured",
-          "forums",
-          "easterEgg",
-          "codeEditor",
-          "costumeEditor",
-          "projectPlayer",
-          "editorMenuBar",
-          "projectPage",
-          "profiles",
-          "studios",
-          "comments"
-        ]
-      },
-      "contains": {
-        "enum": ["community", "editor", "popup"]
+        "enum": ["beta", "danger", "recommended", "featured", "easterEgg"]
       },
       "minItems": 1
     },
@@ -119,5 +122,63 @@
       "description": "If true, the addon will be enabled when the extension is first installed. If you want your addon to be enabled by default, mention in your pr.",
       "default": false
     }
-  }
+  },
+  "definitions": {
+    "matches": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "A match rule for any URL on Scratch origin. The script will execute will execute in all pages.",
+          "const": "*"
+        },
+        {
+          "type": "string",
+          "description": "A RegEx match rule. Patterns starting with https will be treated as an absolute RegEx pattern, and patterns that don't start will be treated as an relative RegEx pattern.",
+          "pattern": "^\\^"
+        },
+        {
+          "type": "array",
+          "description": "An array that contains match rules. The script will execute if it matches any of the rules.",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "A RegEx match rule. Patterns starting with https will be treated as an absolute RegEx pattern, and patterns that don't start will be treated as an relative RegEx pattern.",
+                "pattern": "^\\^"
+              },
+              {
+                "type": "string",
+                "description": "A match rule shortcut.",
+                "enum": [
+                  "projects",
+                  "projectEmbeds",
+                  "studios",
+                  "studioComments",
+                  "profiles",
+                  "topics",
+                  "newPostScreens",
+                  "editingScreens",
+                  "forums",
+                  "scratchWWWNoProject"
+                ]
+              },
+              {
+                "type": "string",
+                "description": "A match rule shortcut matcher.",
+                "enum": ["isNotScratchWWW"]
+              },
+              {
+                "type": "string",
+                "description": "A URL match rule.",
+                "pattern": "^https://"
+              }
+            ]
+          },
+          "minItems": 1
+        }
+      ]
+    }
+  },
+  "required": ["name", "description", "tags", "versionAdded"],
+  "additionalProperties": false
 }
