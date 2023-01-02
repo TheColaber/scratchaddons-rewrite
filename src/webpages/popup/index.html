@@ -2,6 +2,28 @@
 <html>
   <head>
     <script type="module" src="./index.ts"></script>
+    <style>
+      :root {
+        --theme: 255, 123, 38;
+        --content-background: #fff;
+      }
+
+      @font-face {
+        font-family: "Sora";
+        src: url("../Sora.tff") format("truetype");
+      }
+
+      body {
+        margin: 0px;
+        width: 400px;
+        height: 600px;
+        background-color: rgb(var(--theme));
+      }
+
+      #app {
+        height: 100%;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>

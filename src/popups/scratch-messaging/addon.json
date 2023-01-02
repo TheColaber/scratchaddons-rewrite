@@ -1,0 +1,20 @@
+{
+  "name": "Scratch Messaging",
+  "description": "Available when clicking the Scratch Addons icon. Provides easy reading and replying to your Scratch messages: groups messages by project, shows full comment text and context, allows direct comment replying.",
+  "credits": [
+    {
+      "name": "World_Languages"
+    },
+    {
+      "name": "griffpatch"
+    }
+  ],
+  "popup": {
+    "name": "Messaging",
+    "icon": "envelope",
+    "component": "component.vue"
+  },
+  "versionAdded": "1.0.0",
+  "tags": ["popup", "recommended"],
+  "enabledByDefault": true
+}

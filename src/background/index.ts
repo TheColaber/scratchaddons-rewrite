@@ -1,2 +1,3 @@
-console.log("Hi!");
-chrome.action;
+import addonSetup from "./addon-setup";
+
+addonSetup();

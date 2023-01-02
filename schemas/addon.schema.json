@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "addon.json schema",
+  "title": "Scratch Addons addon manifest",
+  "description": "The manifest that describes an addon.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the addon. Make sure that the the first word is capital and the rest of the words are not. Addon names should be a noun, not a verb.",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the addon. Describe what the addon does and how to use it. Make sure to leave a period at the end of the description.",
+      "minLength": 1
+    },
+    "credits": {
+      "type": "array",
+      "description": "An array containing credits to the authors/contributors of the addon.",
+      "items": {
+        "type": "object",
+        "description": "A credited author/contributor.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the credited person.",
+            "minLength": 1
+          },
+          "link": {
+            "type": "string",
+            "description": "The link relevant to the credit.",
+            "pattern": "^https?:\\/\\/?(?:[a-z0-9-]+\\.)*[0-9a-z_-]+(?:\\.[a-z]+)+\\/.*$"
+          },
+
+          "note": {
+            "type": "object",
+            "description": "Details for the credit.",
+            "properties": {
+              "content": {
+                "type": "string",
+                "description": "The note for the credit."
+              },
+              "id": {
+                "type": "string",
+                "description": "The ID for the credit. Required if note is in use."
+              }
+            },
+            "required": ["content", "id"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "popup": {
+      "type": "object",
+      "description": "Details for the popup.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the popup.",
+          "minLength": 1
+        },
+        "icon": {
+          "type": "string",
+          "description": "The name of the popup icon.",
+          "minLength": 1
+        },
+        "component": {
+          "type": "string",
+          "description": "The file of the popup component.",
+          "minLength": 1
+        }
+      },
+      "required": ["icon", "name", "component"]
+    },
+    "versionAdded": {
+      "type": "string",
+      "description": "The version that introduced the addon.",
+      "pattern": "^1\\.\\d+\\.\\d+$"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags which are used for filtering and badges on the settings page.",
+      "items": {
+        "type": "string",
+        "description": "A tag.",
+        "enum": [
+          "community",
+          "editor",
+          "popup",
+          "theme",
+          "beta",
+          "danger",
+          "recommended",
+          "featured",
+          "forums",
+          "easterEgg",
+          "codeEditor",
+          "costumeEditor",
+          "projectPlayer",
+          "editorMenuBar",
+          "projectPage",
+          "profiles",
+          "studios",
+          "comments"
+        ]
+      },
+      "contains": {
+        "enum": ["community", "editor", "popup"]
+      },
+      "minItems": 1
+    },
+    "enabledByDefault": {
+      "type": "boolean",
+      "description": "If true, the addon will be enabled when the extension is first installed. If you want your addon to be enabled by default, mention in your pr.",
+      "default": false
+    }
+  }
+}

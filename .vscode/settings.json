@@ -1,0 +1,12 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["manifest.json"],
+      "url": "https://json.schemastore.org/chrome-manifest"
+    },
+    {
+      "fileMatch": ["addon.json"],
+      "url": "./schemas/addon.schema.json"
+    }
+  ]
+}

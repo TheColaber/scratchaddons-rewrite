@@ -20,59 +20,57 @@
     </div>
     <div class="popups">
       <div class="tabs">
-        <button class="tab sel">
+        <button class="tab sel" v-for="popup of popups">
           <Icon icon="uil:envelope" />
-          <span>Messaging</span>
+          <span>{{ popup.manifest.popup.name }}</span>
         </button>
       </div>
+      <component :is="popups[selectedTab].id" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Icon } from "@iconify/vue";
+import { popups } from "#addons";
+import { components } from "#popup-components";
 
-const { darkTheme } = await chrome.storage.sync.get("darkTheme");
+const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
+  ["darkTheme", "addonsEnabled"]
+);
+
+for (const { id, manifest } of popups) {
+  if (addonsEnabled[id]) {
+    // manifest.popup
+    // path
+  }
+}
 
 export default {
-  components: { Icon },
+  components: { Icon, ...components },
   data() {
     return {
+      popups,
       darkTheme: !!darkTheme,
+      selectedTab: 0,
     };
   },
 };
 </script>
 
 <style lang="scss">
-:root {
-  --theme: 255, 123, 38;
-  --content-background: #fff;
-}
-
-@font-face {
-  font-family: "Sora";
-  src: url("../Sora.tff") format("truetype");
-}
-
-body {
-  margin: 0px;
-  width: 400px;
-  height: 600px;
-  background-color: rgb(var(--theme));
-}
-
 .container {
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  color: #fff;
   font-family: "Sora", sans-serif;
 }
 
 .header {
   display: flex;
   height: 60px;
+  color: #fff;
 
   .title {
     flex-grow: 1;

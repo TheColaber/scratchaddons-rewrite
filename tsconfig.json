@@ -3,7 +3,16 @@
     "types": ["@types/chrome"],
     "target": "es2017",
     "module": "es2022",
-    "moduleResolution": "Node"
+    "outDir": "./dist",
+    "rootDir": ".",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "#addons": ["./virtuals/addons.d.ts"],
+      "#popup-components": ["./virtuals/popup-components.d.ts"]
+    }
   },
   "include": ["src/**/*"]
 }
