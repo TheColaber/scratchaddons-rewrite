@@ -33,7 +33,7 @@
 <script lang="ts">
 import { Icon } from "@iconify/vue";
 import { popups } from "#addons";
-import { components } from "#popup-components";
+import * as components from "#popup-components";
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]

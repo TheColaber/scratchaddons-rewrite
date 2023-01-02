@@ -47,10 +47,10 @@ export default {
         return `export const popups = ${JSON.stringify(popups)}`;
       },
       "#popup-components": () => {
-        const imports = popups
+        return popups
           .map(
             ({ id, manifest }) =>
-              `import _${id.replace(/-/g, "")} from "${path
+              `export { default as "${id}" } from "${path
                 .resolve(
                   path.dirname(""),
                   `./src/popups/${id}/${manifest.popup.component}`
@@ -58,10 +58,6 @@ export default {
                 .replace(/\\/g, "/")}";`
           )
           .join("\n");
-        const exports = `export const components = {${popups
-          .map(({ id }) => `"${id}": _${id.replace(/-/g, "")}`)
-          .join(",")}}`;
-        return imports + exports;
       },
     }),
     alias({
