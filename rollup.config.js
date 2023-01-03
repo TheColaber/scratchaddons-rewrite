@@ -15,6 +15,7 @@ import commonjs from "@rollup/plugin-commonjs";
 const popups = await getAddonManifests("src/popups");
 const addons = await getAddonManifests("src/addons");
 
+/** @type {import("rollup").InputOptions} */
 export default {
   input: "src/manifest.json",
   output: {
@@ -22,6 +23,21 @@ export default {
     format: "esm",
   },
   plugins: [
+    {
+      name: "test",
+      async generateBundle() {
+        this.emitFile({
+          type: "asset",
+          fileName: "images/icon-gray-16.png",
+          source: await fs.readFile("src/images/icon-gray-16.png"),
+        });
+        this.emitFile({
+          type: "asset",
+          fileName: "images/icon-gray-32.png",
+          source: await fs.readFile("src/images/icon-gray-32.png"),
+        });
+      },
+    },
     ((modules) => {
       return {
         name: "virtual",

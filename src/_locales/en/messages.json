@@ -1,5 +1,26 @@
 {
   "name": {
     "message": "Scratch Addons"
+  },
+  "15min": {
+    "message": "For 15 minutes"
+  },
+  "1hour": {
+    "message": "For 1 hour"
+  },
+  "8hours": {
+    "message": "For 8 hours"
+  },
+  "24hours": {
+    "message": "For 24 hours"
+  },
+  "untilEnabled": {
+    "message": "Until I turn it back on"
+  },
+  "mute": {
+    "message": "Mute"
+  },
+  "unmute": {
+    "message": "Unmute"
   }
 }
