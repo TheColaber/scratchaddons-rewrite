@@ -1,3 +1,2 @@
-import addonSetup from "./addon-setup";
-
-addonSetup();
+import "./addon-setup";
+import "./run-addons";
