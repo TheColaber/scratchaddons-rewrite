@@ -1,11 +1,5 @@
 import { addons } from "#addons";
-export default function ({
-  addonsEnabled,
-  l10nUrls,
-}: {
-  addonsEnabled: [];
-  l10nUrls: string[];
-}) {
+export default function (addonsEnabled: any, l10nUrls: string[]) {
   for (const id in addonsEnabled) {
     if (addonsEnabled[id]) {
       const addon = addons.find((addon) => addon.id === id);

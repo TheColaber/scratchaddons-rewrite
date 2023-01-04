@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs/promises";
 
+import dynamicImportVars from "@rollup/plugin-dynamic-import-vars";
 import { chromeExtension } from "rollup-plugin-chrome-extension";
 import typescript from "@rollup/plugin-typescript";
 import vue from "rollup-plugin-vue";
@@ -82,6 +83,7 @@ export default {
           .join("\n");
       },
     }),
+    // dynamicImportVars(),
     chromeExtension(),
     vue({ target: "browser" }),
     postcss(),
