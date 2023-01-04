@@ -21,10 +21,28 @@ const periods = [
   },
 ];
 
+chrome.contextMenus.create({
+  id: "unmute",
+  title: chrome.i18n.getMessage("unmute"),
+  contexts: ["action"],
+});
+chrome.contextMenus.create({
+  id: "mute",
+  title: chrome.i18n.getMessage("mute"),
+  contexts: ["action"],
+});
+for (const period of periods) {
+  chrome.contextMenus.create({
+    id: period.id,
+    parentId: "mute",
+    title: chrome.i18n.getMessage(period.id),
+    contexts: ["action"],
+  });
+}
+
 (async function () {
   const { muted = false } = await chrome.storage.local.get("muted");
-  if (muted) contextMenuMuted();
-  else contextMenuUnmuted();
+  contextMenuMuted(muted);
 })();
 
 chrome.contextMenus.onClicked.addListener(
@@ -32,73 +50,33 @@ chrome.contextMenus.onClicked.addListener(
     if (parentMenuItemId === "mute") {
       const period = periods.find(({ id }) => menuItemId === id);
       if (!period) throw "Unknown context menu item";
-      contextMenuMuted();
-      muteForMins(period.mins);
+      contextMenuMuted(true);
+      if (period.mins !== Infinity)
+        chrome.alarms.create("muted", { delayInMinutes: period.mins });
     } else if (menuItemId === "unmute") {
-      contextMenuUnmuted();
-      unmute();
+      contextMenuMuted(false);
     }
   }
 );
 
-let showingMenu: string | null = null;
-
-function contextMenuUnmuted() {
-  if (showingMenu === "unmute") chrome.contextMenus.remove("unmute");
-  showingMenu = "mute";
-  chrome.contextMenus.create({
-    id: "mute",
-    title: chrome.i18n.getMessage("mute"),
-    contexts: ["action"],
-  });
-  for (const period of periods) {
-    chrome.contextMenus.create({
-      id: period.id,
-      title: chrome.i18n.getMessage(period.id),
-      parentId: "mute",
-      contexts: ["action"],
-    });
-  }
+function contextMenuMuted(muted: boolean) {
+  chrome.contextMenus.update("mute", { visible: !muted });
+  chrome.contextMenus.update("unmute", { visible: muted });
+  chrome.storage.local.set({ muted });
 
   const versionName = chrome.runtime.getManifest().version_name || "";
   const prerelease = versionName.includes("-prerelease");
+  const icon = muted ? "icon-gray" : prerelease ? "icon-blue" : "icon";
   chrome.action.setIcon({
     path: {
-      16: prerelease ? "../images/icon-blue-16.png" : "../images/icon-16.png",
-      32: prerelease ? "../images/icon-blue-32.png" : "../images/icon-32.png",
+      16: `../images/${icon}-16.png`,
+      32: `../images/${icon}-32.png`,
     },
   });
-}
-
-function contextMenuMuted() {
-  if (showingMenu === "mute") chrome.contextMenus.remove("mute");
-  showingMenu = "unmute";
-  chrome.contextMenus.create({
-    id: "unmute",
-    title: chrome.i18n.getMessage("unmute"),
-    contexts: ["action"],
-  });
-  chrome.action.setIcon({
-    path: {
-      16: "../images/icon-gray-16.png",
-      32: "../images/icon-gray-32.png",
-    },
-  });
-}
-
-function muteForMins(mins: number) {
-  if (mins !== Infinity)
-    chrome.alarms.create("muted", { delayInMinutes: mins });
-  chrome.storage.local.set({ muted: true });
-}
-
-function unmute() {
-  chrome.storage.local.set({ muted: false });
 }
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "muted") {
-    unmute();
-    contextMenuUnmuted();
+    contextMenuMuted(false);
   }
 });

@@ -1,10 +1,8 @@
 import path from "path";
 import fs from "fs/promises";
 
-import alias from "@rollup/plugin-alias";
 import { chromeExtension } from "rollup-plugin-chrome-extension";
 import typescript from "@rollup/plugin-typescript";
-import image from "@rollup/plugin-image";
 import vue from "rollup-plugin-vue";
 import postcss from "rollup-plugin-postcss";
 import replace from "@rollup/plugin-replace";
@@ -26,6 +24,11 @@ export default {
     {
       name: "test",
       async generateBundle() {
+        this.emitFile({
+          type: "asset",
+          fileName: "images/icon.svg",
+          source: await fs.readFile("src/images/icon.svg"),
+        });
         this.emitFile({
           type: "asset",
           fileName: "images/icon-gray-16.png",
@@ -79,13 +82,7 @@ export default {
           .join("\n");
       },
     }),
-    alias({
-      entries: {
-        "@": path.resolve(path.dirname(""), "src"),
-      },
-    }),
     chromeExtension(),
-    image(),
     vue({ target: "browser" }),
     postcss(),
     replace({

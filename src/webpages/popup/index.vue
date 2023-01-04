@@ -2,7 +2,7 @@
   <div class="container" :darkTheme="false">
     <div class="header">
       <div class="title">
-        <img src="@/images/icon.svg" class="logo" />
+        <img :src="'../../images/icon.svg'" class="logo" />
         <span class="text">
           Scratch Addons
           <a

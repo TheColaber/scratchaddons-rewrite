@@ -10,6 +10,33 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
   // });
 
   // const { globalState, addonsWithUserscripts, styles } = await getInfo(url);
+
+  const l10nUrls = await getL10NURLs(url);
+
+  const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
+
+  chrome.scripting.executeScript({
+    target: { tabId },
+    injectImmediately: true,
+    world: "MAIN",
+    func: async (script: string, params) => {
+      const { default: module } = await import(script);
+      module(params);
+    },
+    args: [
+      chrome.runtime.getURL("mainworld/index.js"),
+      { addonsEnabled, l10nUrls },
+    ],
+  });
+  // if (!styles.length) return;
+  // chrome.scripting.insertCSS({
+  //   target: { tabId },
+  //   // origin: chrome.scripting.StyleOrigin.AUTHOR,
+  //   files: styles.map((style) => style.href),
+  // });
+});
+
+async function getL10NURLs(url: string) {
   const cookie = await chrome.cookies.get({ url, name: "scratchlanguage" });
   const langCode = cookie ? cookie.value || "en" : "en";
 
@@ -22,24 +49,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
   }
   const enJSON = chrome.runtime.getURL("addons-l10n/en");
   if (!urls.includes(enJSON)) urls.push(enJSON);
-
-  chrome.scripting.executeScript({
-    target: { tabId },
-    injectImmediately: true,
-    world: "MAIN",
-    func: async (script: string, urls) => {
-      const { default: module } = await import(script);
-      module(urls);
-    },
-    args: [chrome.runtime.getURL("mainworld/index.js"), urls],
-  });
-  // if (!styles.length) return;
-  // chrome.scripting.insertCSS({
-  //   target: { tabId },
-  //   // origin: chrome.scripting.StyleOrigin.AUTHOR,
-  //   files: styles.map((style) => style.href),
-  // });
-});
+  return urls;
+}
 
 // async function getInfo(url) {
 //   const manifests = await loadAddonManifests();
