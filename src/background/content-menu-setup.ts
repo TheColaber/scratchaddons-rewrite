@@ -21,6 +21,7 @@ const periods = [
   },
 ];
 
+chrome.contextMenus.removeAll();
 chrome.contextMenus.create({
   id: "unmute",
   title: chrome.i18n.getMessage("unmute"),

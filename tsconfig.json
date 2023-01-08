@@ -11,6 +11,7 @@
     "resolveJsonModule": true,
     "paths": {
       "#addons": ["./virtuals/addons.d.ts"],
+      "#popups": ["./virtuals/addons.d.ts"],
       "#popup-components": ["./virtuals/popup-components.d.ts"]
     }
   },

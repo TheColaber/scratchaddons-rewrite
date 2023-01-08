@@ -14,32 +14,38 @@
           </a>
         </span>
       </div>
-      <button class="settings">
+      <button class="settings" @click="openSettingsPage()">
         <Icon icon="uil:cog" />
       </button>
     </div>
     <div class="popups">
       <div class="tabs">
-        <button class="tab sel" v-for="popup of popups">
+        <button
+          class="tab"
+          :class="{ sel: id === selectedTab }"
+          v-for="id of ORDER"
+        >
           <Icon icon="uil:envelope" />
-          <span>{{ popup.manifest.popup.name }}</span>
+          <span>{{ popups[id].popup.name }}</span>
         </button>
       </div>
-      <component :is="popups[selectedTab].id" />
+      <component :is="selectedTab" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Icon } from "@iconify/vue";
-import { popups } from "#addons";
+import * as popups from "#popups";
 import * as components from "#popup-components";
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
-for (const { id, manifest } of popups) {
+for (const id in popups) {
+  /* @ts-ignore */
+  const manifest = popups[id];
   if (addonsEnabled[id]) {
     // manifest.popup
     // path
@@ -50,10 +56,19 @@ export default {
   components: { Icon, ...components },
   data() {
     return {
+      ORDER: ["scratch-messaging"],
       popups,
       darkTheme: !!darkTheme,
-      selectedTab: 0,
+      selectedTab: "",
     };
+  },
+  created() {
+    this.selectedTab = this.ORDER[0];
+  },
+  methods: {
+    openSettingsPage() {
+      chrome.runtime.openOptionsPage();
+    },
   },
 };
 </script>

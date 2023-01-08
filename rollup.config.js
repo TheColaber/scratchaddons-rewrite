@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs/promises";
 
 import dynamicImportVars from "@rollup/plugin-dynamic-import-vars";
+import virtual from "@rollup/plugin-virtual";
 import { chromeExtension } from "rollup-plugin-chrome-extension";
 import typescript from "@rollup/plugin-typescript";
 import vue from "rollup-plugin-vue";
@@ -14,74 +15,33 @@ import commonjs from "@rollup/plugin-commonjs";
 const popups = await getAddonManifests("src/popups");
 const addons = await getAddonManifests("src/addons");
 
-/** @type {import("rollup").InputOptions} */
+/** @type {import("rollup").RollupOptions} */
 export default {
   input: "src/manifest.json",
   output: {
     dir: "dist",
     format: "esm",
+    chunkFileNames: "chunk_[name].js",
   },
   plugins: [
-    {
-      name: "test",
-      async generateBundle() {
-        this.emitFile({
-          type: "asset",
-          fileName: "images/icon.svg",
-          source: await fs.readFile("src/images/icon.svg"),
-        });
-        this.emitFile({
-          type: "asset",
-          fileName: "images/icon-gray-16.png",
-          source: await fs.readFile("src/images/icon-gray-16.png"),
-        });
-        this.emitFile({
-          type: "asset",
-          fileName: "images/icon-gray-32.png",
-          source: await fs.readFile("src/images/icon-gray-32.png"),
-        });
-      },
-    },
-    ((modules) => {
-      return {
-        name: "virtual",
-        resolveId(id, importer) {
-          if (id in modules) {
-            return id + ":sep:" + importer;
-          }
-          return null;
-        },
-        load(id) {
-          const match = id.match(/(.*):sep:(.*)/);
-          if (match) {
-            const [, idWithoutSep, file] = match;
-            if (idWithoutSep in modules) {
-              return modules[idWithoutSep](file);
-            }
-          }
-
-          return null;
-        },
-      };
-    })({
-      "#addons": () => {
-        return `
-        export const popups = ${JSON.stringify(popups)};
-        export const addons = ${JSON.stringify(addons)};`;
-      },
-      "#popup-components": () => {
-        return popups
-          .map(
-            ({ id, manifest }) =>
-              `export { default as "${id}" } from "${path
-                .resolve(
-                  path.dirname(""),
-                  `./src/popups/${id}/${manifest.popup.component}`
-                )
-                .replace(/\\/g, "/")}";`
-          )
-          .join("\n");
-      },
+    virtual({
+      "#addons": addons
+        .map(({ id, path }) => `export { default as "${id}" } from "${path}";`)
+        .join("\n"),
+      "#popups": popups
+        .map(({ id, path }) => `export { default as "${id}" } from "${path}";`)
+        .join("\n"),
+      "#popup-components": popups
+        .map(
+          ({ id, manifest }) =>
+            `export { default as "${id}" } from "${path
+              .resolve(
+                path.dirname(""),
+                `./src/popups/${id}/${manifest.popup.component}`
+              )
+              .replace(/\\/g, "/")}";`
+        )
+        .join("\n"),
     }),
     // dynamicImportVars(),
     chromeExtension(),
@@ -92,12 +52,15 @@ export default {
       preventAssignment: true,
     }),
     typescript(),
-    json(),
+    json({
+      preferConst: true,
+    }),
     resolve(),
     commonjs(),
   ],
 };
 
+/** @returns {{id: string, manifest: any, path:string}[]} */
 async function getAddonManifests(dir, id) {
   const dirents = await fs.readdir(dir, { withFileTypes: true });
   const files = await Promise.all(
@@ -110,6 +73,7 @@ async function getAddonManifests(dir, id) {
           return {
             id,
             manifest: JSON.parse(await fs.readFile(res, "utf-8")),
+            path: res.replace(/\\/g, "/"),
           };
         } else {
           return null;

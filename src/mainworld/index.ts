@@ -1,8 +1,10 @@
-import { addons } from "#addons";
+import * as addons from "#addons";
+
 export default function (addonsEnabled: any, l10nUrls: string[]) {
   for (const id in addonsEnabled) {
     if (addonsEnabled[id]) {
-      const addon = addons.find((addon) => addon.id === id);
+      /* @ts-ignore */
+      const addon = addons[id];
       if (!addon) continue;
       const { manifest } = addon;
       console.log(manifest.userscripts);

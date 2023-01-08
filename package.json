@@ -11,6 +11,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-typescript": "^10.0.1",
+    "@rollup/plugin-virtual": "^3.0.1",
     "@types/chrome": "^0.0.206",
     "rollup": "^3.9.0",
     "rollup-plugin-chrome-extension": "^3.6.10",
@@ -22,7 +23,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w"
+    "build": "node rollup",
+    "dev": "node rollup -w"
   }
 }
