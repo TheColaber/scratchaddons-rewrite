@@ -15,7 +15,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
 
   const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
 
-  chrome.scripting.executeScript({
+  const result = await chrome.scripting.executeScript({
     target: { tabId },
     injectImmediately: true,
     world: "MAIN",
@@ -29,6 +29,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
       l10nUrls,
     ],
   });
+  console.log(result);
+  
   // if (!styles.length) return;
   // chrome.scripting.insertCSS({
   //   target: { tabId },

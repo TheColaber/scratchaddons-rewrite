@@ -4,9 +4,10 @@ import * as popups from "#popups";
 (async function () {
   const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
 
-  for (const id in { ...addons, ...popups }) {
+  const allAddons = { ...addons, ...popups }
+  for (const id in allAddons) {
     /* @ts-ignore */
-    const manifest = addons[id];
+    const manifest = allAddons[id];
     if (addonsEnabled[id] === undefined)
       addonsEnabled[id] = !!manifest.enabledByDefault;
   }

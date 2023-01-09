@@ -7,11 +7,14 @@ Current Features that differ from the original Scratch Addons:
 - Typescript
 - Auto Refresh
 - Nested CSS
+- Scoped CSS
 - Easy and Fast Icon Access
+- Improved folder structure for addons
+- Faster addon loading
+- Faster popup loading
 
 Planned Features:
 
-- Improved folder structure for addons
 - Typed Addon APIS
 
 Planned Settings Page Features:
