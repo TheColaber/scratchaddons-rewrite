@@ -58,13 +58,18 @@ export default {
           const manifest = JSON.parse(code);
 
           if (manifest.userscripts) {
-            manifest.userscripts = manifest.userscripts.map((userscript) => {           
-              return {...userscript, url: ("addons/editor/code/test-addon/" + userscript.url).replace(".ts", ".js")};
-            })
+            manifest.userscripts = manifest.userscripts.map((userscript) => {
+              return {
+                ...userscript,
+                url: (
+                  "addons/editor/code/test-addon/" + userscript.url
+                ).replace(".ts", ".js"),
+              };
+            });
           }
-          return JSON.stringify(manifest)
+          return JSON.stringify(manifest);
         }
-      }
+      },
     },
     json({
       preferConst: true,

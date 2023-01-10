@@ -13,6 +13,7 @@
     "@rollup/plugin-typescript": "^10.0.1",
     "@rollup/plugin-virtual": "^3.0.1",
     "@types/chrome": "^0.0.206",
+    "prettier": "^2.8.2",
     "rollup": "^3.9.0",
     "rollup-plugin-chrome-extension": "^3.6.10",
     "rollup-plugin-postcss": "^4.0.2",
@@ -24,6 +25,7 @@
   "type": "module",
   "scripts": {
     "build": "node rollup",
-    "dev": "node rollup -w"
+    "dev": "node rollup -w",
+    "prettier": "prettier --write ."
   }
 }
