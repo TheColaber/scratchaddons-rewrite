@@ -42,8 +42,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
 async function getL10NURLs(url: string) {
   const cookie = await chrome.cookies.get({ url, name: "scratchlanguage" });
   const langCode = cookie ? cookie.value || "en" : "en";
-
-  const urls = [chrome.runtime.getURL(`addons-l10n/${cookie?.value}`)];
+    
+  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
   if (langCode === "pt") {
     urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
   }

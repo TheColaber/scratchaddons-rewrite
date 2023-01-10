@@ -21,7 +21,7 @@ export default {
   output: {
     dir: "dist",
     format: "esm",
-    chunkFileNames: "chunk_[name].js",
+    chunkFileNames: "chunk.[name].js",
   },
   plugins: [
     virtual({
@@ -43,7 +43,6 @@ export default {
         )
         .join("\n"),
     }),
-    // dynamicImportVars(),
     chromeExtension(),
     vue({ target: "browser" }),
     postcss(),
@@ -52,6 +51,27 @@ export default {
       preventAssignment: true,
     }),
     typescript(),
+    {
+      name: "addon-manifest",
+      transform(code, id) {
+        if (path.basename(id) === "addon.json") {
+          const manifest = JSON.parse(code);
+
+          if (manifest.userscripts) {
+            manifest.userscripts = manifest.userscripts.map((userscript) => {
+              const asset = this.emitFile({
+                type: 'asset',
+                fileName: ("addons/editor/code/test-addon/" + userscript.url).replace(".ts", ".js"),
+                // TODO: Make this import correctly
+                source: `import("${"addons/editor/code/test-addon/" + userscript.url}")`,
+              })              
+              return this.getFileName(asset);
+            })
+          }
+          return JSON.stringify(manifest)
+        }
+      }
+    },
     json({
       preferConst: true,
     }),
