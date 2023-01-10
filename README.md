@@ -1,8 +1,10 @@
 # Scratch Addons Rewrite
 
-Current Features that differ from the original Scratch Addons:
+Internal Features:
 
 - Manifest Version 3
+
+Dev Features:
 - Vue 3 Webpages (Popup/Settings Page)
 - Typescript
 - Auto Refresh
@@ -10,15 +12,14 @@ Current Features that differ from the original Scratch Addons:
 - Scoped CSS
 - Easy and Fast Icon Access
 - Improved folder structure for addons
+
+User Features:
 - Faster addon loading
 - Faster popup loading
 
 Planned Features:
 
 - Typed Addon APIS
-
-Planned Settings Page Features:
-
 - Onboarding
 - Improved Theming
 - Hotkeys
