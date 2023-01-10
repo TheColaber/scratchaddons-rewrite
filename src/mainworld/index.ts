@@ -1,8 +1,6 @@
 import * as addons from "#addons";
 
-export default function (addonsEnabled: any, l10nUrls: string[]) {
-  console.log("test", addonsEnabled, l10nUrls);
-  
+export default function (addonsEnabled: any, l10nUrls: string[], baseUrl: string) {  
   for (const id in addonsEnabled) {
     if (addonsEnabled[id]) {
       /* @ts-ignore */
@@ -10,9 +8,10 @@ export default function (addonsEnabled: any, l10nUrls: string[]) {
       console.log(addon);
       
       if (!addon) continue;
-      console.log(addon.userscripts);
+      for (const {url} of addon.userscripts) {
+        import(baseUrl + url)
+
+      }
     }
   }
-  console.log(l10nUrls);
-  // console.log(addons);
 }

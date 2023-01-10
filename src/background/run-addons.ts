@@ -19,14 +19,15 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     target: { tabId },
     injectImmediately: true,
     world: "MAIN",
-    func: async (script: string, addonsEnabled, l10nUrls) => {
+    func: async (script: string, addonsEnabled, l10nUrls, baseUrl) => {
       const { default: module } = await import(script);
-      module(addonsEnabled, l10nUrls);
+      module(addonsEnabled, l10nUrls, baseUrl);
     },
     args: [
       chrome.runtime.getURL("mainworld/index.js"),
       addonsEnabled,
       l10nUrls,
+      chrome.runtime.getURL("")
     ],
   });
   console.log(result);

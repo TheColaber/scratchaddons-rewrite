@@ -58,14 +58,8 @@ export default {
           const manifest = JSON.parse(code);
 
           if (manifest.userscripts) {
-            manifest.userscripts = manifest.userscripts.map((userscript) => {
-              const asset = this.emitFile({
-                type: 'asset',
-                fileName: ("addons/editor/code/test-addon/" + userscript.url).replace(".ts", ".js"),
-                // TODO: Make this import correctly
-                source: `import("${"addons/editor/code/test-addon/" + userscript.url}")`,
-              })              
-              return this.getFileName(asset);
+            manifest.userscripts = manifest.userscripts.map((userscript) => {           
+              return {...userscript, url: ("addons/editor/code/test-addon/" + userscript.url).replace(".ts", ".js")};
             })
           }
           return JSON.stringify(manifest)
