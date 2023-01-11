@@ -23,11 +23,12 @@
         <button
           class="tab"
           :class="{ sel: id === selectedTab }"
+          @click="selectedTab = id"
           v-for="id of ORDER"
         >
           <Icon :icon="'uil:' + popups[id].icon" />
           <span>{{ popups[id].name }}</span>
-          <a target="_blank" :href="'fullscreen.html?id=' + id">
+          <a target="_blank" :href="'fullscreen.html?id=' + id" v-if="id !== 'settings-page'">
             <Icon icon="uil:external-link-alt" />
           </a>
         </button>
@@ -110,7 +111,7 @@ export default {
 }
 
 .container {
-  height: 100%;
+  height: inherit;
   display: flex;
   flex-direction: column;
   font-family: "Sora", sans-serif;
@@ -245,4 +246,3 @@ export default {
   }
 }
 </style>
-        
