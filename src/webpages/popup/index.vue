@@ -25,8 +25,11 @@
           :class="{ sel: id === selectedTab }"
           v-for="id of ORDER"
         >
-          <Icon icon="uil:envelope" />
-          <span>{{ popups[id].popup.name }}</span>
+          <Icon :icon="'uil:' + popups[id].icon" />
+          <span>{{ popups[id].name }}</span>
+          <a target="_blank" :href="'fullscreen.html?id=' + id">
+            <Icon icon="uil:external-link-alt" />
+          </a>
         </button>
       </div>
       <component :is="selectedTab" />
@@ -38,26 +41,29 @@
 import { Icon } from "@iconify/vue";
 import * as popups from "#popups";
 import * as components from "#popup-components";
+import settingsComponent from "../settings/index.vue"
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
+const enabledPopups = {}
 for (const id in popups) {
-  /* @ts-ignore */
-  const manifest = popups[id];
   if (addonsEnabled[id]) {
-    // manifest.popup
-    // path
+  /* @ts-ignore */
+  enabledPopups[id] = popups[id].popup
   }
 }
 
+/* @ts-ignore */
+enabledPopups["settings-page"] = {name: "Addons", icon: "wrench"}
+
 export default {
-  components: { Icon, ...components },
+  components: { Icon, ...components, "settings-page": settingsComponent },
   data() {
     return {
-      ORDER: ["scratch-messaging"],
-      popups,
+      ORDER: ["scratch-messaging", "settings-page"],
+      popups: enabledPopups,
       darkTheme: !!darkTheme,
       selectedTab: "",
     };
@@ -82,9 +88,25 @@ export default {
 </script>
 
 <style lang="scss">
-.darkTheme {
-  --content-background: #2a2a2a;
-  --control-border: #000;
+.container {
+  --content-background: #f7f7f7;
+  --control-border: #aaa;
+
+  /* Button */
+  --button-background: #ecebeb;
+  --button-hover-background: #d4d3d3;
+  
+  --content-text: #000;
+
+  &.darkTheme {
+    --content-background: #2a2a2a;
+    --control-border: #000;
+    /* Button */
+    --button-background: #222;
+    --button-hover-background: #1a1a1a;
+
+    --content-text: #fff;
+  }
 }
 
 .container {
@@ -155,7 +177,6 @@ export default {
     padding-bottom: 0px;
     display: flex;
     border-bottom: 1px solid var(--control-border);
-    color: var(--content-text);
     height: 35px;
     overflow: hidden;
 
@@ -164,15 +185,24 @@ export default {
       align-items: center;
       padding: 0px 12px;
       font-size: 12px;
+      color: var(--content-text);
       background-color: var(--button-background);
       border: 1px solid var(--control-border);
       border-bottom: none;
       border-radius: 12px 12px 0 0;
       transition: 0.2s ease;
 
+      &:hover {
+        background-color: var(--button-hover-background);
+      }
+
       &.sel {
         background-color: rgb(var(--theme));
         color: #fff;
+
+        a svg {
+          color: #fff;
+        }
       }
 
       svg {
@@ -182,17 +212,37 @@ export default {
       span {
         padding: 0px 0px 0px 5px;
       }
+
+      a {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        
+        svg {
+          color: var(--content-text);
+          font-size: 10px;
+          margin-left: 1px;
+          padding: 2px;
+
+          &:hover {
+            background: #fff;
+            color: rgb(var(--theme));
+            border-radius: 2px;
+          }
+        }
+      }
     }
   }
 
   button {
-    font-family: inherit;
+    font-family: inherit; 
   }
 
   button:focus-visible,
   a:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(var(--theme), 0.35);
+    box-shadow: 0 0 0 3px var(--content-text);
   }
 }
 </style>
+        
