@@ -18,10 +18,10 @@ jobs:
 
       - name: Build
         run: npm run build
-        
+
       - name: Get tree
         run: tree
-    
+
       - name: Push
         uses: s0/git-publish-subdir-action@v2.6.0
         env:

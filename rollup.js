@@ -8,9 +8,6 @@ if (arg === "-w") {
   const watcher = watch(config);
   watcher.on("event", (event) => {
     console.log(event.code);
-    if (event.code === "START") {
-      generateTypes();
-    }
 
     if (event.code === "ERROR") {
       console.log(event.error);
@@ -21,18 +18,11 @@ if (arg === "-w") {
     }
   });
 } else {
-  rollup(config);
-}
-
-async function generateTypes() {
-  // const popups = await getAddonManifests("src/popups");
-  // // await fs.mkdir("dist/types", { recursive: true });
-  // // await fs.writeFile(
-  // //   "dist/types/addons.d.ts",
-  // //   popups
-  // //     .map(({ id, path }) => `export { default as data } from "${path}";`)
-  // //     .join("\n")
-  // // );
+  (async () => {
+    const bundle = await rollup(config);
+    await bundle.write({ dir: "dist" });
+    process.exit(0);
+  })();
 }
 
 async function getAddonManifests(dir, id) {

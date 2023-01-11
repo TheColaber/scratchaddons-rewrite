@@ -5,6 +5,7 @@ Internal Features:
 - Manifest Version 3
 
 Dev Features:
+
 - Vue 3 Webpages (Popup/Settings Page)
 - Typescript
 - Auto Refresh
@@ -14,6 +15,7 @@ Dev Features:
 - Improved folder structure for addons
 
 User Features:
+
 - Faster addon loading
 - Faster popup loading
 
