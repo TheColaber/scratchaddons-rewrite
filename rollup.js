@@ -20,7 +20,7 @@ if (arg === "-w") {
 } else {
   (async () => {
     const bundle = await rollup(config);
-    await bundle.write({ dir: "dist" });
+    await bundle.write({ dir: "dist", chunkFileNames: config.output.chunkFileNames });
     process.exit(0);
   })();
 }

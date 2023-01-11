@@ -1,4 +1,4 @@
-name: Generate a build and push to another branch
+name: Build and push branch
 
 on:
   push:
@@ -19,9 +19,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Get tree
-        run: tree
-
       - name: Push
         uses: s0/git-publish-subdir-action@v2.6.0
         env:
@@ -29,4 +26,4 @@ jobs:
           BRANCH: build
           FOLDER: dist
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: "Build: ({sha}) {msg}"
+          MESSAGE: "Build {sha}"
