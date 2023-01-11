@@ -1,5 +1,5 @@
-import { a as addons } from '../_virtual__addons-351de710.js';
-import { p as popups } from '../_virtual__popups-b141c43b.js';
+import { a as addons } from '../chunk._virtual__addons.js';
+import { p as popups } from '../chunk._virtual__popups.js';
 
 (async function () {
     const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");

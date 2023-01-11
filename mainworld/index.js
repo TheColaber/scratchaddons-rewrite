@@ -1,4 +1,4 @@
-import { a as addons } from '../_virtual__addons-351de710.js';
+import { a as addons } from '../chunk._virtual__addons.js';
 
 async function index (addonsEnabled, l10nUrls, baseUrl) {
     for (const id in addonsEnabled) {
