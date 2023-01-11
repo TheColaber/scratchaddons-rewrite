@@ -7364,7 +7364,7 @@ function fixSize(value) {
 /**
  * Render icon
  */
-const render = (
+const render$1 = (
 // Icon must be validated before calling this function
 icon, 
 // Partial properties
@@ -7662,7 +7662,7 @@ const Icon = defineComponent({
             : null;
         // Validate icon object
         if (!icon) {
-            return render(emptyIcon, props);
+            return render$1(emptyIcon, props);
         }
         // Add classes
         let newProps = props;
@@ -7675,12 +7675,60 @@ const Icon = defineComponent({
             };
         }
         // Render icon
-        return render({
+        return render$1({
             ...defaultIconProps,
             ...icon.data,
         }, newProps);
     },
 });
+
+const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
+  ["darkTheme", "addonsEnabled"]
+);
+
+var script = {
+  components: { Icon },
+  data() {
+    return {
+      darkTheme: !!darkTheme,
+    };
+  },
+  methods: {
+    async switchMode() {
+      this.darkTheme = !this.darkTheme;
+      await chrome.storage.sync.set({ darkTheme: this.darkTheme });
+    },
+  },
+};
+
+const _hoisted_1 = { class: "container" };
+const _hoisted_2 = { class: "navbar" };
+const _hoisted_3 = ["src"];
+const _hoisted_4 = /*#__PURE__*/createBaseVNode("div", { class: "title" }, "Settings", -1 /* HOISTED */);
+const _hoisted_5 = /*#__PURE__*/createBaseVNode("div", { class: "main" }, null, -1 /* HOISTED */);
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_Icon = resolveComponent("Icon");
+
+  return (openBlock(), createElementBlock("div", _hoisted_1, [
+    createBaseVNode("div", _hoisted_2, [
+      createBaseVNode("img", {
+        src: '../../images/icon.svg',
+        class: "logo"
+      }, null, 8 /* PROPS */, _hoisted_3),
+      _hoisted_4,
+      createBaseVNode("button", {
+        class: "themeSwitcher",
+        onClick: _cache[0] || (_cache[0] = (...args) => ($options.switchMode && $options.switchMode(...args)))
+      }, [
+        createVNode(_component_Icon, {
+          icon: $data.darkTheme ? 'uil:moon' : 'uil:sun'
+        }, null, 8 /* PROPS */, ["icon"])
+      ])
+    ]),
+    _hoisted_5
+  ]))
+}
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -7709,4 +7757,10 @@ function styleInject(css, ref) {
   }
 }
 
-export { Fragment as F, Icon as I, createElementBlock as a, createBaseVNode as b, createApp as c, createVNode as d, renderList as e, createBlock as f, resolveDynamicComponent as g, createTextVNode as h, normalizeClass as n, openBlock as o, resolveComponent as r, styleInject as s, toDisplayString as t };
+var css_248z = ".logo {\n  height: 30px;\n  margin-inline-end: 20px;\n}\n\n.themeSwitcher {\n  padding: 0 20px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background: none;\n  color: inherit;\n}";
+styleInject(css_248z);
+
+script.render = render;
+script.__file = "src/webpages/settings/index.vue";
+
+export { Fragment as F, Icon as I, styleInject as a, createElementBlock as b, createApp as c, createBaseVNode as d, createVNode as e, createBlock as f, resolveDynamicComponent as g, createTextVNode as h, resolveComponent as i, normalizeClass as n, openBlock as o, renderList as r, script as s, toDisplayString as t };
