@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :darkTheme="darkTheme">
+  <div class="container" :class="{ darkTheme: darkTheme }">
     <div class="header">
       <div class="title">
         <img :src="'../../images/icon.svg'" class="logo" />
@@ -64,6 +64,14 @@ export default {
   },
   created() {
     this.selectedTab = this.ORDER[0];
+
+    chrome.storage.sync.onChanged.addListener((changes) => {
+      console.log(changes);
+      if (changes.darkTheme) {
+        this.darkTheme = changes.darkTheme.newValue;
+        console.log(this.darkTheme);
+      }
+    });
   },
   methods: {
     openSettingsPage() {
@@ -74,6 +82,11 @@ export default {
 </script>
 
 <style lang="scss">
+.darkTheme {
+  --content-background: #2a2a2a;
+  --control-border: #000;
+}
+
 .container {
   height: 100%;
   display: flex;
