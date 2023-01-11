@@ -21,6 +21,8 @@ User Features:
 
 Planned Features:
 
+- Theming
+- Superpresets
 - Typed Addon APIS
 - Onboarding
 - Improved Theming
