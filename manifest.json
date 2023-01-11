@@ -2,11 +2,11 @@
   "manifest_version": 3,
   "name": "__MSG_name__",
   "version": "2.0.0",
-  "version_name": "2.0.0-prerelease",
   "description": "The Revamped, Rewritten version of Scratch Addons!",
+  "version_name": "2.0.0-prerelease",
   "default_locale": "en",
   "background": {
-    "service_worker": "background/index.ts",
+    "service_worker": "background/index.js",
     "type": "module"
   },
   "action": {
@@ -22,11 +22,26 @@
     "https://api.scratch.mit.edu/*",
     "https://clouddata.scratch.mit.edu/*"
   ],
-  "permissions": ["storage", "scripting", "cookies", "contextMenus", "alarms"],
+  "permissions": [
+    "storage",
+    "scripting",
+    "cookies",
+    "contextMenus",
+    "alarms"
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["mainworld/*", "images/*", "webpages/Sora.ttf", "chunk.*.js"],
-      "matches": ["https://*.scratch.mit.edu/*", "https://scratchaddons.com/*"]
+      "resources": [
+        "mainworld/*",
+        "images/*",
+        "webpages/Sora.ttf",
+        "chunk.*.js",
+        "addons/**/*.js"
+      ],
+      "matches": [
+        "https://*.scratch.mit.edu/*",
+        "https://scratchaddons.com/*"
+      ]
     }
   ]
 }

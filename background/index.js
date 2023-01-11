@@ -1,64 +1,73 @@
+import { a as addons } from '../_virtual__addons-351de710.js';
+import { p as popups } from '../_virtual__popups-b141c43b.js';
+
+(async function () {
+    const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
+    const allAddons = Object.assign(Object.assign({}, addons), popups);
+    for (const id in allAddons) {
+        /* @ts-ignore */
+        const manifest = allAddons[id];
+        if (addonsEnabled[id] === undefined)
+            addonsEnabled[id] = !!manifest.enabledByDefault;
+    }
+    chrome.storage.sync.set({ addonsEnabled });
+})();
+
 chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
-  if (!url) return;
-  if (status !== "loading") return;
-
-  // chrome.scripting.executeScript({
-  //   target: { tabId },
-  //   injectImmediately: true,
-  //   world: chrome.scripting.ExecutionWorld.MAIN,
-  //   files: ["content-scripts/fix-console.js", "content-scripts/prototype-handler.js", "content-scripts/load-redux.js"],
-  // });
-
-  // const { globalState, addonsWithUserscripts, styles } = await getInfo(url);
-
-  const l10nUrls = await getL10NURLs(url);
-
-  const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-
-  const result = await chrome.scripting.executeScript({
-    target: { tabId },
-    injectImmediately: true,
-    world: "MAIN",
-    func: async (script: string, addonsEnabled, l10nUrls) => {
-      const { default: module } = await import(script);
-      module(addonsEnabled, l10nUrls);
-    },
-    args: [
-      chrome.runtime.getURL("mainworld/index.js"),
-      addonsEnabled,
-      l10nUrls,
-    ],
-  });
-  console.log(result);
-  
-  // if (!styles.length) return;
-  // chrome.scripting.insertCSS({
-  //   target: { tabId },
-  //   // origin: chrome.scripting.StyleOrigin.AUTHOR,
-  //   files: styles.map((style) => style.href),
-  // });
+    if (!url)
+        return;
+    if (status !== "loading")
+        return;
+    // chrome.scripting.executeScript({
+    //   target: { tabId },
+    //   injectImmediately: true,
+    //   world: chrome.scripting.ExecutionWorld.MAIN,
+    //   files: ["content-scripts/fix-console.js", "content-scripts/prototype-handler.js", "content-scripts/load-redux.js"],
+    // });
+    // const { globalState, addonsWithUserscripts, styles } = await getInfo(url);
+    const l10nUrls = await getL10NURLs(url);
+    const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
+    const result = await chrome.scripting.executeScript({
+        target: { tabId },
+        injectImmediately: true,
+        world: "MAIN",
+        func: async (script, addonsEnabled, l10nUrls, baseUrl) => {
+            const { default: module } = await import(script);
+            module(addonsEnabled, l10nUrls, baseUrl);
+        },
+        args: [
+            chrome.runtime.getURL("mainworld/index.js"),
+            addonsEnabled,
+            l10nUrls,
+            chrome.runtime.getURL(""),
+        ],
+    });
+    console.log(result);
+    // if (!styles.length) return;
+    // chrome.scripting.insertCSS({
+    //   target: { tabId },
+    //   // origin: chrome.scripting.StyleOrigin.AUTHOR,
+    //   files: styles.map((style) => style.href),
+    // });
 });
-
-async function getL10NURLs(url: string) {
-  const cookie = await chrome.cookies.get({ url, name: "scratchlanguage" });
-  const langCode = cookie ? cookie.value || "en" : "en";
-    
-  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
-  if (langCode === "pt") {
-    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
-  }
-  if (langCode.includes("-")) {
-    urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
-  }
-  const enJSON = chrome.runtime.getURL("addons-l10n/en");
-  if (!urls.includes(enJSON)) urls.push(enJSON);
-  return urls;
+async function getL10NURLs(url) {
+    const cookie = await chrome.cookies.get({ url, name: "scratchlanguage" });
+    const langCode = cookie ? cookie.value || "en" : "en";
+    const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+    if (langCode === "pt") {
+        urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
+    }
+    if (langCode.includes("-")) {
+        urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
+    }
+    const enJSON = chrome.runtime.getURL("addons-l10n/en");
+    if (!urls.includes(enJSON))
+        urls.push(enJSON);
+    return urls;
 }
-
 // async function getInfo(url) {
 //   const manifests = await loadAddonManifests();
 //   const { addonsEnabled, addonSettings } = await loadSettings();
-
 //   const data = {
 //     globalState: {},
 //     addonsWithUserscripts: [],
@@ -66,7 +75,6 @@ async function getL10NURLs(url: string) {
 //   };
 //   manifests.forEach(({ addonId, manifest }) => {
 //     if (!addonsEnabled[addonId]) return;
-
 //     const scripts = [];
 //     for (const script of manifest.userscripts || []) {
 //       if (urlMatches({ url }, script, addonId))
@@ -75,7 +83,6 @@ async function getL10NURLs(url: string) {
 //           runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
 //         });
 //     }
-
 //     for (let i = 0; i < manifest.userstyles?.length; i++) {
 //       const style = manifest.userstyles[i];
 //       // const styleHref = chrome.runtime.getURL(`/addons/${addonId}/${style.url}`);
@@ -109,16 +116,12 @@ async function getL10NURLs(url: string) {
 //         });
 //       // }
 //     }
-
 //     if (scripts.length) {
 //       data.addonsWithUserscripts.push({ addonId, scripts });
 //     }
 //   });
-
 //   data.globalState = scratchAddons.globalState._target;
-
 //   return data;
-
 //   // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
 //   // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
 //   function urlMatches(data, scriptOrStyle, addonId) {
@@ -136,7 +139,6 @@ async function getL10NURLs(url: string) {
 //       scratchWWWNoProject:
 //         /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/scratch2)?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher)\/?)?$/,
 //     };
-
 //     const WELL_KNOWN_MATCHERS = {
 //       isNotScratchWWW: (match) => {
 //         const { projects, projectEmbeds, scratchWWWNoProject } = WELL_KNOWN_PATTERNS;
@@ -149,9 +151,7 @@ async function getL10NURLs(url: string) {
 //         );
 //       },
 //     };
-
 //     if (scriptOrStyle.if && !matchesIf(scriptOrStyle, addonSettings[addonId])) return false;
-
 //     const url = data.url;
 //     const parsedURL = new URL(url);
 //     const { matches, _scratchDomainImplied } = scriptOrStyle;
@@ -183,13 +183,11 @@ async function getL10NURLs(url: string) {
 //     }
 //     return false;
 //   }
-
 //   function matchesIf(injectable, settings) {
 //     // injectable.if is guaranteed to exist
 //     // addonEnabled and settings are AND-ed
 //     // settings keys are AND-ed
 //     // addonEnabled and settings values are OR-ed
-
 //     /**
 //      * Formula:
 //      * NOT (
@@ -202,7 +200,6 @@ async function getL10NURLs(url: string) {
 //      *  (settings exists AND OR(AND(settings do **NOT** match)))
 //      * )
 //      */
-
 //     return !(
 //       (injectable.if.addonEnabled?.length &&
 //         (Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled]).every(
@@ -217,18 +214,15 @@ async function getL10NURLs(url: string) {
 //         ))
 //     );
 //   }
-
 //   function urlMatchesLegacyPattern(pattern, urlUrl) {
 //     const patternUrl = new URL(pattern);
 //     // We assume both URLs start with https://scratch.mit.edu
-
 //     const patternPath = patternUrl.pathname.split("/");
 //     const urlPath = urlUrl.pathname.split("/");
 //     // Implicit slash at the end of the URL path, if it's not there
 //     if (urlPath[urlPath.length - 1] !== "") urlPath.push("");
 //     // Implicit slash at the end of the pattern, unless it's a wildcard
 //     if (patternPath[patternPath.length - 1] !== "" && patternPath[patternPath.length - 1] !== "*") patternPath.push("");
-
 //     while (patternPath.length) {
 //       // shift() removes the first item of an array, and returns it
 //       const patternItem = patternPath.shift();
@@ -238,3 +232,81 @@ async function getL10NURLs(url: string) {
 //     return true;
 //   }
 // }
+
+const periods = [
+    {
+        id: "15min",
+        mins: 15,
+    },
+    {
+        id: "1hour",
+        mins: 60,
+    },
+    {
+        id: "8hours",
+        mins: 480,
+    },
+    {
+        id: "24hours",
+        mins: 1440,
+    },
+    {
+        id: "untilEnabled",
+        mins: Infinity,
+    },
+];
+chrome.contextMenus.removeAll();
+chrome.contextMenus.create({
+    id: "unmute",
+    title: chrome.i18n.getMessage("unmute"),
+    contexts: ["action"],
+});
+chrome.contextMenus.create({
+    id: "mute",
+    title: chrome.i18n.getMessage("mute"),
+    contexts: ["action"],
+});
+for (const period of periods) {
+    chrome.contextMenus.create({
+        id: period.id,
+        parentId: "mute",
+        title: chrome.i18n.getMessage(period.id),
+        contexts: ["action"],
+    });
+}
+(async function () {
+    const { muted = false } = await chrome.storage.local.get("muted");
+    contextMenuMuted(muted);
+})();
+chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
+    if (parentMenuItemId === "mute") {
+        const period = periods.find(({ id }) => menuItemId === id);
+        if (!period)
+            throw "Unknown context menu item";
+        contextMenuMuted(true);
+        if (period.mins !== Infinity)
+            chrome.alarms.create("muted", { delayInMinutes: period.mins });
+    }
+    else if (menuItemId === "unmute") {
+        contextMenuMuted(false);
+    }
+});
+function contextMenuMuted(muted) {
+    chrome.contextMenus.update("mute", { visible: !muted });
+    chrome.contextMenus.update("unmute", { visible: muted });
+    chrome.storage.local.set({ muted });
+    const versionName = chrome.runtime.getManifest().version_name || "";
+    const prerelease = versionName.includes("-prerelease");
+    const icon = muted ? "icon-gray" : prerelease ? "icon-blue" : "icon";
+    chrome.action.setIcon({
+        path: {
+            16: `../images/${icon}-16.png`,
+            32: `../images/${icon}-32.png`,
+        },
+    });
+}
+chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === "muted") {
+        contextMenuMuted(false);
+    }
+});

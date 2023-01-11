@@ -1,4 +1,0 @@
-{
-  "allOf": [{ "$ref": "./base.schema.json" }],
-  "required": ["userscripts"]
-}
