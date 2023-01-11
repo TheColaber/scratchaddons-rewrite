@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :darkTheme="false">
+  <div class="container" :darkTheme="darkTheme">
     <div class="header">
       <div class="title">
         <img :src="'../../images/icon.svg'" class="logo" />
@@ -76,7 +76,6 @@ export default {
 <style lang="scss">
 .container {
   height: 100%;
-  width: 100%;
   display: flex;
   flex-direction: column;
   font-family: "Sora", sans-serif;
@@ -98,7 +97,7 @@ export default {
       font-weight: 400;
 
       a {
-        color: #fff;
+        color: inherit;
         margin: 5px;
         text-decoration: none;
         opacity: 0.75;

@@ -9,6 +9,10 @@
     "service_worker": "background/index.ts",
     "type": "module"
   },
+  "options_ui": {
+    "open_in_tab": true,
+    "page": "webpages/settings/index.html"
+  },
   "action": {
     "default_popup": "webpages/popup/index.html"
   },
