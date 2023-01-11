@@ -4953,6 +4953,17 @@ function cloneVNode(vnode, extraProps, mergeRef = false) {
 function createTextVNode(text = ' ', flag = 0) {
     return createVNode(Text, null, text, flag);
 }
+/**
+ * @private
+ */
+function createCommentVNode(text = '', 
+// when used as the v-else branch, the comment node must be created as a
+// block to ensure correct updates.
+asBlock = false) {
+    return asBlock
+        ? (openBlock(), createBlock(Comment, null, text))
+        : createVNode(Comment, null, text);
+}
 function normalizeVNode(child) {
     if (child == null || typeof child === 'boolean') {
         // empty placeholder
@@ -7763,4 +7774,4 @@ styleInject(css_248z);
 script.render = render;
 script.__file = "src/webpages/settings/index.vue";
 
-export { Fragment as F, Icon as I, styleInject as a, createElementBlock as b, createApp as c, createBaseVNode as d, createVNode as e, createBlock as f, resolveDynamicComponent as g, createTextVNode as h, resolveComponent as i, normalizeClass as n, openBlock as o, renderList as r, script as s, toDisplayString as t };
+export { Fragment as F, Icon as I, styleInject as a, createElementBlock as b, createApp as c, createBaseVNode as d, createVNode as e, createBlock as f, resolveDynamicComponent as g, createTextVNode as h, createCommentVNode as i, resolveComponent as j, normalizeClass as n, openBlock as o, renderList as r, script as s, toDisplayString as t };
