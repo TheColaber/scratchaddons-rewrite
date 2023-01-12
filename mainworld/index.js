@@ -1,4 +1,7 @@
 import { a as addons } from '../chunk._virtual__addons.js';
+import '../addons/editor/code/test-addon/addon.js';
+import '../chunk.define-manifest.js';
+import '../addons/editor/code/test-addon/userscript.js';
 
 async function index (addonsEnabled, l10nUrls, baseUrl) {
     for (const id in addonsEnabled) {
@@ -6,10 +9,10 @@ async function index (addonsEnabled, l10nUrls, baseUrl) {
             /* @ts-ignore */
             const addon = addons[id];
             console.log(addon);
-            if (!addon)
+            if (!addon || !addon.userscripts)
                 continue;
-            for (const { url } of addon.userscripts) {
-                const { default: func } = await import(baseUrl + url);
+            for (const { func, matches } of addon.userscripts) {
+                console.log(matches);
                 func({ params: true });
             }
         }

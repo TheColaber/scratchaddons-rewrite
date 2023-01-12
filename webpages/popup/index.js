@@ -1,23 +1,9 @@
-import { I as Icon, s as script$2, a as styleInject, c as createApp, b as createElementBlock, d as createBaseVNode, e as createVNode, F as Fragment, r as renderList, f as createBlock, g as resolveDynamicComponent, n as normalizeClass, o as openBlock, h as createTextVNode, t as toDisplayString, i as createCommentVNode, j as resolveComponent } from '../../chunk.index.js';
+import { a as styleInject, c as createApp, I as Icon, s as script$1 } from '../../chunk.index.js';
 import { p as popups } from '../../chunk._virtual__popups.js';
+import { c as createElementBlock, e as createBaseVNode, f as createVNode, F as Fragment, u as renderList, v as createBlock, w as resolveDynamicComponent, x as normalizeClass, y as createTextVNode, o as openBlock, z as toDisplayString, A as createCommentVNode, r as resolveComponent } from '../../chunk.runtime-core.esm-bundler.js';
+import '../../chunk.define-manifest.js';
 
-await chrome.storage.sync.get("addonSettings");
-
-var script$1 = {
-  props: ["manifest"],
-};
-
-function render$1(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createElementBlock("div", null, "test"))
-}
-
-script$1.render = render$1;
-script$1.__file = "src/popups/scratch-messaging/component.vue";
-
-var components = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  'scratch-messaging': script$1
-});
+console.log(popups);
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
@@ -26,16 +12,16 @@ const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
 const enabledPopups = {};
 for (const id in popups) {
   if (addonsEnabled[id]) {
-  /* @ts-ignore */
-  enabledPopups[id] = popups[id].popup;
+    /* @ts-ignore */
+    enabledPopups[id] = popups[id].popup;
   }
 }
 
 /* @ts-ignore */
-enabledPopups["settings-page"] = {name: "Addons", icon: "wrench"};
+enabledPopups["settings-page"] = { name: "Addons", icon: "wrench" };
 
 var script = {
-  components: { Icon, ...components, "settings-page": script$2 },
+  components: { Icon, "settings-page": script$1 },
   data() {
     return {
       ORDER: ["scratch-messaging", "settings-page"],

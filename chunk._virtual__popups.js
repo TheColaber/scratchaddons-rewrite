@@ -1,32 +1,39 @@
-const name = "Scratch Messaging";
-const description = "Available when clicking the Scratch Addons icon. Provides easy reading and replying to your Scratch messages: groups messages by project, shows full comment text and context, allows direct comment replying.";
-const credits = [
-	{
-		name: "World_Languages"
-	},
-	{
-		name: "griffpatch"
-	}
-];
-const popup = {
-	name: "Messaging",
-	icon: "envelope",
-	component: "component.vue"
+import { d as defineManifest } from './chunk.define-manifest.js';
+import { c as createElementBlock, o as openBlock } from './chunk.runtime-core.esm-bundler.js';
+
+await chrome.storage.sync.get("addonSettings");
+
+var script = {
+  props: ["manifest"],
 };
-const versionAdded = "1.0.0";
-const tags = [
-	"recommended"
-];
-const enabledByDefault = true;
-var addon = {
-	name: name,
-	description: description,
-	credits: credits,
-	popup: popup,
-	versionAdded: versionAdded,
-	tags: tags,
-	enabledByDefault: enabledByDefault
-};
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (openBlock(), createElementBlock("div", null, "test"))
+}
+
+script.render = render;
+script.__file = "src/popups/scratch-messaging/component.vue";
+
+var addon = defineManifest({
+    name: "Scratch Messaging",
+    description: "Available when clicking the Scratch Addons icon. Provides easy reading and replying to your Scratch messages: groups messages by project, shows full comment text and context, allows direct comment replying.",
+    credits: [
+        {
+            name: "World_Languages",
+        },
+        {
+            name: "griffpatch",
+        },
+    ],
+    popup: {
+        component: script,
+        name: "Messaging",
+        icon: "envelope",
+    },
+    versionAdded: "1.0.0",
+    tags: ["recommended"],
+    enabledByDefault: true,
+});
 
 var popups = /*#__PURE__*/Object.freeze({
   __proto__: null,
