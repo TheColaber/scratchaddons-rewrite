@@ -46,25 +46,29 @@
 import { Icon } from "@iconify/vue";
 import * as popups from "#popups";
 import settingsComponent from "../settings/index.vue";
-console.log(popups);
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
-const enabledPopups = {};
+const enabledPopups = {
+  "settings-page": { name: "Addons", icon: "wrench", component: settingsComponent }
+};
 for (const id in popups) {
   if (addonsEnabled[id]) {
     /* @ts-ignore */
     enabledPopups[id] = popups[id].popup;
   }
 }
+const components = {};
+for (const id in enabledPopups) {
+  /* @ts-ignore */
+  components[id] = enabledPopups[id].component
+}
 
-/* @ts-ignore */
-enabledPopups["settings-page"] = { name: "Addons", icon: "wrench" };
-
+Object.entries(enabledPopups)
 export default {
-  components: { Icon, "settings-page": settingsComponent },
+  components: { Icon, ...components  },
   data() {
     return {
       ORDER: ["scratch-messaging", "settings-page"],

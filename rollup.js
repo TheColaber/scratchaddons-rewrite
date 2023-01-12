@@ -27,26 +27,3 @@ if (arg === "-w") {
     process.exit(0);
   })();
 }
-
-async function getAddonManifests(dir, id) {
-  const dirents = await fs.readdir(dir, { withFileTypes: true });
-  const files = await Promise.all(
-    dirents.map(async (dirent) => {
-      const res = path.resolve(dir, dirent.name);
-      if (dirent.isDirectory()) {
-        return await getAddonManifests(res, dirent.name);
-      } else {
-        if (dirent.name === "addon.json") {
-          return {
-            id,
-            manifest: JSON.parse(await fs.readFile(res, "utf-8")),
-            path: res.replace(/\\/g, "/"),
-          };
-        } else {
-          return null;
-        }
-      }
-    })
-  );
-  return files.filter((manifest) => !!manifest).flat();
-}
