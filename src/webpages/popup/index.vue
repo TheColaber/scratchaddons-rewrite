@@ -28,7 +28,11 @@
         >
           <Icon :icon="'uil:' + popups[id].icon" />
           <span>{{ popups[id].name }}</span>
-          <a target="_blank" :href="'fullscreen.html?id=' + id" v-if="id !== 'settings-page'">
+          <a
+            target="_blank"
+            :href="'fullscreen.html?id=' + id"
+            v-if="id !== 'settings-page'"
+          >
             <Icon icon="uil:external-link-alt" />
           </a>
         </button>
@@ -41,26 +45,26 @@
 <script lang="ts">
 import { Icon } from "@iconify/vue";
 import * as popups from "#popups";
-import * as components from "#popup-components";
-import settingsComponent from "../settings/index.vue"
+import settingsComponent from "../settings/index.vue";
+console.log(popups);
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
-const enabledPopups = {}
+const enabledPopups = {};
 for (const id in popups) {
   if (addonsEnabled[id]) {
-  /* @ts-ignore */
-  enabledPopups[id] = popups[id].popup
+    /* @ts-ignore */
+    enabledPopups[id] = popups[id].popup;
   }
 }
 
 /* @ts-ignore */
-enabledPopups["settings-page"] = {name: "Addons", icon: "wrench"}
+enabledPopups["settings-page"] = { name: "Addons", icon: "wrench" };
 
 export default {
-  components: { Icon, ...components, "settings-page": settingsComponent },
+  components: { Icon, "settings-page": settingsComponent },
   data() {
     return {
       ORDER: ["scratch-messaging", "settings-page"],
@@ -96,7 +100,7 @@ export default {
   /* Button */
   --button-background: #ecebeb;
   --button-hover-background: #d4d3d3;
-  
+
   --content-text: #000;
 
   &.darkTheme {
@@ -218,7 +222,7 @@ export default {
         height: 100%;
         display: flex;
         align-items: center;
-        
+
         svg {
           color: var(--content-text);
           font-size: 10px;
@@ -236,7 +240,7 @@ export default {
   }
 
   button {
-    font-family: inherit; 
+    font-family: inherit;
   }
 
   button:focus-visible,

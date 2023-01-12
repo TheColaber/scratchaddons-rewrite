@@ -11,9 +11,10 @@ export default async function (
       const addon = addons[id];
       console.log(addon);
 
-      if (!addon) continue;
-      for (const { url } of addon.userscripts) {
-        const { default: func } = await import(baseUrl + url);
+      if (!addon || !addon.userscripts) continue;
+      for (const { func, matches } of addon.userscripts) {
+        console.log(matches);
+
         func({ params: true });
       }
     }

@@ -1,7 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
 
-import dynamicImportVars from "@rollup/plugin-dynamic-import-vars";
 import virtual from "@rollup/plugin-virtual";
 import { chromeExtension } from "rollup-plugin-chrome-extension";
 import typescript from "@rollup/plugin-typescript";
@@ -25,23 +24,8 @@ export default {
   },
   plugins: [
     virtual({
-      "#addons": addons
-        .map(({ id, path }) => `export { default as "${id}" } from "${path}";`)
-        .join("\n"),
-      "#popups": popups
-        .map(({ id, path }) => `export { default as "${id}" } from "${path}";`)
-        .join("\n"),
-      "#popup-components": popups
-        .map(
-          ({ id, manifest }) =>
-            `export { default as "${id}" } from "${path
-              .resolve(
-                path.dirname(""),
-                `./src/popups/${id}/${manifest.popup.component}`
-              )
-              .replace(/\\/g, "/")}";`
-        )
-        .join("\n"),
+      "#addons": addons.join("\n"),
+      "#popups": popups.join("\n"),
     }),
     chromeExtension(),
     vue({ target: "browser" }),
@@ -51,26 +35,6 @@ export default {
       preventAssignment: true,
     }),
     typescript(),
-    {
-      name: "addon-manifest",
-      transform(code, id) {
-        if (path.basename(id) === "addon.json") {
-          const manifest = JSON.parse(code);
-
-          if (manifest.userscripts) {
-            manifest.userscripts = manifest.userscripts.map((userscript) => {
-              return {
-                ...userscript,
-                url: (
-                  "addons/editor/code/test-addon/" + userscript.url
-                ).replace(".ts", ".js"),
-              };
-            });
-          }
-          return JSON.stringify(manifest);
-        }
-      },
-    },
     json({
       preferConst: true,
     }),
@@ -87,16 +51,13 @@ async function getAddonManifests(dir, id) {
       const res = path.resolve(dir, dirent.name);
       if (dirent.isDirectory()) {
         return await getAddonManifests(res, dirent.name);
+      } else if (dirent.name === "addon.ts") {
+        return `export { default as "${id}" } from "${res.replace(
+          /\\/g,
+          "/"
+        )}";`;
       } else {
-        if (dirent.name === "addon.json") {
-          return {
-            id,
-            manifest: JSON.parse(await fs.readFile(res, "utf-8")),
-            path: res.replace(/\\/g, "/"),
-          };
-        } else {
-          return null;
-        }
+        return null;
       }
     })
   );
