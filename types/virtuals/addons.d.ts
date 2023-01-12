@@ -1,3 +1,7 @@
 import { AddonManifest } from "../addon-manifest";
 
-export const testAddon: AddonManifest;
+declare var addons: {
+	[id: string]: AddonManifest
+};
+
+export default addons;
