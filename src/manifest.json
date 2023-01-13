@@ -32,7 +32,7 @@
       "resources": [
         "mainworld/index.ts",
         "images/*",
-        "webpages/*.css",
+        "webpages/css/*",
         "chunk.*.js",
         "addons/**/*.ts"
       ],
