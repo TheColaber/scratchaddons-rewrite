@@ -31,7 +31,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     // const { globalState, addonsWithUserscripts, styles } = await getInfo(url);
     const l10nUrls = await getL10NURLs(url);
     const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-    const result = await chrome.scripting.executeScript({
+    await chrome.scripting.executeScript({
         target: { tabId },
         injectImmediately: true,
         world: "MAIN",
@@ -45,7 +45,17 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
             l10nUrls,
         ],
     });
-    console.log(result);
+    await chrome.scripting.executeScript({
+        target: { tabId },
+        injectImmediately: true,
+        world: "MAIN",
+        func: async (id) => {
+            window.scratchAddons.events.dispatchEvent(new CustomEvent("addonChange", { detail: { id } }));
+        },
+        args: [
+            "scratch-messaging",
+        ],
+    });
     // if (!styles.length) return;
     // chrome.scripting.insertCSS({
     //   target: { tabId },

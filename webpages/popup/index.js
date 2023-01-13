@@ -1,27 +1,28 @@
-import { a as styleInject, c as createApp, I as Icon, s as script$1 } from '../../chunk.index.js';
+import { a as styleInject, c as createApp, s as script$1, I as Icon } from '../../chunk.index.js';
 import { p as popups } from '../../chunk._virtual__popups.js';
-import { c as createElementBlock, e as createBaseVNode, f as createVNode, F as Fragment, u as renderList, v as createBlock, w as resolveDynamicComponent, x as normalizeClass, y as createTextVNode, o as openBlock, z as toDisplayString, A as createCommentVNode, r as resolveComponent } from '../../chunk.runtime-core.esm-bundler.js';
+import { c as createElementBlock, e as createBaseVNode, f as createVNode, F as Fragment, v as renderList, w as createBlock, x as resolveDynamicComponent, y as normalizeClass, z as createTextVNode, o as openBlock, t as toDisplayString, A as createCommentVNode, r as resolveComponent } from '../../chunk.runtime-core.esm-bundler.js';
 import '../../chunk.define-manifest.js';
-
-console.log(popups);
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
-const enabledPopups = {};
+const enabledPopups = {
+  "settings-page": { name: "Addons", icon: "wrench", component: script$1 }
+};
 for (const id in popups) {
   if (addonsEnabled[id]) {
     /* @ts-ignore */
     enabledPopups[id] = popups[id].popup;
   }
 }
-
-/* @ts-ignore */
-enabledPopups["settings-page"] = { name: "Addons", icon: "wrench" };
-
+const components = {};
+for (const id in enabledPopups) {
+  /* @ts-ignore */
+  components[id] = enabledPopups[id].component;
+}
 var script = {
-  components: { Icon, "settings-page": script$1 },
+  components: { Icon, ...components  },
   data() {
     return {
       ORDER: ["scratch-messaging", "settings-page"],

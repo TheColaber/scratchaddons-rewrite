@@ -1,14 +1,23 @@
 import { d as defineManifest } from './chunk.define-manifest.js';
-import { c as createElementBlock, o as openBlock } from './chunk.runtime-core.esm-bundler.js';
+import { c as createElementBlock, t as toDisplayString, o as openBlock } from './chunk.runtime-core.esm-bundler.js';
 
-await chrome.storage.sync.get("addonSettings");
+const storagePromise = chrome.storage.sync.get("addonSettings");
 
 var script = {
   props: ["manifest"],
+  data() {
+    return {
+      storage: {}
+    }
+  },
+  async created() {
+    const { addonSettings = {} } = await storagePromise;
+    this.storage = addonSettings;
+  }
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createElementBlock("div", null, "test"))
+  return (openBlock(), createElementBlock("div", null, "test " + toDisplayString($data.storage), 1 /* TEXT */))
 }
 
 script.render = render;
