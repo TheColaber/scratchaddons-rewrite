@@ -30,7 +30,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "mainworld/*",
+        "mainworld/index.ts",
         "images/*",
         "webpages/Sora.ttf",
         "chunk.*.js",

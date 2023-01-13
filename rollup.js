@@ -1,6 +1,4 @@
 import { rollup, watch } from "rollup";
-import fs from "fs/promises";
-import path from "path";
 import config from "./rollup.config.js";
 
 const [, , arg] = process.argv;

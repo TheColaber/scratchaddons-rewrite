@@ -1,6 +1,17 @@
 import * as addons from "#addons";
 import MATCH_PATTERNS from "./matches";
 
+
+window.scratchAddons = {
+  console: { ...console },
+  events: new EventTarget()
+}
+
+window.scratchAddons.events.addEventListener("addonChange", (event) => {
+  console.log(event);
+  
+})
+
 export default async function (
   addonsEnabled: any,
   l10nUrls: string[]

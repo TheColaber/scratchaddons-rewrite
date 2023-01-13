@@ -1,11 +1,23 @@
 <template>
-  <div>test</div>
+  <div>test
+
+    {{ storage }}
+  </div>
 </template>
 
 <script lang="ts">
-const { addonSettings = {} } = await chrome.storage.sync.get("addonSettings");
+const storagePromise = chrome.storage.sync.get("addonSettings");
 
 export default {
   props: ["manifest"],
+  data() {
+    return {
+      storage: {}
+    }
+  },
+  async created() {
+    const { addonSettings = {} } = await storagePromise
+    this.storage = addonSettings;
+  }
 };
 </script>
