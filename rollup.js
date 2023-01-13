@@ -3,12 +3,12 @@ import config from "./rollup.config.js";
 
 const [, , arg] = process.argv;
 if (arg === "-w") {
-  watch()
+  watchConfig()
 } else {
-  build()
+  buildConfig()
 }
 
-function watch() {
+function watchConfig() {
   const watcher = watch(config);
   watcher.on("event", (event) => {
     if (event.code === "BUNDLE_START") {
@@ -26,7 +26,7 @@ function watch() {
   });
 }
 
-async function build() {
+async function buildConfig() {
   const bundle = await rollup(config);
   await bundle.write({
     dir: "dist",

@@ -100,27 +100,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.container {
-  --content-background: #f7f7f7;
-  --control-border: #aaa;
-
-  /* Button */
-  --button-background: #ecebeb;
-  --button-hover-background: #d4d3d3;
-
-  --content-text: #000;
-
-  &.darkTheme {
-    --content-background: #2a2a2a;
-    --control-border: #000;
-    /* Button */
-    --button-background: #222;
-    --button-hover-background: #1a1a1a;
-
-    --content-text: #fff;
-  }
-}
+<style lang="scss" scoped>
+@import url("../css/colors.css");
+@import url("../css/sora.css");
 
 .container {
   height: inherit;

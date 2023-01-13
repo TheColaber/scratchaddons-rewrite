@@ -34,7 +34,10 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import url("../css/colors.css");
+@import url("../css/sora.css");
+
 .logo {
   height: 30px;
   margin-inline-end: 20px;
