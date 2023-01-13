@@ -15,5 +15,5 @@
       "#popup-components": ["./types/virtuals/popup-components.d.ts"]
     }
   },
-  "include": ["src/**/*", "src/*"]
+  "include": ["src/**/*", "src/*", "types/*"]
 }
