@@ -1,4 +1,4 @@
-import { d as defineComponent, i as isFunction, a as isString, b as createRenderer, h, c as createElementBlock, e as createBaseVNode, f as createVNode, r as resolveComponent, o as openBlock, g as extend, j as isOn, k as isModelListener, l as isArray, m as hyphenate, n as camelize, p as capitalize, q as isSpecialBooleanAttr, s as includeBooleanAttr, u as callWithAsyncErrorHandling } from './chunk.runtime-core.esm-bundler.js';
+import { d as defineComponent, i as isFunction, a as isString, b as createRenderer, h, c as createElementBlock, e as createBaseVNode, f as createVNode, r as resolveComponent, o as openBlock, p as pushScopeId, g as popScopeId, j as extend, k as isOn, l as isModelListener, m as isArray, n as hyphenate, q as camelize, s as capitalize, u as isSpecialBooleanAttr, v as includeBooleanAttr, w as callWithAsyncErrorHandling } from './chunk.runtime-core.esm-bundler.js';
 
 const svgNS = 'http://www.w3.org/2000/svg';
 const doc = (typeof document !== 'undefined' ? document : null);
@@ -2322,11 +2322,12 @@ var script = {
   },
 };
 
+const _withScopeId = n => (pushScopeId("data-v-54bc769c"),n=n(),popScopeId(),n);
 const _hoisted_1 = { class: "container" };
 const _hoisted_2 = { class: "navbar" };
 const _hoisted_3 = ["src"];
-const _hoisted_4 = /*#__PURE__*/createBaseVNode("div", { class: "title" }, "Settings", -1 /* HOISTED */);
-const _hoisted_5 = /*#__PURE__*/createBaseVNode("div", { class: "main" }, null, -1 /* HOISTED */);
+const _hoisted_4 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("div", { class: "title" }, "Settings", -1 /* HOISTED */));
+const _hoisted_5 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("div", { class: "main" }, null, -1 /* HOISTED */));
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Icon = resolveComponent("Icon");
@@ -2378,10 +2379,11 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".logo {\n  height: 30px;\n  margin-inline-end: 20px;\n}\n\n.themeSwitcher {\n  padding: 0 20px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background: none;\n  color: inherit;\n}";
+var css_248z = "@import url(\"../css/colors.css\");\n@import url(\"../css/sora.css\");\n.logo[data-v-54bc769c] {\n  height: 30px;\n  margin-inline-end: 20px;\n}\n\n.themeSwitcher[data-v-54bc769c] {\n  padding: 0 20px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background: none;\n  color: inherit;\n}";
 styleInject(css_248z);
 
 script.render = render;
+script.__scopeId = "data-v-54bc769c";
 script.__file = "src/webpages/settings/index.vue";
 
 export { Icon as I, styleInject as a, createApp as c, script as s };

@@ -7,17 +7,17 @@ var script = {
   props: ["manifest"],
   data() {
     return {
-      storage: {}
-    }
+      storage: {},
+    };
   },
   async created() {
     const { addonSettings = {} } = await storagePromise;
     this.storage = addonSettings;
-  }
+  },
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createElementBlock("div", null, "test " + toDisplayString($data.storage), 1 /* TEXT */))
+  return (openBlock(), createElementBlock("div", null, " test " + toDisplayString($data.storage), 1 /* TEXT */))
 }
 
 script.render = render;

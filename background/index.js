@@ -52,9 +52,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
         func: async (id) => {
             window.scratchAddons.events.dispatchEvent(new CustomEvent("addonChange", { detail: { id } }));
         },
-        args: [
-            "scratch-messaging",
-        ],
+        args: ["scratch-messaging"],
     });
     // if (!styles.length) return;
     // chrome.scripting.insertCSS({

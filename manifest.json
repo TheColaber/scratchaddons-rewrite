@@ -38,7 +38,7 @@
       "resources": [
         "mainworld/index.js",
         "images/*",
-        "webpages/Sora.ttf",
+        "webpages/css/*",
         "chunk.*.js",
         "addons/**/*.js"
       ],

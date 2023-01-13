@@ -19,7 +19,7 @@ var MATCH_PATTERNS = {
 
 window.scratchAddons = {
     console: Object.assign({}, console),
-    events: new EventTarget()
+    events: new EventTarget(),
 };
 window.scratchAddons.events.addEventListener("addonChange", (event) => {
     console.log(event);
