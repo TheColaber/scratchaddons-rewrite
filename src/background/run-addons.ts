@@ -35,11 +35,11 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     injectImmediately: true,
     world: "MAIN",
     func: async (id: string) => {
-      window.scratchAddons.events.dispatchEvent(new CustomEvent("addonChange", {detail: {id}}))
+      window.scratchAddons.events.dispatchEvent(
+        new CustomEvent("addonChange", { detail: { id } })
+      );
     },
-    args: [
-      "scratch-messaging",
-    ],
+    args: ["scratch-messaging"],
   });
 
   // if (!styles.length) return;

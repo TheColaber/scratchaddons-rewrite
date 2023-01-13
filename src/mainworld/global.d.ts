@@ -1,6 +1,6 @@
 interface Window {
   scratchAddons: {
-    console: Console,
-    events: EventTarget
-  }
+    console: Console;
+    events: EventTarget;
+  };
 }

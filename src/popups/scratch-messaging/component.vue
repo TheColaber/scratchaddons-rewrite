@@ -1,5 +1,6 @@
 <template>
-  <div>test
+  <div>
+    test
 
     {{ storage }}
   </div>
@@ -12,12 +13,12 @@ export default {
   props: ["manifest"],
   data() {
     return {
-      storage: {}
-    }
+      storage: {},
+    };
   },
   async created() {
-    const { addonSettings = {} } = await storagePromise
+    const { addonSettings = {} } = await storagePromise;
     this.storage = addonSettings;
-  }
+  },
 };
 </script>

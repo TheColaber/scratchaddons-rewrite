@@ -52,7 +52,11 @@ const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
 );
 
 const enabledPopups = {
-  "settings-page": { name: "Addons", icon: "wrench", component: settingsComponent }
+  "settings-page": {
+    name: "Addons",
+    icon: "wrench",
+    component: settingsComponent,
+  },
 };
 for (const id in popups) {
   if (addonsEnabled[id]) {
@@ -63,12 +67,12 @@ for (const id in popups) {
 const components = {};
 for (const id in enabledPopups) {
   /* @ts-ignore */
-  components[id] = enabledPopups[id].component
+  components[id] = enabledPopups[id].component;
 }
 
-Object.entries(enabledPopups)
+Object.entries(enabledPopups);
 export default {
-  components: { Icon, ...components  },
+  components: { Icon, ...components },
   data() {
     return {
       ORDER: ["scratch-messaging", "settings-page"],
