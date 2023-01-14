@@ -27,5 +27,8 @@
     "build": "node rollup",
     "dev": "node rollup -w",
     "prettier": "prettier --write ."
+  },
+  "dependencies": {
+    "rollup-plugin-typescript2": "^0.34.1"
   }
 }

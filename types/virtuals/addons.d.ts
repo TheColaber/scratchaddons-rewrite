@@ -4,4 +4,4 @@ declare var addons: {
   [id: string]: AddonManifest;
 };
 
-export default addons;
+export = addons;

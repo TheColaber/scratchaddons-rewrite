@@ -1,4 +1,5 @@
-import { ComponentPublicInstance } from "vue";
+import { Component } from "vue";
+import matches from "../src/mainworld/matches";
 
 export interface AddonManifest {
   name: string;
@@ -8,13 +9,21 @@ export interface AddonManifest {
   popup?: {
     name: string;
     icon: string;
-    component: ComponentPublicInstance;
+    component: Component;
   };
   userscripts?: {
     func: Function;
-    matches: string[];
+    matches: (keyof typeof matches)[];
     runAtComplete: boolean;
   }[];
   tags: string[];
   enabledByDefault?: boolean;
+}
+
+export interface PopupManifest extends AddonManifest {
+  popup: {
+    name: string;
+    icon: string;
+    component: Component;
+  };
 }

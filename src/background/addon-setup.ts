@@ -6,7 +6,6 @@ import * as popups from "#popups";
 
   const allAddons = { ...addons, ...popups };
   for (const id in allAddons) {
-    /* @ts-ignore */
     const manifest = allAddons[id];
     if (addonsEnabled[id] === undefined)
       addonsEnabled[id] = !!manifest.enabledByDefault;

@@ -1,9 +1,9 @@
 <template>
-  <div class="container" :class="{ darkTheme: darkTheme }">
-    <div class="header">
-      <div class="title">
-        <img :src="'../../images/icon.svg'" class="logo" />
-        <span class="text">
+  <div :class="[$style.container, { [colors.darkTheme]: darkTheme, [colors.lightTheme]: !darkTheme }]">
+    <div :class="$style.header">
+      <div :class="$style.title">
+        <img :src="'../../images/icon.svg'" :class="$style.logo" />
+        <span :class="$style.text">
           Scratch Addons
           <a
             href="https://scratchaddons.com/changelog"
@@ -14,15 +14,14 @@
           </a>
         </span>
       </div>
-      <button class="settings" @click="openSettingsPage()">
+      <button :class="$style.settings" @click="openSettingsPage()">
         <Icon icon="uil:cog" />
       </button>
     </div>
-    <div class="popups">
-      <div class="tabs">
+    <div :class="$style.popups">
+      <div :class="$style.tabs">
         <button
-          class="tab"
-          :class="{ sel: id === selectedTab }"
+          :class="[$style.tab, { [$style.sel]: id === selectedTab }]"
           @click="selectedTab = id"
           v-for="id of ORDER"
         >
@@ -47,30 +46,28 @@ import { Icon } from "@iconify/vue";
 import * as popups from "#popups";
 import settingsComponent from "../settings/index.vue";
 
+import colors from "../css/colors.module.scss"
+import "../css/sora.css"
+
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
-const enabledPopups = {
-  "settings-page": {
-    name: "Addons",
-    icon: "wrench",
-    component: settingsComponent,
-  },
-};
-for (const id in popups) {
-  if (addonsEnabled[id]) {
-    /* @ts-ignore */
-    enabledPopups[id] = popups[id].popup;
-  }
-}
-const components = {};
-for (const id in enabledPopups) {
-  /* @ts-ignore */
-  components[id] = enabledPopups[id].component;
+const enabledPopups = (Object.keys(popups).map(id => {
+  if (!addonsEnabled[id]) return {};
+  return ({ [id]: popups[id].popup })
+})).reduce((prev, curr) => ({ ...prev, ... curr }), {});
+enabledPopups["settings-page"] = {
+  name: "Addons",
+  icon: "wrench",
+  component: settingsComponent,
 }
 
-Object.entries(enabledPopups);
+const components = (Object.keys(enabledPopups).map(id => {
+  if (!addonsEnabled[id]) return {};
+  return ({ [id]: enabledPopups[id].component })
+})).reduce((prev, curr) => ({ ...prev, ... curr }), {});
+
 export default {
   components: { Icon, ...components },
   data() {
@@ -79,11 +76,11 @@ export default {
       popups: enabledPopups,
       darkTheme: !!darkTheme,
       selectedTab: "",
+      colors
     };
   },
   created() {
     this.selectedTab = this.ORDER[0];
-
     chrome.storage.sync.onChanged.addListener((changes) => {
       console.log(changes);
       if (changes.darkTheme) {
@@ -100,32 +97,25 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import url("../css/colors.css");
-@import url("../css/sora.css");
-
+<style lang="scss" module>
 .container {
   height: inherit;
   display: flex;
   flex-direction: column;
   font-family: "Sora", sans-serif;
 }
-
 .header {
   display: flex;
   height: 60px;
   color: #fff;
-
   .title {
     flex-grow: 1;
     display: flex;
     align-items: center;
     padding: 0 20px;
-
     .text {
       font-size: 18px;
       font-weight: 400;
-
       a {
         color: inherit;
         margin: 5px;
@@ -134,13 +124,11 @@ export default {
         font-size: 12px;
       }
     }
-
     .logo {
       height: 30px;
       margin-inline-end: 20px;
     }
   }
-
   .settings {
     padding: 0 20px;
     cursor: pointer;
@@ -150,23 +138,19 @@ export default {
     border: none;
     background: none;
     color: inherit;
-
     svg {
       font-size: 24px;
     }
   }
-
   button:focus-visible,
   a:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px #fff;
   }
 }
-
 .popups {
   background-color: var(--content-background);
   flex: 1;
-
   .tabs {
     padding: 10px;
     padding-bottom: 0px;
@@ -174,7 +158,6 @@ export default {
     border-bottom: 1px solid var(--control-border);
     height: 35px;
     overflow: hidden;
-
     .tab {
       display: flex;
       align-items: center;
@@ -186,39 +169,31 @@ export default {
       border-bottom: none;
       border-radius: 12px 12px 0 0;
       transition: 0.2s ease;
-
       &:hover {
         background-color: var(--button-hover-background);
       }
-
       &.sel {
         background-color: rgb(var(--theme));
         color: #fff;
-
         a svg {
           color: #fff;
         }
       }
-
       svg {
         font-size: 18px;
       }
-
       span {
         padding: 0px 0px 0px 5px;
       }
-
       a {
         height: 100%;
         display: flex;
         align-items: center;
-
         svg {
           color: var(--content-text);
           font-size: 10px;
           margin-left: 1px;
           padding: 2px;
-
           &:hover {
             background: #fff;
             color: rgb(var(--theme));
@@ -228,11 +203,9 @@ export default {
       }
     }
   }
-
   button {
     font-family: inherit;
   }
-
   button:focus-visible,
   a:focus-visible {
     outline: none;

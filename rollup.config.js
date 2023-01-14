@@ -28,13 +28,13 @@ export default {
       "#popups": popups.join("\n"),
     }),
     chromeExtension(),
+    typescript(),
     vue({ target: "browser" }),
     postcss(),
     replace({
       "process.env.NODE_ENV": JSON.stringify("production"),
       preventAssignment: true,
     }),
-    typescript(),
     json({
       preferConst: true,
     }),
