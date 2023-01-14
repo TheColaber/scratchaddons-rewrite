@@ -3,14 +3,6 @@
     {
       "fileMatch": ["manifest.json"],
       "url": "https://json.schemastore.org/chrome-manifest"
-    },
-    {
-      "fileMatch": ["popups/**/addon.json"],
-      "url": "./schemas/addon-manifest/popup.schema.json"
-    },
-    {
-      "fileMatch": ["addons/**/addon.json"],
-      "url": "./schemas/addon-manifest/addon.schema.json"
     }
   ]
 }

@@ -23,11 +23,11 @@ export default {
     chunkFileNames: "chunk.[name].js",
   },
   plugins: [
+    chromeExtension(),
     virtual({
       "#addons": addons,
       "#popups": popups,
     }),
-    chromeExtension(),
     typescript(),
     vue({ target: "browser" }),
     postcss(),

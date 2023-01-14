@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="$style.container">
     test
 
     {{ storage }}
@@ -22,3 +22,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" module>
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--page-background);
+}
+</style>

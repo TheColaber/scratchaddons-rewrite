@@ -43,7 +43,9 @@
           </a>
         </button>
       </div>
-      <component :is="selectedTab" />
+      <div :class="$style.component">
+        <component :is="selectedTab" />
+      </div>
     </div>
   </div>
 </template>
@@ -73,10 +75,7 @@ enabledPopups["settings-page"] = {
 };
 
 const components = Object.keys(enabledPopups)
-  .map((id) => {
-    if (!addonsEnabled[id]) return {};
-    return { [id]: enabledPopups[id].component };
-  })
+  .map((id) => ({ [id]: enabledPopups[id].component }))
   .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 
 export default {
@@ -168,23 +167,24 @@ export default {
 .popups {
   background-color: var(--content-background);
   flex: 1;
+  display: flex;
+    flex-direction: column;
+
   .tabs {
     padding: 10px;
-    padding-bottom: 0px;
     display: flex;
-    border-bottom: 1px solid var(--control-border);
+    gap: 8px;
     height: 35px;
     overflow: hidden;
     .tab {
       display: flex;
       align-items: center;
-      padding: 0px 12px;
+      padding: 0px 8px;
       font-size: 12px;
       color: var(--content-text);
-      background-color: var(--button-background);
-      border: 1px solid var(--control-border);
-      border-bottom: none;
-      border-radius: 12px 12px 0 0;
+      background: none;
+      border: none;
+      border-radius: 12px;
       transition: 0.2s ease;
       font-family: inherit;
 
@@ -209,9 +209,13 @@ export default {
       .name {
         padding: 0px 0px 0px 5px;
       }
+
       .link {
-        height: 100%;
+        display: none;
+      }
+      &.sel .link, &:focus-visible .link, &:hover .link {
         display: flex;
+        height: 100%;
         align-items: center;
 
         &:focus-visible {
@@ -232,6 +236,11 @@ export default {
         }
       }
     }
+  }
+
+  .component {
+    display: flex;
+    flex: 1;
   }
 }
 </style>

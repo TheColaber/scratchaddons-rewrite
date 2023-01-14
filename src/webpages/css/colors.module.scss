@@ -10,11 +10,15 @@
 }
 
 .darkTheme {
+  /* Content */
   --content-background: #2a2a2a;
+  --content-text: #fff;
+  
   --control-border: #000;
+  --page-background: #222;
+
   /* Button */
   --button-background: #222;
   --button-hover-background: #1a1a1a;
 
-  --content-text: #fff;
 }
