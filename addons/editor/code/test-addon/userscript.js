@@ -1,5 +1,9 @@
-async function userscript ({ params }) {
-    console.log("hi scratch!", params);
+function defineScript(script) {
+    return script;
 }
+
+var userscript = defineScript(async function () {
+    console.log("hi scratch!");
+});
 
 export { userscript as default };

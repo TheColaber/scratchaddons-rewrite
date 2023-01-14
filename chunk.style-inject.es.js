@@ -5405,4 +5405,31 @@ const useSSRContext = () => {
 // Core API ------------------------------------------------------------------
 const version = "3.2.45";
 
-export { createBlock as A, resolveDynamicComponent as B, createCommentVNode as C, Fragment as F, isString as a, createRenderer as b, createElementBlock as c, defineComponent as d, createBaseVNode as e, createVNode as f, popScopeId as g, h, isFunction as i, extend as j, isOn as k, isModelListener as l, isArray as m, hyphenate as n, openBlock as o, pushScopeId as p, camelize as q, resolveComponent as r, capitalize as s, toDisplayString as t, isSpecialBooleanAttr as u, includeBooleanAttr as v, callWithAsyncErrorHandling as w, normalizeClass as x, createTextVNode as y, renderList as z };
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+export { renderList as A, createBlock as B, resolveDynamicComponent as C, createCommentVNode as D, Fragment as F, isString as a, createRenderer as b, createElementBlock as c, defineComponent as d, createBaseVNode as e, createVNode as f, popScopeId as g, h, isFunction as i, extend as j, isOn as k, isModelListener as l, isArray as m, normalizeClass as n, openBlock as o, pushScopeId as p, hyphenate as q, resolveComponent as r, styleInject as s, toDisplayString as t, camelize as u, capitalize as v, isSpecialBooleanAttr as w, includeBooleanAttr as x, callWithAsyncErrorHandling as y, createTextVNode as z };

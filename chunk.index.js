@@ -1,4 +1,4 @@
-import { d as defineComponent, i as isFunction, a as isString, b as createRenderer, h, c as createElementBlock, e as createBaseVNode, f as createVNode, r as resolveComponent, o as openBlock, p as pushScopeId, g as popScopeId, j as extend, k as isOn, l as isModelListener, m as isArray, n as hyphenate, q as camelize, s as capitalize, u as isSpecialBooleanAttr, v as includeBooleanAttr, w as callWithAsyncErrorHandling } from './chunk.runtime-core.esm-bundler.js';
+import { d as defineComponent, s as styleInject, i as isFunction, a as isString, b as createRenderer, h, c as createElementBlock, e as createBaseVNode, f as createVNode, r as resolveComponent, o as openBlock, p as pushScopeId, g as popScopeId, j as extend, k as isOn, l as isModelListener, m as isArray, q as hyphenate, u as camelize, v as capitalize, w as isSpecialBooleanAttr, x as includeBooleanAttr, y as callWithAsyncErrorHandling } from './chunk.style-inject.es.js';
 
 const svgNS = 'http://www.w3.org/2000/svg';
 const doc = (typeof document !== 'undefined' ? document : null);
@@ -2352,33 +2352,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   ]))
 }
 
-function styleInject(css, ref) {
-  if ( ref === void 0 ) ref = {};
-  var insertAt = ref.insertAt;
-
-  if (!css || typeof document === 'undefined') { return; }
-
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
-  } else {
-    head.appendChild(style);
-  }
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
-}
-
 var css_248z = "@import url(\"../css/colors.css\");\n@import url(\"../css/sora.css\");\n.logo[data-v-54bc769c] {\n  height: 30px;\n  margin-inline-end: 20px;\n}\n\n.themeSwitcher[data-v-54bc769c] {\n  padding: 0 20px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background: none;\n  color: inherit;\n}";
 styleInject(css_248z);
 
@@ -2386,4 +2359,4 @@ script.render = render;
 script.__scopeId = "data-v-54bc769c";
 script.__file = "src/webpages/settings/index.vue";
 
-export { Icon as I, styleInject as a, createApp as c, script as s };
+export { Icon as I, createApp as c, script as s };

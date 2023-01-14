@@ -1,6 +1,6 @@
 import { a as addons } from '../chunk._virtual__addons.js';
 import { p as popups } from '../chunk._virtual__popups.js';
-import '../chunk.runtime-core.esm-bundler.js';
+import '../chunk.style-inject.es.js';
 import '../addons/editor/code/test-addon/addon.js';
 import '../chunk.define-manifest.js';
 import '../addons/editor/code/test-addon/userscript.js';

@@ -1,5 +1,5 @@
 import { d as defineManifest } from './chunk.define-manifest.js';
-import { c as createElementBlock, t as toDisplayString, o as openBlock } from './chunk.runtime-core.esm-bundler.js';
+import { s as styleInject, c as createElementBlock, t as toDisplayString, n as normalizeClass, o as openBlock } from './chunk.style-inject.es.js';
 
 const storagePromise = chrome.storage.sync.get("addonSettings");
 
@@ -17,8 +17,18 @@ var script = {
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createElementBlock("div", null, " test " + toDisplayString($data.storage), 1 /* TEXT */))
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass(_ctx.$style.container)
+  }, " test " + toDisplayString($data.storage), 3 /* TEXT, CLASS */))
 }
+
+var css_248z = "._container_1grok_2 {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  background: var(--page-background);\n}";
+styleInject(css_248z);
+
+var style0 = {"container":"_container_1grok_2"};
+
+const cssModules = script.__cssModules = {};
+cssModules["$style"] = style0;
 
 script.render = render;
 script.__file = "src/popups/scratch-messaging/component.vue";
