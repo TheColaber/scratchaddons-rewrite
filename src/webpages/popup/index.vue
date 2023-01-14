@@ -109,12 +109,14 @@ export default {
 
 <style lang="scss" module>
 .container {
+  --gradient: linear-gradient(to right, var(--theme), hsl(24deg 100% 67%));
   height: inherit;
   display: flex;
   flex-direction: column;
   font-family: "Sora", sans-serif;
 }
 .header {
+  background-image: var(--gradient);
   display: flex;
   height: 60px;
   color: #fff;
@@ -132,6 +134,7 @@ export default {
         text-decoration: none;
         opacity: 0.75;
         font-size: 12px;
+        border-radius: 4px;
 
         &:focus-visible {
           outline: none;
@@ -165,12 +168,16 @@ export default {
   }
 }
 .popups {
-  background-color: var(--content-background);
+  background-color: var(--page-background);
   flex: 1;
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
 
   .tabs {
+    margin: 10px;
+    background-color: var(--content-background);
+    border-radius: 12px;
+
     padding: 10px;
     display: flex;
     gap: 8px;
@@ -185,19 +192,26 @@ export default {
       background: none;
       border: none;
       border-radius: 12px;
-      transition: 0.2s ease;
+      transition: 0.2s ease background;
       font-family: inherit;
+
+      &:has(.link) {
+        padding: 0px 15.5px;
+      }
 
       &:hover {
         background-color: var(--button-hover-background);
+        padding: 0px 8px;
       }
 
       &:focus-visible {
+        padding: 0px 8px;
         outline: none;
         box-shadow: inset 0 0 0 3px var(--content-text);
       }
       &.sel {
-        background-color: rgb(var(--theme));
+        padding: 0px 8px;
+        background-image: var(--gradient);
         color: #fff;
         a svg {
           color: #fff;
@@ -212,27 +226,32 @@ export default {
 
       .link {
         display: none;
+        outline: none;
       }
-      &.sel .link, &:focus-visible .link, &:hover .link {
+      &.sel .link,
+      &:focus-visible .link,
+      &:hover .link {
         display: flex;
         height: 100%;
         align-items: center;
-
-        &:focus-visible {
-          outline: none;
-          box-shadow: inset 0 0 0 3px var(--content-text);
-        }
 
         svg {
           color: var(--content-text);
           font-size: 10px;
           margin-left: 1px;
           padding: 2px;
+          border-radius: 2px;
+          
           &:hover {
             background: #fff;
-            color: rgb(var(--theme));
-            border-radius: 2px;
+            color: var(--theme);
           }
+        }
+
+        &:focus-visible svg {
+          
+          background: #fff;
+          color: var(--theme);
         }
       }
     }
