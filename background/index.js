@@ -9,7 +9,6 @@ import '../addons/editor/code/test-addon/userscript.js';
     const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
     const allAddons = Object.assign(Object.assign({}, addons), popups);
     for (const id in allAddons) {
-        /* @ts-ignore */
         const manifest = allAddons[id];
         if (addonsEnabled[id] === undefined)
             addonsEnabled[id] = !!manifest.enabledByDefault;
