@@ -47,7 +47,7 @@ import * as popups from "#popups";
 import settingsComponent from "../settings/index.vue";
 
 import colors from "../css/colors.module.scss"
-import "../css/sora.css"
+import "../css/sora.scss"
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
