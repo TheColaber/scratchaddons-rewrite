@@ -11,6 +11,7 @@
         <span :class="$style.text">
           Scratch Addons
           <a
+            :class="$style.link"
             href="https://scratchaddons.com/changelog"
             target="_blank"
             title="View changelog"
@@ -31,8 +32,9 @@
           v-for="id of ORDER"
         >
           <Icon :icon="'uil:' + popups[id].icon" />
-          <span>{{ popups[id].name }}</span>
+          <span :class="$style.name">{{ popups[id].name }}</span>
           <a
+            :class="$style.link"
             target="_blank"
             :href="'fullscreen.html?id=' + id"
             v-if="id !== 'settings-page'"
@@ -125,12 +127,17 @@ export default {
     .text {
       font-size: 18px;
       font-weight: 400;
-      a {
+      .link {
         color: inherit;
         margin: 5px;
         text-decoration: none;
         opacity: 0.75;
         font-size: 12px;
+
+        &:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 3px #fff;
+        }
       }
     }
     .logo {
@@ -147,14 +154,15 @@ export default {
     border: none;
     background: none;
     color: inherit;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 3px #fff;
+    }
+
     svg {
       font-size: 24px;
     }
-  }
-  button:focus-visible,
-  a:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px #fff;
   }
 }
 .popups {
@@ -178,8 +186,15 @@ export default {
       border-bottom: none;
       border-radius: 12px 12px 0 0;
       transition: 0.2s ease;
+      font-family: inherit;
+
       &:hover {
         background-color: var(--button-hover-background);
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: inset 0 0 0 3px var(--content-text);
       }
       &.sel {
         background-color: rgb(var(--theme));
@@ -191,13 +206,19 @@ export default {
       svg {
         font-size: 18px;
       }
-      span {
+      .name {
         padding: 0px 0px 0px 5px;
       }
-      a {
+      .link {
         height: 100%;
         display: flex;
         align-items: center;
+
+        &:focus-visible {
+          outline: none;
+          box-shadow: inset 0 0 0 3px var(--content-text);
+        }
+
         svg {
           color: var(--content-text);
           font-size: 10px;
@@ -211,14 +232,6 @@ export default {
         }
       }
     }
-  }
-  button {
-    font-family: inherit;
-  }
-  button:focus-visible,
-  a:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--content-text);
   }
 }
 </style>
