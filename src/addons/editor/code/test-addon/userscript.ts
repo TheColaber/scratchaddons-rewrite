@@ -1,3 +1,4 @@
-export default async function ({ params }: { params: boolean }) {
-  console.log("hi scratch!", params);
-}
+import defineScript from "../../../../helpers/define-script";
+export default defineScript(async function () {
+  console.log("hi scratch!");
+});
