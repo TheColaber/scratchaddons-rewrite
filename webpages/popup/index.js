@@ -14,20 +14,24 @@ const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
-const enabledPopups = (Object.keys(popups).map(id => {
-  if (!addonsEnabled[id]) return {};
-  return ({ [id]: popups[id].popup })
-})).reduce((prev, curr) => ({ ...prev, ... curr }), {});
+const enabledPopups = Object.keys(popups)
+  .map((id) => {
+    if (!addonsEnabled[id]) return {};
+    return { [id]: popups[id].popup };
+  })
+  .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 enabledPopups["settings-page"] = {
   name: "Addons",
   icon: "wrench",
   component: script$1,
 };
 
-const components = (Object.keys(enabledPopups).map(id => {
-  if (!addonsEnabled[id]) return {};
-  return ({ [id]: enabledPopups[id].component })
-})).reduce((prev, curr) => ({ ...prev, ... curr }), {});
+const components = Object.keys(enabledPopups)
+  .map((id) => {
+    if (!addonsEnabled[id]) return {};
+    return { [id]: enabledPopups[id].component };
+  })
+  .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 
 var script = {
   components: { Icon, ...components },
@@ -37,7 +41,7 @@ var script = {
       popups: enabledPopups,
       darkTheme: !!darkTheme,
       selectedTab: "",
-      colors
+      colors,
     };
   },
   created() {
@@ -70,7 +74,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Icon = resolveComponent("Icon");
 
   return (openBlock(), createElementBlock("div", {
-    class: normalizeClass([_ctx.$style.container, { [$data.colors.darkTheme]: $data.darkTheme, [$data.colors.lightTheme]: !$data.darkTheme }])
+    class: normalizeClass([
+      _ctx.$style.container,
+      { [$data.colors.darkTheme]: $data.darkTheme, [$data.colors.lightTheme]: !$data.darkTheme },
+    ])
   }, [
     createBaseVNode("div", {
       class: normalizeClass(_ctx.$style.header)
