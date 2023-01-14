@@ -11,6 +11,7 @@ Dev Features:
 - Auto Refresh
 - Nested CSS
 - Scoped CSS
+- Nested CSS
 - Easy and Fast Icon Access
 - Improved folder structure for addons
 
