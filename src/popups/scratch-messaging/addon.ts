@@ -1,6 +1,6 @@
 import defineManifest from "../../helpers/define-manifest";
-
 import component from "./component.vue";
+
 export default defineManifest({
   name: "Scratch Messaging",
   description:

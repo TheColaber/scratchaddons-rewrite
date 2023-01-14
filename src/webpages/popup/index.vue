@@ -1,5 +1,10 @@
 <template>
-  <div :class="[$style.container, { [colors.darkTheme]: darkTheme, [colors.lightTheme]: !darkTheme }]">
+  <div
+    :class="[
+      $style.container,
+      { [colors.darkTheme]: darkTheme, [colors.lightTheme]: !darkTheme },
+    ]"
+  >
     <div :class="$style.header">
       <div :class="$style.title">
         <img :src="'../../images/icon.svg'" :class="$style.logo" />
@@ -46,27 +51,31 @@ import { Icon } from "@iconify/vue";
 import * as popups from "#popups";
 import settingsComponent from "../settings/index.vue";
 
-import colors from "../css/colors.module.scss"
-import "../css/sora.scss"
+import colors from "../css/colors.module.scss";
+import "../css/sora.scss";
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
-const enabledPopups = (Object.keys(popups).map(id => {
-  if (!addonsEnabled[id]) return {};
-  return ({ [id]: popups[id].popup })
-})).reduce((prev, curr) => ({ ...prev, ... curr }), {});
+const enabledPopups = Object.keys(popups)
+  .map((id) => {
+    if (!addonsEnabled[id]) return {};
+    return { [id]: popups[id].popup };
+  })
+  .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 enabledPopups["settings-page"] = {
   name: "Addons",
   icon: "wrench",
   component: settingsComponent,
-}
+};
 
-const components = (Object.keys(enabledPopups).map(id => {
-  if (!addonsEnabled[id]) return {};
-  return ({ [id]: enabledPopups[id].component })
-})).reduce((prev, curr) => ({ ...prev, ... curr }), {});
+const components = Object.keys(enabledPopups)
+  .map((id) => {
+    if (!addonsEnabled[id]) return {};
+    return { [id]: enabledPopups[id].component };
+  })
+  .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 
 export default {
   components: { Icon, ...components },
@@ -76,7 +85,7 @@ export default {
       popups: enabledPopups,
       darkTheme: !!darkTheme,
       selectedTab: "",
-      colors
+      colors,
     };
   },
   created() {

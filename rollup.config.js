@@ -24,8 +24,8 @@ export default {
   },
   plugins: [
     virtual({
-      "#addons": addons.join("\n"),
-      "#popups": popups.join("\n"),
+      "#addons": addons,
+      "#popups": popups,
     }),
     chromeExtension(),
     typescript(),
@@ -45,12 +45,17 @@ export default {
 
 /** @returns {{id: string, manifest: any, path:string}[]} */
 async function getAddonManifests(dir, id) {
+  const imports = await addAddonImport(dir, id);
+  return imports.join("\n");
+}
+
+async function addAddonImport(dir, id) {
   const dirents = await fs.readdir(dir, { withFileTypes: true });
   const files = await Promise.all(
     dirents.map(async (dirent) => {
       const res = path.resolve(dir, dirent.name);
       if (dirent.isDirectory()) {
-        return await getAddonManifests(res, dirent.name);
+        return await addAddonImport(res, dirent.name);
       } else if (dirent.name === "addon.ts") {
         return `export { default as "${id}" } from "${res.replace(
           /\\/g,

@@ -3,9 +3,9 @@ import config from "./rollup.config.js";
 
 const [, , arg] = process.argv;
 if (arg === "-w") {
-  watchConfig()
+  watchConfig();
 } else {
-  buildConfig()
+  buildConfig();
 }
 
 function watchConfig() {
