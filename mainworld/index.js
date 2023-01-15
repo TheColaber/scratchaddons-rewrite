@@ -1,6 +1,8 @@
 import { a as addons } from '../chunk._virtual__addons.js';
-import '../addons/editor/code/test-addon/addon.js';
+import '../addons/community/account-switcher/addon.js';
 import '../chunk.define-manifest.js';
+import '../addons/community/account-switcher/worker.js';
+import '../addons/editor/code/test-addon/addon.js';
 import '../addons/editor/code/test-addon/userscript.js';
 
 var MATCH_PATTERNS = {
