@@ -1,6 +1,6 @@
 import * as addons from "#addons";
 
-(async () => {
+export default async () => {
   const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
 
   for (const id in addons) {
@@ -9,4 +9,4 @@ import * as addons from "#addons";
     if (!addonsEnabled[id]) continue;
     addon.worker();
   }
-})();
+};

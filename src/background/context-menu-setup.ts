@@ -41,10 +41,10 @@ for (const period of periods) {
   });
 }
 
-(async function () {
+export default async function () {
   const { muted = false } = await chrome.storage.local.get("muted");
   contextMenuMuted(muted);
-})();
+}
 
 chrome.contextMenus.onClicked.addListener(
   ({ parentMenuItemId, menuItemId }) => {

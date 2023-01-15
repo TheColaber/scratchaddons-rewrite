@@ -1,7 +1,7 @@
 import * as addons from "#addons";
 import * as popups from "#popups";
 
-(async function () {
+export default async function () {
   const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
 
   const allAddons = { ...addons, ...popups };
@@ -12,4 +12,4 @@ import * as popups from "#popups";
   }
 
   chrome.storage.sync.set({ addonsEnabled });
-})();
+}
