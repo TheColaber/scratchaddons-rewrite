@@ -4,6 +4,8 @@ import '../chunk.define-manifest.js';
 import '../addons/community/account-switcher/worker.js';
 import '../addons/editor/code/test-addon/addon.js';
 import '../addons/editor/code/test-addon/userscript.js';
+import '../addons/popup/msg-count-badge/addon.js';
+import '../addons/popup/msg-count-badge/worker.js';
 
 var MATCH_PATTERNS = {
     projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,

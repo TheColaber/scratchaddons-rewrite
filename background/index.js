@@ -6,17 +6,8 @@ import '../chunk.define-manifest.js';
 import '../addons/community/account-switcher/worker.js';
 import '../addons/editor/code/test-addon/addon.js';
 import '../addons/editor/code/test-addon/userscript.js';
-
-(async function () {
-    const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-    const allAddons = Object.assign(Object.assign({}, addons), popups);
-    for (const id in allAddons) {
-        const manifest = allAddons[id];
-        if (addonsEnabled[id] === undefined)
-            addonsEnabled[id] = !!manifest.enabledByDefault;
-    }
-    chrome.storage.sync.set({ addonsEnabled });
-})();
+import '../addons/popup/msg-count-badge/addon.js';
+import '../addons/popup/msg-count-badge/worker.js';
 
 chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     if (!url)
@@ -119,10 +110,10 @@ for (const period of periods) {
         contexts: ["action"],
     });
 }
-(async function () {
+async function contextMenuSetup () {
     const { muted = false } = await chrome.storage.local.get("muted");
     contextMenuMuted(muted);
-})();
+}
 chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
     if (parentMenuItemId === "mute") {
         const period = periods.find(({ id }) => menuItemId === id);
@@ -156,7 +147,18 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     }
 });
 
-(async () => {
+async function addonSetup () {
+    const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
+    const allAddons = Object.assign(Object.assign({}, addons), popups);
+    for (const id in allAddons) {
+        const manifest = allAddons[id];
+        if (addonsEnabled[id] === undefined)
+            addonsEnabled[id] = !!manifest.enabledByDefault;
+    }
+    chrome.storage.sync.set({ addonsEnabled });
+}
+
+var workerScripts = async () => {
     const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
     for (const id in addons) {
         const addon = addons[id];
@@ -166,4 +168,11 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             continue;
         addon.worker();
     }
+};
+
+// Creates Listener
+contextMenuSetup();
+(async () => {
+    await addonSetup();
+    await workerScripts();
 })();
