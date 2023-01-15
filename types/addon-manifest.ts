@@ -16,6 +16,7 @@ export interface AddonManifest {
     matches: (keyof typeof matches)[];
     runAtComplete: boolean;
   }[];
+  worker?: Function;
   tags: string[];
   enabledByDefault?: boolean;
 }

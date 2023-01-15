@@ -241,7 +241,7 @@ export default {
           margin-left: 1px;
           padding: 2px;
           border-radius: 2px;
-          
+
           &:hover {
             background: #fff;
             color: var(--theme);
@@ -249,7 +249,6 @@ export default {
         }
 
         &:focus-visible svg {
-          
           background: #fff;
           color: var(--theme);
         }

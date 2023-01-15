@@ -38,6 +38,18 @@ export default {
     json({
       preferConst: true,
     }),
+    // {
+    //   name: "addon-imports",
+    //   transform(code, id) {
+    //     if (path.basename(id) === "addon.ts") {
+    //       code = `import defineManifest from "${path.relative(path.dirname(id), "src/helpers/define-manifest").replace(
+    //         /\\/g,
+    //         "/"
+    //       )}";\n` + code;
+    //       return code;
+    //     }
+    //   }
+    // },
     resolve(),
     commonjs(),
   ],
