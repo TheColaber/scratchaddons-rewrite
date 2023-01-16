@@ -4,8 +4,8 @@ import '../chunk.style-inject.es.js';
 import '../addons/community/account-switcher/addon.js';
 import '../chunk.define-manifest.js';
 import '../addons/community/account-switcher/worker.js';
-import '../addons/editor/code/test-addon/addon.js';
-import '../addons/editor/code/test-addon/userscript.js';
+import '../addons/editor/find-bar/addon.js';
+import '../addons/editor/find-bar/userscript.js';
 import '../addons/popup/msg-count-badge/addon.js';
 import '../addons/popup/msg-count-badge/worker.js';
 

@@ -2,10 +2,30 @@ import { a as addons } from '../chunk._virtual__addons.js';
 import '../addons/community/account-switcher/addon.js';
 import '../chunk.define-manifest.js';
 import '../addons/community/account-switcher/worker.js';
-import '../addons/editor/code/test-addon/addon.js';
-import '../addons/editor/code/test-addon/userscript.js';
+import '../addons/editor/find-bar/addon.js';
+import '../addons/editor/find-bar/userscript.js';
 import '../addons/popup/msg-count-badge/addon.js';
 import '../addons/popup/msg-count-badge/worker.js';
+
+class Addon extends EventTarget {
+    constructor(id) {
+        super();
+        this.id = id;
+        // catches both Chrome and Chromium
+        this.browser = /Chrom/.test(navigator.userAgent) ? "chrome" : "firefox";
+        this.disabled = false;
+        this.addEventListener("disabled", () => (this.disabled = true));
+        this.addEventListener("reenabled", () => (this.disabled = false));
+    }
+}
+
+class UserscriptAddon extends Addon {
+    constructor(id, enabledLate) {
+        super(id);
+        this.path = new URL(import.meta.url).origin;
+        this.enabledLate = enabledLate;
+    }
+}
 
 var MATCH_PATTERNS = {
     projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,
@@ -42,7 +62,7 @@ async function index (addonsEnabled, l10nUrls) {
                     }
                 }
                 if (urlMatches) {
-                    func({ params: true });
+                    func({ addon: new UserscriptAddon(id, false) });
                 }
             }
         }

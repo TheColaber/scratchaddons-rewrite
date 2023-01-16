@@ -7,7 +7,7 @@ var css_248z$2 = ".colors-module_lightTheme__Dq1Tc {\n  --content-background: #f
 var colors = {"lightTheme":"colors-module_lightTheme__Dq1Tc","darkTheme":"colors-module_darkTheme__Is8W-"};
 styleInject(css_248z$2);
 
-var css_248z$1 = "@font-face {\n  font-family: \"Sora\";\n  src: url(\"./Sora.ttf\") format(\"truetype\");\n}";
+var css_248z$1 = "@font-face {\n  font-family: \"Sora\";\n  src: url(\"../css/Sora.ttf\") format(\"truetype\");\n}";
 styleInject(css_248z$1);
 
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
