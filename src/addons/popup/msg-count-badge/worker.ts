@@ -1,6 +1,6 @@
 const ALARM_FETCH_COUNT = "ALARM_FETCH_COUNT";
 
-let session;
+let session: { user: {username: string}};
 export default async function () {
   session = await updateSession()
 

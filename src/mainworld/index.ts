@@ -1,4 +1,5 @@
 import * as addons from "#addons";
+import UserscriptAddon from "../addon-api/userscript";
 import MATCH_PATTERNS from "./matches";
 
 window.scratchAddons = {
@@ -24,7 +25,7 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
           }
         }
         if (urlMatches) {
-          func({ params: true });
+          func({addon: new UserscriptAddon(id, false)});
         }
       }
     }

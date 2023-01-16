@@ -1,5 +1,6 @@
 import { Component } from "vue";
 import matches from "../src/mainworld/matches";
+import defineScript from "../src/helpers/define-script";
 
 export interface AddonManifest {
   name: string;
@@ -12,11 +13,15 @@ export interface AddonManifest {
     component: Component;
   };
   userscripts?: {
-    func: Function;
+    func: ReturnType<typeof defineScript>;
     matches: (keyof typeof matches)[];
     runAtComplete: boolean;
   }[];
   worker?: Function;
+  hotkeys?: {
+    id: string;
+    default: string[];
+  }[];
   tags: string[];
   enabledByDefault?: boolean;
 }

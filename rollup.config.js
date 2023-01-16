@@ -28,9 +28,9 @@ export default {
       "#addons": addons,
       "#popups": popups,
     }),
-    typescript(),
     vue({ target: "browser" }),
     postcss(),
+    typescript(),
     replace({
       "process.env.NODE_ENV": JSON.stringify("production"),
       preventAssignment: true,
