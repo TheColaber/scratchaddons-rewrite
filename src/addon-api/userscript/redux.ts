@@ -41,7 +41,7 @@ export default class ReduxHandler extends EventTarget {
    * @param {object} payload - payload to pass to redux.
    * @throws when Redux is unavailable.
    */
-  dispatch(payload) {
+  dispatch(payload: any) {
     if (!window.scratchAddons.redux.dispatch)
       throw new Error("Redux is unavailable");
     window.scratchAddons.redux.dispatch(payload);
@@ -54,12 +54,11 @@ export default class ReduxHandler extends EventTarget {
    * @param {string=|string[]=} actions - the action(s) to check for.
    * @returns {Promise} a Promise resolved when the state meets the condition.
    */
-  waitForState(condition, opts = {}) {
+  waitForState(condition: (state: any) => boolean, {actions}: { actions?: string|string[]} = {}) {
     this.initialize();
     if (!window.scratchAddons.redux.target)
       return Promise.reject(new Error("Redux is unavailable"));
     if (condition(window.scratchAddons.redux.state)) return Promise.resolve();
-    let actions = opts.actions || null;
     if (typeof actions === "string") actions = [actions];
     return new Promise((resolve) => {
       const listener = ({ detail }) => {

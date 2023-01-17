@@ -5,7 +5,7 @@ import styles from "./userstyle.module.css";
 // import BlockInstance from "./blockly/BlockInstance.js";
 // import Utils from "./blockly/Utils.js";
 
-export default defineScript(async function ({ addon, console, msg }) {  
+export default defineScript(async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.getBlockly();
 
   class FindBar {
@@ -83,7 +83,7 @@ export default defineScript(async function ({ addon, console, msg }) {
       if (!this.findBarOuter) {
         return;
       }
-      
+
       const tab = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
       const visible = tab === 0 || tab === 1 || tab === 2;
       this.findBarOuter.hidden = !visible;
@@ -536,7 +536,10 @@ export default defineScript(async function ({ addon, console, msg }) {
         item.className = styles["sa-find-flag"];
       } else {
         const colorId = colorIds[proc.cls];
-        item.classList.add(styles["sa-block-color"], styles[`sa-block-color-${colorId}`])
+        item.classList.add(
+          styles["sa-block-color"],
+          styles[`sa-block-color-${colorId}`]
+        );
       }
       item.addEventListener("mousedown", (e) => {
         this.onItemClick(item);

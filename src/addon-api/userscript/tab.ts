@@ -25,7 +25,7 @@ export default class Tab {
         key.startsWith(this.REACT_INTERNAL_PREFIX)
       );
     }
-    return this._react_internal_key;
+    return this._react_internal_key as keyof typeof elem;
   }
 
   displayNoneWhileDisabled(el: Element) {
@@ -58,7 +58,7 @@ export default class Tab {
         if (this._waitForElementSet.has(element)) continue;
         if (elementCondition && !elementCondition(element)) continue;
         if (markAsSeen) this._waitForElementSet.add(element);
-        
+
         return Promise.resolve(element);
       }
     }
@@ -93,7 +93,7 @@ export default class Tab {
         return match;
       });
     }
-    
+
     return promise;
   }
 
@@ -121,14 +121,12 @@ export default class Tab {
     if (!internalKey) {
       throw "React Internal Key not found on gui_blocks-wrapper";
     }
-    const internal = elem[internalKey];
+    const internal: { child: any, stateNode: any} = elem[internalKey];
     let childable = internal;
-    /* eslint-disable no-empty */
     while (
       ((childable = childable.child),
       !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)
     ) {}
-    /* eslint-enable no-empty */
     return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
   }
 }
