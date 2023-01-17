@@ -37,6 +37,8 @@
     {
       "resources": [
         "mainworld/index.js",
+        "mainworld/setup.js",
+        "mainworld/load-redux.js",
         "images/*",
         "webpages/css/*",
         "chunk.*.js",

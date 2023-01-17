@@ -1,29 +1,33 @@
 import { a as addons } from '../chunk._virtual__addons.js';
 import { p as popups } from '../chunk._virtual__popups.js';
-import '../chunk.style-inject.es.js';
+import '../addons/editor/find-bar/userscript.js';
+import '../chunk.runtime-core.esm-bundler.js';
 import '../addons/community/account-switcher/addon.js';
 import '../chunk.define-manifest.js';
 import '../addons/community/account-switcher/worker.js';
 import '../addons/editor/find-bar/addon.js';
-import '../addons/editor/find-bar/userscript.js';
+import '../chunk.style-inject.es.js';
 import '../addons/popup/msg-count-badge/addon.js';
 import '../addons/popup/msg-count-badge/worker.js';
 
+chrome.scripting.registerContentScripts([
+    {
+        id: "load-redux",
+        world: "MAIN",
+        runAt: "document_start",
+        matches: ["https://scratch.mit.edu/*"],
+        js: ["mainworld/setup.js", "mainworld/load-redux.js"],
+        allFrames: true
+    }
+]);
 chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     if (!url)
         return;
     if (status !== "loading")
         return;
-    // chrome.scripting.executeScript({
-    //   target: { tabId },
-    //   injectImmediately: true,
-    //   world: chrome.scripting.ExecutionWorld.MAIN,
-    //   files: ["content-scripts/fix-console.js", "content-scripts/prototype-handler.js", "content-scripts/load-redux.js"],
-    // });
-    // const { globalState, addonsWithUserscripts, styles } = await getInfo(url);
     const l10nUrls = await getL10NURLs(url);
     const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-    await chrome.scripting.executeScript({
+    chrome.scripting.executeScript({
         target: { tabId },
         injectImmediately: true,
         world: "MAIN",
@@ -46,12 +50,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
         },
         args: ["scratch-messaging"],
     });
-    // if (!styles.length) return;
-    // chrome.scripting.insertCSS({
-    //   target: { tabId },
-    //   // origin: chrome.scripting.StyleOrigin.AUTHOR,
-    //   files: styles.map((style) => style.href),
-    // });
 });
 async function getL10NURLs(url) {
     const cookie = await chrome.cookies.get({ url, name: "scratchlanguage" });

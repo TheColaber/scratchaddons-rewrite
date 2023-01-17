@@ -1,6 +1,7 @@
 import { s as script$1, I as Icon, c as createApp } from '../../chunk.index.js';
 import { p as popups } from '../../chunk._virtual__popups.js';
-import { s as styleInject, c as createElementBlock, e as createBaseVNode, n as normalizeClass, z as createTextVNode, f as createVNode, F as Fragment, A as renderList, B as createBlock, C as resolveDynamicComponent, o as openBlock, t as toDisplayString, D as createCommentVNode, r as resolveComponent } from '../../chunk.style-inject.es.js';
+import { s as styleInject } from '../../chunk.style-inject.es.js';
+import { c as createElementBlock, e as createBaseVNode, n as normalizeClass, y as createTextVNode, f as createVNode, F as Fragment, z as renderList, A as createBlock, B as resolveDynamicComponent, o as openBlock, t as toDisplayString, C as createCommentVNode, r as resolveComponent } from '../../chunk.runtime-core.esm-bundler.js';
 import '../../chunk.define-manifest.js';
 
 var css_248z$2 = ".colors-module_lightTheme__Dq1Tc {\n  --content-background: #f7f7f7;\n  --control-border: #aaa;\n  /* Button */\n  --button-background: #ecebeb;\n  --button-hover-background: #d4d3d3;\n  --content-text: #000;\n}\n\n.colors-module_darkTheme__Is8W- {\n  /* Content */\n  --content-background: #2a2a2a;\n  --content-text: #fff;\n  --control-border: #000;\n  --page-background: #222;\n  /* Button */\n  --button-background: #222;\n  --button-hover-background: #1a1a1a;\n}";

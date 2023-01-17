@@ -1,5 +1,6 @@
 import { d as defineManifest } from './chunk.define-manifest.js';
-import { s as styleInject, c as createElementBlock, t as toDisplayString, n as normalizeClass, o as openBlock } from './chunk.style-inject.es.js';
+import { c as createElementBlock, t as toDisplayString, n as normalizeClass, o as openBlock } from './chunk.runtime-core.esm-bundler.js';
+import { s as styleInject } from './chunk.style-inject.es.js';
 
 const storagePromise = chrome.storage.sync.get("addonSettings");
 

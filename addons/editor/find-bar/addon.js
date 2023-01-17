@@ -1,5 +1,6 @@
 import { d as defineManifest } from '../../../chunk.define-manifest.js';
 import userscript from './userscript.js';
+import '../../../chunk.style-inject.es.js';
 
 var addon = defineManifest({
     name: "Find bar",
@@ -15,12 +16,12 @@ var addon = defineManifest({
     hotkeys: [
         {
             id: "previousLocation",
-            default: ["Ctrl", "Left"]
+            default: ["Ctrl", "Left"],
         },
         {
             id: "nextLocation",
-            default: ["Ctrl", "Right"]
-        }
+            default: ["Ctrl", "Right"],
+        },
     ],
     tags: ["codeEditor", "costumeEditor", "recommended"],
     enabledByDefault: true,
