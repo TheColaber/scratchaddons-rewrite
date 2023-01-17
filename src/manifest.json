@@ -34,7 +34,7 @@
         "mainworld/setup.ts",
         "mainworld/load-redux.ts",
         "images/*",
-        "webpages/css/*",
+        "webpages/css/*.ttf",
         "chunk.*.js",
         "addons/**/*.ts"
       ],

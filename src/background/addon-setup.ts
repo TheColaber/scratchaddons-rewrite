@@ -12,4 +12,4 @@ export default async function () {
   }
 
   chrome.storage.sync.set({ addonsEnabled });
-}
+};

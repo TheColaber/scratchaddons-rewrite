@@ -38,8 +38,8 @@ There are many things I plan to fix, and your help and support is appreciated wh
 
 Todo:
 
-- Fix vue typescript warnings that weren't there before
 - Allow auto import of helpers to addons and popups directory
 - Create two different manifests for chrome and firefox
+- Add more addon apis
 
 This project is most definitely a Work In Progress, and if you can contribute in anyway, I would love that. I plan to explain the folder structure and how everything works at some point so that it becomes easier to contribute.
