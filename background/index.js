@@ -17,8 +17,8 @@ chrome.scripting.registerContentScripts([
         runAt: "document_start",
         matches: ["https://scratch.mit.edu/*"],
         js: ["mainworld/setup.js", "mainworld/load-redux.js"],
-        allFrames: true
-    }
+        allFrames: true,
+    },
 ]);
 chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     if (!url)

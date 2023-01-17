@@ -68,13 +68,12 @@ class ReduxHandler extends EventTarget {
      * @param {string=|string[]=} actions - the action(s) to check for.
      * @returns {Promise} a Promise resolved when the state meets the condition.
      */
-    waitForState(condition, opts = {}) {
+    waitForState(condition, { actions } = {}) {
         this.initialize();
         if (!window.scratchAddons.redux.target)
             return Promise.reject(new Error("Redux is unavailable"));
         if (condition(window.scratchAddons.redux.state))
             return Promise.resolve();
-        let actions = opts.actions || null;
         if (typeof actions === "string")
             actions = [actions];
         return new Promise((resolve) => {
@@ -189,10 +188,8 @@ class Tab {
         }
         const internal = elem[internalKey];
         let childable = internal;
-        /* eslint-disable no-empty */
         while (((childable = childable.child),
             !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) { }
-        /* eslint-enable no-empty */
         return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
     }
 }
