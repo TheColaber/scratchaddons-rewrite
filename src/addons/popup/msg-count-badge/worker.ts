@@ -1,10 +1,10 @@
 const ALARM_FETCH_COUNT = "ALARM_FETCH_COUNT";
 
-let session: { user: {username: string}};
+let session: { user: { username: string } };
 export default async function () {
-  session = await updateSession()
+  session = await updateSession();
 
-  updateBadge()
+  updateBadge();
 
   chrome.alarms.create(ALARM_FETCH_COUNT, {
     delayInMinutes: 5,
@@ -13,16 +13,16 @@ export default async function () {
 
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === ALARM_FETCH_COUNT) {
-      updateBadge()
+      updateBadge();
     }
-  })
+  });
 
   chrome.cookies.onChanged.addListener(async ({ cookie, removed }) => {
     if (cookie.name === "scratchsessionsid") {
-      session = await updateSession()
-      updateBadge()
+      session = await updateSession();
+      updateBadge();
     }
-  })
+  });
 }
 
 async function updateSession() {
@@ -37,15 +37,17 @@ async function updateSession() {
 
 async function updateBadge() {
   if (session.user) {
-  
-  const { count }: { count: number } = await (await fetch(
-    `https://api.scratch.mit.edu/users/${session.user.username}/messages/count?timestamp=${Date.now()}`
-  )).json();
+    const { count }: { count: number } = await (
+      await fetch(
+        `https://api.scratch.mit.edu/users/${
+          session.user.username
+        }/messages/count?timestamp=${Date.now()}`
+      )
+    ).json();
 
-  chrome.action.setBadgeText({ text: count.toString() });
-  chrome.action.setBadgeBackgroundColor({ color: "#000" });
-} else {
-  chrome.action.setBadgeText({ text: "" });
-
-}
+    chrome.action.setBadgeText({ text: count.toString() });
+    chrome.action.setBadgeBackgroundColor({ color: "#000" });
+  } else {
+    chrome.action.setBadgeText({ text: "" });
+  }
 }

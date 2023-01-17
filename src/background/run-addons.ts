@@ -1,24 +1,27 @@
+chrome.scripting.registerContentScripts([
+  {
+    id: "load-redux",
+    world: "MAIN",
+    runAt: "document_start",
+    matches: ["https://scratch.mit.edu/*"],
+    js: ["mainworld/setup.js", "mainworld/load-redux.js"],
+    allFrames: true
+  }
+]);
+
 chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
   if (!url) return;
   if (status !== "loading") return;
-
-  // chrome.scripting.executeScript({
-  //   target: { tabId },
-  //   injectImmediately: true,
-  //   world: chrome.scripting.ExecutionWorld.MAIN,
-  //   files: ["content-scripts/fix-console.js", "content-scripts/prototype-handler.js", "content-scripts/load-redux.js"],
-  // });
-
-  // const { globalState, addonsWithUserscripts, styles } = await getInfo(url);
 
   const l10nUrls = await getL10NURLs(url);
 
   const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
 
-  await chrome.scripting.executeScript({
+  chrome.scripting.executeScript({
     target: { tabId },
     injectImmediately: true,
     world: "MAIN",
+
     func: async (script: string, addonsEnabled, l10nUrls) => {
       const { default: module } = await import(script);
       module(addonsEnabled, l10nUrls);
@@ -41,13 +44,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     },
     args: ["scratch-messaging"],
   });
-
-  // if (!styles.length) return;
-  // chrome.scripting.insertCSS({
-  //   target: { tabId },
-  //   // origin: chrome.scripting.StyleOrigin.AUTHOR,
-  //   files: styles.map((style) => style.href),
-  // });
 });
 
 async function getL10NURLs(url: string) {

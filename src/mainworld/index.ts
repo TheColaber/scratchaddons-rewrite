@@ -2,11 +2,6 @@ import * as addons from "#addons";
 import UserscriptAddon from "../addon-api/userscript";
 import MATCH_PATTERNS from "./matches";
 
-window.scratchAddons = {
-  console: { ...console },
-  events: new EventTarget(),
-};
-
 window.scratchAddons.events.addEventListener("addonChange", (event) => {
   console.log(event);
 });
@@ -25,7 +20,15 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
           }
         }
         if (urlMatches) {
-          func({addon: new UserscriptAddon(id, false)});
+          func({
+            addon: new UserscriptAddon(id, false),
+            console: window.scratchAddons.console,
+            msg: (msg) => {
+              console.log(l10nUrls);
+
+              return "test";
+            },
+          });
         }
       }
     }

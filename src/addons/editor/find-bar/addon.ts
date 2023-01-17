@@ -3,7 +3,8 @@ import userscript from "./userscript";
 
 export default defineManifest({
   name: "Find bar",
-  description: "Creates a search bar next to the sounds tab to find and jump to scripts, costumes and sounds. Use the hotkeys for this addon in the code area to navigate to previous or next visited position after using the find bar.",
+  description:
+    "Creates a search bar next to the sounds tab to find and jump to scripts, costumes and sounds. Use the hotkeys for this addon in the code area to navigate to previous or next visited position after using the find bar.",
   versionAdded: "1.0.0",
   userscripts: [
     {
@@ -15,13 +16,13 @@ export default defineManifest({
   hotkeys: [
     {
       id: "previousLocation",
-      default: ["Ctrl", "Left"]
+      default: ["Ctrl", "Left"],
     },
     {
       id: "nextLocation",
-      default: ["Ctrl", "Right"]
-    }
+      default: ["Ctrl", "Right"],
+    },
   ],
-  tags: ["codeEditor", "costumeEditor","recommended"],
+  tags: ["codeEditor", "costumeEditor", "recommended"],
   enabledByDefault: true,
 });
