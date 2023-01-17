@@ -40,7 +40,7 @@
         "mainworld/setup.js",
         "mainworld/load-redux.js",
         "images/*",
-        "webpages/css/*",
+        "webpages/css/*.ttf",
         "chunk.*.js",
         "addons/**/*.js"
       ],
