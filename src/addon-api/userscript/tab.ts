@@ -1,4 +1,5 @@
 import ReduxHandler from "./redux";
+import { Blockly } from "../../../types/apis/Blockly";
 
 export default class Tab {
   id: string;
@@ -32,8 +33,35 @@ export default class Tab {
     el.setAttribute("data-addon-disabled-" + this.id, "");
   }
 
-  scratchClass(...args: string[]) {
-    return "todo-scratchclass-sa";
+  scratchClass(...args: (string | { others: string })[]) {
+    let res = "";
+    args
+      .forEach((classNameToFind) => {
+        if (typeof classNameToFind !== "string") return;
+        if (window.scratchAddons.classNames.loaded) {
+          // TODO: Make regex B)
+          res +=
+            window.scratchAddons.classNames.arr.find(
+              (className) =>
+                className.startsWith(classNameToFind + "_") &&
+                className.length === classNameToFind.length + 6
+            ) || "";
+        } else {
+          res += `scratchAddonsScratchClass/${classNameToFind}`;
+        }
+        res += " ";
+      });
+    const options = args[args.length - 1];
+    if (typeof options === "object") {
+      const classNames = Array.isArray(options.others)
+        ? options.others
+        : [options.others];
+      classNames.forEach((string) => (res += string + " "));
+    }
+    res = res.slice(0, -1);
+    // Sanitize just in case
+    res = res.replace(/"/g, "");
+    return res;
   }
 
   waitForElement(
@@ -81,11 +109,11 @@ export default class Tab {
       elementCondition,
     });
     if (reduxEvents) {
-      let listener = ({ detail }: { detail: any }) => {
+      let listener = (({ detail }: CustomEvent) => {
         if (reduxEvents.includes(detail.action.type)) {
           satisfied = true;
         }
-      };
+      }) as EventListener;
       this.redux.initialize();
       this.redux.addEventListener("statechanged", listener);
       promise.then((match) => {
@@ -107,7 +135,7 @@ export default class Tab {
     return "projectpage";
   }
 
-  async getBlockly() {
+  async getBlockly(): Promise<Blockly> {
     if (this._cache.Blockly) return this._cache.Blockly;
     if (!this.editorMode || this.editorMode === "embed") {
       throw new Error(
@@ -121,7 +149,8 @@ export default class Tab {
     if (!internalKey) {
       throw "React Internal Key not found on gui_blocks-wrapper";
     }
-    const internal: { child: any, stateNode: any} = elem[internalKey];
+    // TODO: we shouldn't need to use any here.
+    const internal: any | { child: any; stateNode: any } = elem[internalKey];
     let childable = internal;
     while (
       ((childable = childable.child),

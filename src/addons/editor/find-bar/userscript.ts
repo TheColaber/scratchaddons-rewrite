@@ -9,7 +9,7 @@ export default defineScript(async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.getBlockly();
 
   class FindBar {
-    prevValue: string;
+    prevValue: string | null;
     findBarOuter: HTMLDivElement;
     findLabel: HTMLLabelElement;
     findWrapper: HTMLSpanElement;
@@ -54,7 +54,7 @@ export default defineScript(async function ({ addon, console, msg }) {
       this.findInput.placeholder = msg("find-placeholder");
       this.findInput.autocomplete = "off";
 
-      this.dropdown = new Dropdown(this.utils);
+      this.dropdown = new Dropdown({} /* this.utils */);
 
       this.dropdownOut.appendChild(this.dropdown.createDom());
 
@@ -65,7 +65,10 @@ export default defineScript(async function ({ addon, console, msg }) {
     }
 
     get workspace() {
-      return Blockly.getMainWorkspace();
+      if (!Blockly) throw "Blockly not found";
+      const workspace = Blockly.getMainWorkspace();
+      if (!workspace) throw "Blockly workspace not found";
+      return workspace;
     }
 
     attachDom(root: Element) {
@@ -80,10 +83,6 @@ export default defineScript(async function ({ addon, console, msg }) {
     }
 
     tabChanged() {
-      if (!this.findBarOuter) {
-        return;
-      }
-
       const tab = addon.tab.redux.state.scratchGui.editorTab.activeTabIndex;
       const visible = tab === 0 || tab === 1 || tab === 2;
       this.findBarOuter.hidden = !visible;
@@ -131,10 +130,12 @@ export default defineScript(async function ({ addon, console, msg }) {
       }
     }
 
-    inputKeyDown(e) {
+    inputKeyDown(e: KeyboardEvent) {
       this.dropdown.inputKeyDown(e);
 
       // Enter
+      console.log(e.key);
+
       if (e.keyCode === 13) {
         this.findInput.blur();
         return;
@@ -153,8 +154,8 @@ export default defineScript(async function ({ addon, console, msg }) {
       }
     }
 
-    eventKeyDown(e) {
-      if (addon.self.disabled || !this.findBarOuter) return;
+    eventKeyDown(e: KeyboardEvent) {
+      if (addon.disabled || !this.findBarOuter) return;
 
       let ctrlKey = e.ctrlKey || e.metaKey;
 
@@ -169,7 +170,10 @@ export default defineScript(async function ({ addon, console, msg }) {
 
       if (e.keyCode === 37 && ctrlKey) {
         // Ctrl + Left Arrow Key
-        if (document.activeElement.tagName === "INPUT") {
+        if (
+          document.activeElement &&
+          document.activeElement.tagName === "INPUT"
+        ) {
           return;
         }
 
@@ -183,7 +187,10 @@ export default defineScript(async function ({ addon, console, msg }) {
 
       if (e.keyCode === 39 && ctrlKey) {
         // Ctrl + Right Arrow Key
-        if (document.activeElement.tagName === "INPUT") {
+        if (
+          document.activeElement &&
+          document.activeElement.tagName === "INPUT"
+        ) {
           return;
         }
 
@@ -196,7 +203,7 @@ export default defineScript(async function ({ addon, console, msg }) {
       }
     }
 
-    showDropDown(focusID, instanceBlock) {
+    showDropDown(focusID?: string, instanceBlock?: any) {
       if (!focusID && this.dropdownOut.classList.contains("visible")) {
         return;
       }
@@ -245,7 +252,7 @@ export default defineScript(async function ({ addon, console, msg }) {
 
     getScratchBlocks() {
       let myBlocks = [];
-      let myBlocksByProcCode = {};
+      let myBlocksByProcCode: { [id: string]: any } = {};
 
       let topBlocks = this.workspace.getTopBlocks();
 
@@ -255,7 +262,7 @@ export default defineScript(async function ({ addon, console, msg }) {
        * @param root
        * @returns BlockItem
        */
-      function addBlock(cls, txt, root) {
+      function addBlock(cls: string, txt: string, root: any) {
         let id = root.id ? root.id : root.getId ? root.getId() : null;
         let clone = myBlocksByProcCode[txt];
         if (clone) {
@@ -274,11 +281,11 @@ export default defineScript(async function ({ addon, console, msg }) {
         return items;
       }
 
-      function getDescFromField(root) {
+      function getDescFromField(root: any) {
         let fields = root.inputList[0];
-        let desc;
+        let desc = "";
         for (const fieldRow of fields.fieldRow) {
-          desc = (desc ? desc + " " : "") + fieldRow.getText();
+          desc += (desc.length ? " " : "") + fieldRow.getText();
         }
         return desc;
       }

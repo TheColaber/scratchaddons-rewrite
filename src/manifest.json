@@ -21,11 +21,7 @@
     "32": "images/icon-blue-32.png",
     "1024": "images/icon.png"
   },
-  "host_permissions": [
-    "https://scratch.mit.edu/*",
-    "https://api.scratch.mit.edu/*",
-    "https://clouddata.scratch.mit.edu/*"
-  ],
+  "host_permissions": ["https://*.scratch.mit.edu/*"],
   "permissions": ["storage", "scripting", "cookies", "contextMenus", "alarms"],
   "web_accessible_resources": [
     {
