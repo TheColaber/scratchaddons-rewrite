@@ -1,9 +1,8 @@
-// ReDucks: Redux ducktyped
-// Not actual Redux, but should be compatible
+// TODO: this file should be rewritten or smth.
 class ReDucks {
-  static compose(...composeArgs) {
-    if (composeArgs.length === 0) return (...args) => args;
-    return (...args) => {
+  static compose(...composeArgs: any[]) {
+    if (composeArgs.length === 0) return (...args: any[]) => args;
+    return (...args: any[]) => {
       const composeArgsReverse = composeArgs.slice(0).reverse();
       let result = composeArgsReverse.shift()(...args);
       for (const fn of composeArgsReverse) {
@@ -13,14 +12,14 @@ class ReDucks {
     };
   }
 
-  static applyMiddleware(...middlewares) {
-    return (createStore) =>
-      (...createStoreArgs) => {
+  static applyMiddleware(...middlewares: any[]) {
+    return (createStore: (...args: any[]) => any) =>
+      (...createStoreArgs: any[]) => {
         const store = createStore(...createStoreArgs);
         let { dispatch } = store;
         const api = {
           getState: store.getState,
-          dispatch: (action) => dispatch(action),
+          dispatch: (action: any) => dispatch(action),
         };
         const initialized = middlewares.map((middleware) => middleware(api));
         dispatch = ReDucks.compose(...initialized)(store.dispatch);
@@ -30,15 +29,20 @@ class ReDucks {
 }
 
 let newerCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-function compose(...args) {
-  window.scratchAddons.redux.target = new EventTarget();
+function compose(this: typeof compose, ...args: any[]) {
   window.scratchAddons.redux.state = {};
   window.scratchAddons.redux.dispatch = () => {};
 
-  function middleware({ getState, dispatch }) {
+  function middleware({
+    getState,
+    dispatch,
+  }: {
+    getState: () => any;
+    dispatch: (data: any) => void;
+  }) {
     window.scratchAddons.redux.dispatch = dispatch;
     window.scratchAddons.redux.state = getState();
-    return (next) => (action) => {
+    return (next: (action: any) => any) => (action: any) => {
       const nextReturn = next(action);
       const ev = new CustomEvent("statechanged", {
         detail: {
