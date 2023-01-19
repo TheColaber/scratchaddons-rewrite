@@ -22,9 +22,7 @@
     "1024": "images/icon.png"
   },
   "host_permissions": [
-    "https://scratch.mit.edu/*",
-    "https://api.scratch.mit.edu/*",
-    "https://clouddata.scratch.mit.edu/*"
+    "https://*.scratch.mit.edu/*"
   ],
   "permissions": [
     "storage",
@@ -36,13 +34,10 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "mainworld/index.js",
-        "mainworld/setup.js",
-        "mainworld/load-redux.js",
+        "mainworld/*.js",
         "images/*",
         "webpages/css/*.ttf",
-        "chunk.*.js",
-        "addons/**/*.js"
+        "chunk.*.js"
       ],
       "matches": [
         "https://*.scratch.mit.edu/*",

@@ -1,14 +1,12 @@
 import { a as addons } from '../chunk._virtual__addons.js';
-import '../addons/editor/find-bar/userscript.js';
-import '../addons/community/account-switcher/addon.js';
+import MATCH_PATTERNS from './matches.js';
 import '../chunk.define-manifest.js';
-import '../addons/community/account-switcher/worker.js';
-import '../addons/editor/find-bar/addon.js';
-import '../addons/popup/msg-count-badge/addon.js';
-import '../addons/popup/msg-count-badge/worker.js';
 import '../chunk.style-inject.es.js';
 
 class Addon extends EventTarget {
+    id;
+    browser;
+    disabled;
     constructor(id) {
         super();
         this.id = id;
@@ -21,6 +19,7 @@ class Addon extends EventTarget {
 }
 
 class ReduxHandler extends EventTarget {
+    initialized;
     constructor() {
         super();
         this.initialized = false;
@@ -33,7 +32,7 @@ class ReduxHandler extends EventTarget {
         if (!window.scratchAddons.redux.target || this.initialized)
             return;
         this.initialized = true;
-        window.scratchAddons.redux.target.addEventListener("statechanged", ({ detail }) => {
+        window.scratchAddons.redux.target.addEventListener("statechanged", (({ detail, }) => {
             const newEvent = new CustomEvent("statechanged", {
                 detail: {
                     action: detail.action,
@@ -42,7 +41,7 @@ class ReduxHandler extends EventTarget {
                 },
             });
             this.dispatchEvent(newEvent);
-        });
+        }));
     }
     /**
      * Redux state.
@@ -69,28 +68,36 @@ class ReduxHandler extends EventTarget {
      * @returns {Promise} a Promise resolved when the state meets the condition.
      */
     waitForState(condition, { actions } = {}) {
-        this.initialize();
-        if (!window.scratchAddons.redux.target)
-            return Promise.reject(new Error("Redux is unavailable"));
-        if (condition(window.scratchAddons.redux.state))
-            return Promise.resolve();
-        if (typeof actions === "string")
-            actions = [actions];
-        return new Promise((resolve) => {
-            const listener = ({ detail }) => {
+        return new Promise((resolve, reject) => {
+            this.initialize();
+            if (!window.scratchAddons.redux.target)
+                return reject("Redux not found.");
+            if (condition(window.scratchAddons.redux.state))
+                return resolve(true);
+            if (typeof actions === "string")
+                actions = [actions];
+            const listener = (({ detail }) => {
+                if (!window.scratchAddons.redux.target)
+                    return reject("Redux not found.");
                 if (actions && !actions.includes(detail.action.type))
                     return;
                 if (!condition(detail.next))
                     return;
                 window.scratchAddons.redux.target.removeEventListener("statechanged", listener);
+                // TODO: WHY DO WE DO THIS????
                 setTimeout(resolve, 0);
-            };
+            });
             window.scratchAddons.redux.target.addEventListener("statechanged", listener);
         });
     }
 }
 
 class Tab {
+    id;
+    _cache;
+    _waitForElementSet;
+    redux;
+    _react_internal_key;
     constructor(id) {
         this.id = id;
         this._cache = { Blockly: null };
@@ -111,7 +118,32 @@ class Tab {
         el.setAttribute("data-addon-disabled-" + this.id, "");
     }
     scratchClass(...args) {
-        return "todo-scratchclass-sa";
+        let res = "";
+        args.forEach((classNameToFind) => {
+            if (typeof classNameToFind !== "string")
+                return;
+            if (window.scratchAddons.classNames.loaded) {
+                // TODO: Make regex B)
+                res +=
+                    window.scratchAddons.classNames.arr.find((className) => className.startsWith(classNameToFind + "_") &&
+                        className.length === classNameToFind.length + 6) || "";
+            }
+            else {
+                res += `scratchAddonsScratchClass/${classNameToFind}`;
+            }
+            res += " ";
+        });
+        const options = args[args.length - 1];
+        if (typeof options === "object") {
+            const classNames = Array.isArray(options.others)
+                ? options.others
+                : [options.others];
+            classNames.forEach((string) => (res += string + " "));
+        }
+        res = res.slice(0, -1);
+        // Sanitize just in case
+        res = res.replace(/"/g, "");
+        return res;
     }
     waitForElement(selector, { markAsSeen = false, condition, reduxCondition, elementCondition, reduxEvents, }) {
         if (!condition || condition()) {
@@ -146,11 +178,11 @@ class Tab {
             elementCondition,
         });
         if (reduxEvents) {
-            let listener = ({ detail }) => {
+            let listener = (({ detail }) => {
                 if (reduxEvents.includes(detail.action.type)) {
                     satisfied = true;
                 }
-            };
+            });
             this.redux.initialize();
             this.redux.addEventListener("statechanged", listener);
             promise.then((match) => {
@@ -186,6 +218,7 @@ class Tab {
         if (!internalKey) {
             throw "React Internal Key not found on gui_blocks-wrapper";
         }
+        // TODO: we shouldn't need to use any here.
         const internal = elem[internalKey];
         let childable = internal;
         while (((childable = childable.child),
@@ -195,6 +228,9 @@ class Tab {
 }
 
 class UserscriptAddon extends Addon {
+    enabledLate;
+    path;
+    tab;
     constructor(id, enabledLate) {
         super(id);
         this.tab = new Tab(id);
@@ -202,20 +238,6 @@ class UserscriptAddon extends Addon {
         this.enabledLate = enabledLate;
     }
 }
-
-var MATCH_PATTERNS = {
-    projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,
-    projectEmbeds: /^\/projects\/\d+\/embed\/?$/,
-    studios: /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/,
-    profiles: /^\/users\/[\w-]+\/?$/,
-    topics: /^\/discuss\/topic\/\d+\/?$/,
-    newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
-    editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
-    forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
-    // scratch-www routes, not including project pages
-    // Matches /projects (an error page) but not /projects/<id>
-    scratchWWWNoProject: /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects)\/?)?$/,
-};
 
 window.scratchAddons.events.addEventListener("addonChange", (event) => {
     console.log(event);
@@ -234,6 +256,7 @@ async function index (addonsEnabled, l10nUrls) {
                     }
                 }
                 if (urlMatches) {
+                    window.scratchAddons.console.log(id, "is now running!");
                     func({
                         addon: new UserscriptAddon(id, false),
                         console: window.scratchAddons.console,

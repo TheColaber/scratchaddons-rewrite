@@ -1,15 +1,10 @@
 import { a as addons } from '../chunk._virtual__addons.js';
 import { p as popups } from '../chunk._virtual__popups.js';
-import '../addons/editor/find-bar/userscript.js';
 import '../chunk.runtime-core.esm-bundler.js';
-import '../addons/community/account-switcher/addon.js';
 import '../chunk.define-manifest.js';
-import '../addons/community/account-switcher/worker.js';
-import '../addons/editor/find-bar/addon.js';
 import '../chunk.style-inject.es.js';
-import '../addons/popup/msg-count-badge/addon.js';
-import '../addons/popup/msg-count-badge/worker.js';
 
+// chrome.scripting.unregisterContentScripts({ ids: ["load-redux"]})
 chrome.scripting.registerContentScripts([
     {
         id: "load-redux",
@@ -147,7 +142,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 async function addonSetup () {
     const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-    const allAddons = Object.assign(Object.assign({}, addons), popups);
+    const allAddons = { ...addons, ...popups };
     for (const id in allAddons) {
         const manifest = allAddons[id];
         if (addonsEnabled[id] === undefined)

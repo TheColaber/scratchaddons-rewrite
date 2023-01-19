@@ -1,5 +1,4 @@
-// ReDucks: Redux ducktyped
-// Not actual Redux, but should be compatible
+// TODO: this file should be rewritten or smth.
 class ReDucks {
     static compose(...composeArgs) {
         if (composeArgs.length === 0)
@@ -29,10 +28,9 @@ class ReDucks {
 }
 let newerCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 function compose(...args) {
-    window.scratchAddons.redux.target = new EventTarget();
     window.scratchAddons.redux.state = {};
     window.scratchAddons.redux.dispatch = () => { };
-    function middleware({ getState, dispatch }) {
+    function middleware({ getState, dispatch, }) {
         window.scratchAddons.redux.dispatch = dispatch;
         window.scratchAddons.redux.state = getState();
         return (next) => (action) => {
