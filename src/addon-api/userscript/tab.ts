@@ -35,22 +35,21 @@ export default class Tab {
 
   scratchClass(...args: (string | { others: string })[]) {
     let res = "";
-    args
-      .forEach((classNameToFind) => {
-        if (typeof classNameToFind !== "string") return;
-        if (window.scratchAddons.classNames.loaded) {
-          // TODO: Make regex B)
-          res +=
-            window.scratchAddons.classNames.arr.find(
-              (className) =>
-                className.startsWith(classNameToFind + "_") &&
-                className.length === classNameToFind.length + 6
-            ) || "";
-        } else {
-          res += `scratchAddonsScratchClass/${classNameToFind}`;
-        }
-        res += " ";
-      });
+    args.forEach((classNameToFind) => {
+      if (typeof classNameToFind !== "string") return;
+      if (window.scratchAddons.classNames.loaded) {
+        // TODO: Make regex B)
+        res +=
+          window.scratchAddons.classNames.arr.find(
+            (className) =>
+              className.startsWith(classNameToFind + "_") &&
+              className.length === classNameToFind.length + 6
+          ) || "";
+      } else {
+        res += `scratchAddonsScratchClass/${classNameToFind}`;
+      }
+      res += " ";
+    });
     const options = args[args.length - 1];
     if (typeof options === "object") {
       const classNames = Array.isArray(options.others)

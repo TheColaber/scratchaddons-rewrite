@@ -3,10 +3,10 @@ interface Window {
     console: Console;
     events: EventTarget;
     redux: { target?: EventTarget; state?: any; dispatch?: any };
-    sharedObserver: import("./shared-observer").default;
+    sharedObserver: import("../src/mainworld/classes/shared-observer").default;
     classNames: {
       loaded: boolean;
-      arr: string[]
-    }
+      arr: string[];
+    };
   };
 }

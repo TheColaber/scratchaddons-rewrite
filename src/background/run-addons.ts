@@ -1,3 +1,4 @@
+// chrome.scripting.unregisterContentScripts({ ids: ["load-redux"]})
 chrome.scripting.registerContentScripts([
   {
     id: "load-redux",

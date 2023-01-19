@@ -1,6 +1,13 @@
+type pendingItem = {
+  condition?: () => boolean;
+  query: string;
+  seen?: WeakSet<Element>;
+  elementCondition?: (match: Element) => boolean;
+};
+type pendingSet = pendingItem & { resolve: (match: Element) => void };
 export default class SharedObserver {
   inactive: boolean;
-  pending: Set<any>;
+  pending: Set<pendingSet>;
   observer: MutationObserver;
   constructor() {
     this.inactive = true;
@@ -24,16 +31,7 @@ export default class SharedObserver {
     });
   }
 
-  /**
-   * Watches an element.
-   * @param {object} opts - options
-   * @param {string} opts.query - query.
-   * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
-   * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
-   * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
-   * @returns {Promise<Node>} Promise that is resolved with modified element.
-   */
-  watch(opts: any): Promise<Element> {
+  watch(opts: pendingItem): Promise<Element> {
     if (this.inactive) {
       this.inactive = false;
       this.observer.observe(document.documentElement, {

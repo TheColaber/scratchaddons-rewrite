@@ -26,13 +26,10 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "mainworld/index.ts",
-        "mainworld/setup.ts",
-        "mainworld/load-redux.ts",
+        "mainworld/*.ts",
         "images/*",
         "webpages/css/*.ttf",
-        "chunk.*.js",
-        "addons/**/*.ts"
+        "chunk.*.js"
       ],
       "matches": ["https://*.scratch.mit.edu/*", "https://scratchaddons.com/*"]
     }

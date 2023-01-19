@@ -20,6 +20,7 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
           }
         }
         if (urlMatches) {
+          window.scratchAddons.console.log(id, "is now running!");
           func({
             addon: new UserscriptAddon(id, false),
             console: window.scratchAddons.console,
