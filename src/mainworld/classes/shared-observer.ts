@@ -1,7 +1,7 @@
 type pendingItem = {
   condition?: () => boolean;
   query: string;
-  seen?: WeakSet<Element>;
+  seen?: WeakSet<Element> | null;
   elementCondition?: (match: Element) => boolean;
 };
 type pendingSet = pendingItem & { resolve: (match: Element) => void };
