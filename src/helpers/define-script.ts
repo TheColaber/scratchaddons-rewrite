@@ -5,7 +5,7 @@ export default function defineScript(
     addon: UserscriptAddon;
     console: Console;
     msg: (msg: string) => string;
-  }) => Promise<void>
+  }) => any | Promise<any>
 ) {
   return script;
 }

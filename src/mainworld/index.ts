@@ -2,11 +2,40 @@ import * as addons from "#addons";
 import UserscriptAddon from "../addon-api/userscript";
 import MATCH_PATTERNS from "./matches";
 
-window.scratchAddons.events.addEventListener("addonChange", (event) => {
-  console.log(event);
-});
+const AddonInstances: UserscriptAddon[] = [];
+
+window.scratchAddons.events.addEventListener("addonDynamicDisable", ((
+  event: CustomEvent
+) => {
+  const id = event.detail.id;
+  const addon = AddonInstances.find((addon) => addon.id === id);
+  if (!addon) throw "HUH??";
+  addon.dispatchEvent(new CustomEvent("dynamicDisable"));
+  addon.disabled = true;
+  const style = document.createElement("style");
+  style.setAttribute("data-addon-disabled-style-" + id, "");
+  style.textContent = `[data-addon-disabled-${id}] { display: none !important; }`;
+  document.body.appendChild(style);
+}) as EventListener);
+
+window.scratchAddons.events.addEventListener("addonDynamicEnable", ((
+  event: CustomEvent
+) => {
+  const id = event.detail.id;
+  const addon = AddonInstances.find((addon) => addon.id === id);
+  if (!addon) throw "HUH??";
+  addon.dispatchEvent(new CustomEvent("dynamicEnable"));
+  addon.disabled = false;
+  const disabledStyle = document.querySelector(
+    `[data-addon-disabled-style-${id}]`
+  );
+  if (disabledStyle) {
+    disabledStyle.remove();
+  }
+}) as EventListener);
 
 export default async function (addonsEnabled: any, l10nUrls: string[]) {
+  window.scratchAddons.loaded = true;
   for (const id in addonsEnabled) {
     if (addonsEnabled[id]) {
       const addon = addons[id];
@@ -21,8 +50,10 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
         }
         if (urlMatches) {
           window.scratchAddons.console.log(id, "is now running!");
+          const addonInstance = new UserscriptAddon(id, false);
+          AddonInstances.push(addonInstance);
           func({
-            addon: new UserscriptAddon(id, false),
+            addon: addonInstance,
             console: window.scratchAddons.console,
             msg: (msg) => {
               console.log(l10nUrls);

@@ -1,6 +1,7 @@
 import SharedObserver from "./classes/shared-observer";
 
 window.scratchAddons = {
+  loaded: false,
   console: { ...console },
   events: new EventTarget(),
   redux: { target: new EventTarget() },

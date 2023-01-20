@@ -1,5 +1,6 @@
 interface Window {
   scratchAddons: {
+    loaded: boolean;
     console: Console;
     events: EventTarget;
     redux: { target: EventTarget; state?: any; dispatch?: any };
