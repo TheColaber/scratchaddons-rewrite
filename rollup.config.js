@@ -27,7 +27,7 @@ export default {
       "#addons": addons,
       "#popups": popups,
     }),
-    vue({ target: "browser" }),
+    vue({ target: "browser", styleInjector: "cry"  }),
     postcss(),
     typescript(),
     replace({

@@ -1,14 +1,15 @@
-// chrome.scripting.unregisterContentScripts({ ids: ["load-redux"]})
-chrome.scripting.registerContentScripts([
-  {
-    id: "load-redux",
-    world: "MAIN",
-    runAt: "document_start",
-    matches: ["https://scratch.mit.edu/*"],
-    js: ["mainworld/setup.js", "mainworld/load-redux.js"],
-    allFrames: true,
-  },
-]);
+chrome.scripting.unregisterContentScripts({ ids: ["load-redux"] }).then(() => {
+  chrome.scripting.registerContentScripts([
+    {
+      id: "load-redux",
+      world: "MAIN",
+      runAt: "document_start",
+      matches: ["https://scratch.mit.edu/*"],
+      js: ["mainworld/setup.js", "mainworld/load-redux.js"],
+      allFrames: true,
+    },
+  ]);  
+});
 
 chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
   if (!url) return;

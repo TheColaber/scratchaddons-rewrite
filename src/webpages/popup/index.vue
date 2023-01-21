@@ -257,7 +257,6 @@ export default {
   }
 
   .component {
-    display: flex;
     flex: 1;
   }
 }
