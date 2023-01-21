@@ -7,6 +7,7 @@ interface Window {
     sharedObserver: import("../src/mainworld/classes/shared-observer").default;
     classNames: {
       loaded: boolean;
+      promise: Promise<void>;
       arr: string[];
     };
   };

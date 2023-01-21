@@ -6,10 +6,9 @@ window.scratchAddons = {
   events: new EventTarget(),
   redux: { target: new EventTarget() },
   sharedObserver: new SharedObserver(),
-  classNames: { loaded: false, arr: [] },
+  classNames: { loaded: false, arr: [], promise: window.scratchAddons.sharedObserver.watch({ query: "title" }).then(loadClasses) },
 };
 
-window.scratchAddons.sharedObserver.watch({ query: "title" }).then(loadClasses);
 async function loadClasses() {
   window.scratchAddons.classNames.arr = [
     ...new Set(
@@ -38,24 +37,4 @@ async function loadClasses() {
     ),
   ];
   window.scratchAddons.classNames.loaded = true;
-
-  const seenNonAddedClasses = new WeakSet();
-  while (true) {
-    const nonAddedClass = await window.scratchAddons.sharedObserver.watch({
-      query: "[class*='scratchAddonsScratchClass/']",
-      seen: seenNonAddedClasses,
-    });
-    nonAddedClass.classList.forEach((className) => {
-      if (!className.startsWith("scratchAddonsScratchClass")) return;
-      const classNameToFind = className.substring(className.indexOf("/") + 1);
-      const scratchClass = window.scratchAddons.classNames.arr.find(
-        (className) =>
-          className.startsWith(classNameToFind + "_") &&
-          className.length === classNameToFind.length + 6
-      );
-      if (scratchClass) {
-        nonAddedClass.classList.replace(className, scratchClass);
-      }
-    });
-  }
 }

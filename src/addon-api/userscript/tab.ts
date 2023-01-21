@@ -33,22 +33,27 @@ export default class Tab {
     el.setAttribute("data-addon-disabled-" + this.id, "");
   }
 
+  waitUntilScratchClassesLoaded() {
+    return window.scratchAddons.classNames.promise
+  }
+
   scratchClass(...args: (string | { others: string })[]) {
     let res = "";
     args.forEach((classNameToFind) => {
       if (typeof classNameToFind !== "string") return;
       if (window.scratchAddons.classNames.loaded) {
-        // TODO: Make regex B)
-        res +=
-          window.scratchAddons.classNames.arr.find(
-            (className) =>
-              className.startsWith(classNameToFind + "_") &&
-              className.length === classNameToFind.length + 6
-          ) || "";
+        const scratchClass = window.scratchAddons.classNames.arr.find(
+          (className) =>
+            className.startsWith(classNameToFind + "_") &&
+            className.length === classNameToFind.length + 6
+        )
+        if (!scratchClass) {
+          console.error("Could not find scratch class", classNameToFind)
+        }
+        res += scratchClass + " "
       } else {
-        res += `scratchAddonsScratchClass/${classNameToFind}`;
+        console.error("Scratch classes have not loaded. Use `await addon.tab.waitUntilScratchClassesLoaded()` before using scratchClass.")
       }
-      res += " ";
     });
     const options = args[args.length - 1];
     if (typeof options === "object") {
