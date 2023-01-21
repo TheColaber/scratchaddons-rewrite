@@ -22,11 +22,14 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
         return;
     const l10nUrls = await getL10NURLs(url);
     const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-    chrome.scripting.executeScript({
+    await chrome.scripting.executeScript({
         target: { tabId },
         injectImmediately: true,
         world: "MAIN",
         func: async (script, addonsEnabled, l10nUrls) => {
+            if (window.scratchAddons.loaded)
+                return;
+            // TODO: lets rollupify or smth
             const { default: module } = await import(script);
             module(addonsEnabled, l10nUrls);
         },
@@ -36,14 +39,25 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
             l10nUrls,
         ],
     });
+    await new Promise((r) => setTimeout(r, 3000));
     await chrome.scripting.executeScript({
         target: { tabId },
         injectImmediately: true,
         world: "MAIN",
         func: async (id) => {
-            window.scratchAddons.events.dispatchEvent(new CustomEvent("addonChange", { detail: { id } }));
+            window.scratchAddons.events.dispatchEvent(new CustomEvent("addonDynamicDisable", { detail: { id } }));
         },
-        args: ["scratch-messaging"],
+        args: ["find-bar"],
+    });
+    await new Promise((r) => setTimeout(r, 3000));
+    await chrome.scripting.executeScript({
+        target: { tabId },
+        injectImmediately: true,
+        world: "MAIN",
+        func: async (id) => {
+            window.scratchAddons.events.dispatchEvent(new CustomEvent("addonDynamicEnable", { detail: { id } }));
+        },
+        args: ["find-bar"],
     });
 });
 async function getL10NURLs(url) {

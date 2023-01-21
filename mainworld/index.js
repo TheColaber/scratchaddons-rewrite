@@ -117,21 +117,25 @@ class Tab {
     displayNoneWhileDisabled(el) {
         el.setAttribute("data-addon-disabled-" + this.id, "");
     }
+    waitUntilScratchClassesLoaded() {
+        return window.scratchAddons.classNames.promise;
+    }
     scratchClass(...args) {
         let res = "";
         args.forEach((classNameToFind) => {
             if (typeof classNameToFind !== "string")
                 return;
             if (window.scratchAddons.classNames.loaded) {
-                // TODO: Make regex B)
-                res +=
-                    window.scratchAddons.classNames.arr.find((className) => className.startsWith(classNameToFind + "_") &&
-                        className.length === classNameToFind.length + 6) || "";
+                const scratchClass = window.scratchAddons.classNames.arr.find((className) => className.startsWith(classNameToFind + "_") &&
+                    className.length === classNameToFind.length + 6);
+                if (!scratchClass) {
+                    console.error("Could not find scratch class", classNameToFind);
+                }
+                res += scratchClass + " ";
             }
             else {
-                res += `scratchAddonsScratchClass/${classNameToFind}`;
+                console.error("Scratch classes have not loaded. Use `await addon.tab.waitUntilScratchClassesLoaded()` before using scratchClass.");
             }
-            res += " ";
         });
         const options = args[args.length - 1];
         if (typeof options === "object") {
@@ -239,10 +243,33 @@ class UserscriptAddon extends Addon {
     }
 }
 
-window.scratchAddons.events.addEventListener("addonChange", (event) => {
-    console.log(event);
-});
+const AddonInstances = [];
+window.scratchAddons.events.addEventListener("addonDynamicDisable", ((event) => {
+    const id = event.detail.id;
+    const addon = AddonInstances.find((addon) => addon.id === id);
+    if (!addon)
+        throw "HUH??";
+    addon.dispatchEvent(new CustomEvent("dynamicDisable"));
+    addon.disabled = true;
+    const style = document.createElement("style");
+    style.setAttribute("data-addon-disabled-style-" + id, "");
+    style.textContent = `[data-addon-disabled-${id}] { display: none !important; }`;
+    document.body.appendChild(style);
+}));
+window.scratchAddons.events.addEventListener("addonDynamicEnable", ((event) => {
+    const id = event.detail.id;
+    const addon = AddonInstances.find((addon) => addon.id === id);
+    if (!addon)
+        throw "HUH??";
+    addon.dispatchEvent(new CustomEvent("dynamicEnable"));
+    addon.disabled = false;
+    const disabledStyle = document.querySelector(`[data-addon-disabled-style-${id}]`);
+    if (disabledStyle) {
+        disabledStyle.remove();
+    }
+}));
 async function index (addonsEnabled, l10nUrls) {
+    window.scratchAddons.loaded = true;
     for (const id in addonsEnabled) {
         if (addonsEnabled[id]) {
             const addon = addons[id];
@@ -257,8 +284,10 @@ async function index (addonsEnabled, l10nUrls) {
                 }
                 if (urlMatches) {
                     window.scratchAddons.console.log(id, "is now running!");
+                    const addonInstance = new UserscriptAddon(id, false);
+                    AddonInstances.push(addonInstance);
                     func({
-                        addon: new UserscriptAddon(id, false),
+                        addon: addonInstance,
                         console: window.scratchAddons.console,
                         msg: (msg) => {
                             console.log(l10nUrls);
