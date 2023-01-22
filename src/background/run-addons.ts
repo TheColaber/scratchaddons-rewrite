@@ -1,4 +1,5 @@
-chrome.scripting.unregisterContentScripts({ ids: ["load-redux"] }).then(() => {
+chrome.scripting.getRegisteredContentScripts({ ids: ["load-redux"] }).then((contentScript) => {
+  if (contentScript.find((cs) => cs.id === "load-redux")) return;
   chrome.scripting.registerContentScripts([
     {
       id: "load-redux",
