@@ -1,12 +1,13 @@
 import SharedObserver from "./classes/shared-observer";
 
+const sharedObserver = new SharedObserver();
 window.scratchAddons = {
   loaded: false,
   console: { ...console },
   events: new EventTarget(),
   redux: { target: new EventTarget() },
-  sharedObserver: new SharedObserver(),
-  classNames: { loaded: false, arr: [], promise: window.scratchAddons.sharedObserver.watch({ query: "title" }).then(loadClasses) },
+  sharedObserver,
+  classNames: { loaded: false, arr: [], promise: sharedObserver.watch({ query: "title" }).then(loadClasses) },
 };
 
 async function loadClasses() {

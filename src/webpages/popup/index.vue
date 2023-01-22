@@ -168,14 +168,14 @@ export default {
   }
 }
 .popups {
-  background-color: var(--page-background);
+  background-color: var(--background-primary);
   flex: 1;
   display: flex;
   flex-direction: column;
 
   .tabs {
     margin: 10px;
-    background-color: var(--content-background);
+    background-color: var(--background-secondary);
     border-radius: 12px;
 
     padding: 10px;

@@ -26,7 +26,7 @@ import { Icon } from "@iconify/vue";
 import colors from "../css/colors.module.scss";
 import "../css/sora.scss";
 
-const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
+let { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
 
@@ -40,7 +40,8 @@ export default {
   },
   methods: {
     switchMode() {
-      this.darkTheme = !this.darkTheme;
+      darkTheme = !darkTheme
+      this.darkTheme = darkTheme;
       chrome.storage.sync.set({ darkTheme: this.darkTheme });
     },
   },
@@ -70,19 +71,6 @@ export default {
     .text {
       font-size: 18px;
       font-weight: 400;
-      .link {
-        color: inherit;
-        margin: 5px;
-        text-decoration: none;
-        opacity: 0.75;
-        font-size: 12px;
-        border-radius: 4px;
-
-        &:focus-visible {
-          outline: none;
-          box-shadow: 0 0 0 3px #fff;
-        }
-      }
     }
     .logo {
       height: 30px;
@@ -110,97 +98,10 @@ export default {
   }
 }
 .main {
-  background-color: var(--page-background);
+  background-color: var(--background-primary);
   flex: 1;
   display: flex;
   flex-direction: column;
-
-  .tabs {
-    margin: 10px;
-    background-color: var(--content-background);
-    border-radius: 12px;
-
-    padding: 10px;
-    display: flex;
-    gap: 8px;
-    height: 35px;
-    overflow: hidden;
-    .tab {
-      display: flex;
-      align-items: center;
-      padding: 0px 8px;
-      font-size: 12px;
-      color: var(--content-text);
-      background: none;
-      border: none;
-      border-radius: 12px;
-      transition: 0.2s ease background;
-      font-family: inherit;
-
-      &:has(.link) {
-        padding: 0px 15.5px;
-      }
-
-      &:hover {
-        background-color: var(--button-hover-background);
-        padding: 0px 8px;
-      }
-
-      &:focus-visible {
-        padding: 0px 8px;
-        outline: none;
-        box-shadow: inset 0 0 0 3px var(--content-text);
-      }
-      &.sel {
-        padding: 0px 8px;
-        background-image: var(--gradient);
-        color: #fff;
-        a svg {
-          color: #fff;
-        }
-      }
-      svg {
-        font-size: 18px;
-      }
-      .name {
-        padding: 0px 0px 0px 5px;
-      }
-
-      .link {
-        display: none;
-        outline: none;
-      }
-      &.sel .link,
-      &:focus-visible .link,
-      &:hover .link {
-        display: flex;
-        height: 100%;
-        align-items: center;
-
-        svg {
-          color: var(--content-text);
-          font-size: 10px;
-          margin-left: 1px;
-          padding: 2px;
-          border-radius: 2px;
-
-          &:hover {
-            background: #fff;
-            color: var(--theme);
-          }
-        }
-
-        &:focus-visible svg {
-          background: #fff;
-          color: var(--theme);
-        }
-      }
-    }
-  }
-
-  .component {
-    display: flex;
-    flex: 1;
-  }
+  color: var(--content-text);
 }
 </style>
