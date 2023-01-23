@@ -1,4 +1,3 @@
-import defineManifest from "../../../helpers/define-manifest";
 import userscript from "./userscript";
 
 export default defineManifest({

@@ -34,18 +34,34 @@ export default {
       "process.env.NODE_ENV": JSON.stringify("production"),
       preventAssignment: true,
     }),
-    // {
-    //   name: "addon-imports",
-    //   transform(code, id) {
-    //     if (path.basename(id) === "addon.ts") {
-    //       code = `import defineManifest from "${path.relative(path.dirname(id), "src/helpers/define-manifest").replace(
-    //         /\\/g,
-    //         "/"
-    //       )}";\n` + code;
-    //       return code;
-    //     }
-    //   }
-    // },
+    {
+      name: "addon-imports",
+      transform(code, id) {
+        let fullPath = id;
+        let parts = [];
+        while (path.basename(fullPath) !== "") {
+          parts.push(path.basename(fullPath));
+          fullPath = path.dirname(fullPath)
+          if (fullPath === ".") break;
+          if (path.basename(fullPath) === "src") break;
+        }
+        if (!parts.includes("addons")) return;
+        if (parts[0] === "addon.ts") {
+          code = `import defineManifest from "${path.relative(path.dirname(id), "src/helpers/define-manifest").replace(
+            /\\/g,
+            "/"
+          )}";\n` + code;
+          return code;
+        }
+        if (parts[0].endsWith(".ts")) {
+          code = `import defineScript from "${path.relative(path.dirname(id), "src/helpers/define-script").replace(
+            /\\/g,
+            "/"
+          )}";\n` + code;
+          return code;
+        }
+      }
+    },
     resolve(),
     commonjs(),
   ],

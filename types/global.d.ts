@@ -1,3 +1,4 @@
+
 interface Window {
   scratchAddons: {
     loaded: boolean;
@@ -14,3 +15,9 @@ interface Window {
 
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: (...args: any) => void;
 }
+
+declare global {
+  const defineScript: typeof import("../src/helpers/define-script").default;
+  const defineManifest: typeof import("../src/helpers/define-manifest").default;
+}
+export {}

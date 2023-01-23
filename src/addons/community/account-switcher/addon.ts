@@ -1,4 +1,3 @@
-import defineManifest from "../../../helpers/define-manifest";
 import worker from "./worker";
 
 export default defineManifest({
