@@ -37,10 +37,11 @@ window.scratchAddons.events.addEventListener("addonDynamicEnable", ((
 export default async function (addonsEnabled: any, l10nUrls: string[]) {
   window.scratchAddons.loaded = true;
   for (const id in addonsEnabled) {
-    if (addonsEnabled[id]) {
-      const addon = addons[id];
+    if (!addonsEnabled[id]) continue;
+    const addon = addons[id];
 
-      if (!addon || !addon.userscripts) continue;
+    if (!addon) continue;
+    if (addon.userscripts) {
       for (const { func, matches } of addon.userscripts) {
         let urlMatches = false;
         for (const match of matches) {
@@ -61,6 +62,19 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
               return "test";
             },
           });
+        }
+      }
+    }
+    if (addon.userstyles) {
+      for (const { url, matches } of addon.userstyles) {
+        let urlMatches = false;
+        for (const match of matches) {
+          if (MATCH_PATTERNS[match].test(window.location.pathname)) {
+            urlMatches = true;
+          }
+        }
+        if (urlMatches) {
+          const style = document.head.appendChild(document.createElement("style"))
         }
       }
     }

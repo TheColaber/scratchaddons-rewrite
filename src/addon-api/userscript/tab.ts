@@ -34,7 +34,7 @@ export default class Tab {
   }
 
   waitUntilScratchClassesLoaded() {
-    return window.scratchAddons.classNames.promise
+    return window.scratchAddons.classNames.promise;
   }
 
   scratchClass(...args: (string | { others: string })[]) {
@@ -46,13 +46,15 @@ export default class Tab {
           (className) =>
             className.startsWith(classNameToFind + "_") &&
             className.length === classNameToFind.length + 6
-        )
+        );
         if (!scratchClass) {
-          console.error("Could not find scratch class", classNameToFind)
+          console.error("Could not find scratch class", classNameToFind);
         }
-        res += scratchClass + " "
+        res += scratchClass + " ";
       } else {
-        console.error("Scratch classes have not loaded. Use `await addon.tab.waitUntilScratchClassesLoaded()` before using scratchClass.")
+        console.error(
+          "Scratch classes have not loaded. Use `await addon.tab.waitUntilScratchClassesLoaded()` before using scratchClass."
+        );
       }
     });
     const options = args[args.length - 1];
@@ -159,7 +161,13 @@ export default class Tab {
     while (
       ((childable = childable.child),
       !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)
-    ) {}
-    return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
+    ) {};
+    this._cache.Blockly = childable.stateNode.ScratchBlocks;
+    if (!this._cache.Blockly) {
+      throw new Error(
+        `Blockly was type ${typeof this._cache.Blockly} on ${this.editorMode} page (${location.pathname})`
+      );
+    }
+    return (this._cache.Blockly);
   }
 }

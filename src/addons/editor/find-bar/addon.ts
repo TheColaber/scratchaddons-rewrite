@@ -12,6 +12,12 @@ export default defineManifest({
       runAtComplete: false,
     },
   ],
+  userstyles: [
+    {
+      url: "userstyle.css",
+      matches: ["projects"],
+    },
+  ],
   hotkeys: [
     {
       id: "previousLocation",

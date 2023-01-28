@@ -1,17 +1,13 @@
 <template>
-  <div :class="$style.container">
-    test
-  </div>
+  <div :class="$style.container">test</div>
 </template>
 
 <script lang="ts">
-
 export default {
   props: ["manifest"],
   data() {
-    return {
-    };
-  }
+    return {};
+  },
 };
 </script>
 

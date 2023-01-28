@@ -17,6 +17,10 @@ export interface AddonManifest {
     matches: (keyof typeof matches)[];
     runAtComplete: boolean;
   }[];
+  userstyles?: {
+    url: string;
+    matches: (keyof typeof matches)[];
+  }[];
   worker?: Function;
   hotkeys?: {
     id: string;

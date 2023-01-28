@@ -5,7 +5,7 @@ declare namespace ScratchBlocks {
   class Block {
     type: string;
     getChildren: () => any[];
-    inputList: any[];
+    inputList: { fieldRow: { name: string; getText: () => string }[] }[];
   }
 
   class BlockSvg extends Block {}
@@ -177,6 +177,7 @@ declare namespace ScratchBlocks {
     getCommentById(id: string): WorkspaceComment | null;
     getFlyout(): Flyout | null;
     allInputsFilled(shadowBlocksAreFilled?: boolean): boolean;
+    centerOnBlock(id: string): void
   }
 
   interface WorkspaceConstructor {
@@ -186,11 +187,14 @@ declare namespace ScratchBlocks {
     getById(id: string): Workspace | null;
   }
 
-  class WorkspaceSvg extends Workspace {}
+  class WorkspaceSvg extends Workspace {
+    prototype: {createDom: (optClass: string) => void;}
+  }
 
   interface RealBlockly {
+    getMainWorkspace(): Workspace;
     Workspace: WorkspaceConstructor;
-    WorkspaceSvg: typeof WorkspaceSvg;
+    WorkspaceSvg: WorkspaceSvg;
   }
 
   interface BlocklyGlobal {
@@ -198,4 +202,4 @@ declare namespace ScratchBlocks {
   }
 }
 
-export type Blockly = ScratchBlocks.BlocklyGlobal | undefined;
+export type Blockly = ScratchBlocks.RealBlockly

@@ -27,7 +27,7 @@ export default {
       "#addons": addons,
       "#popups": popups,
     }),
-    vue({ target: "browser", styleInjector: "cry"  }),
+    vue({ target: "browser", styleInjector: "cry" }),
     postcss(),
     typescript(),
     replace({
@@ -41,26 +41,26 @@ export default {
         let parts = [];
         while (path.basename(fullPath) !== "") {
           parts.push(path.basename(fullPath));
-          fullPath = path.dirname(fullPath)
+          fullPath = path.dirname(fullPath);
           if (fullPath === ".") break;
           if (path.basename(fullPath) === "src") break;
         }
-        if (!parts.includes("addons")) return;
+        if (!(parts.includes("addons") || parts.includes("popups"))) return;
         if (parts[0] === "addon.ts") {
-          code = `import defineManifest from "${path.relative(path.dirname(id), "src/helpers/define-manifest").replace(
-            /\\/g,
-            "/"
-          )}";\n` + code;
+          code =
+            `import defineManifest from "${path
+              .relative(path.dirname(id), "src/helpers/define-manifest")
+              .replace(/\\/g, "/")}";\n` + code;
           return code;
         }
         if (parts[0].endsWith(".ts")) {
-          code = `import defineScript from "${path.relative(path.dirname(id), "src/helpers/define-script").replace(
-            /\\/g,
-            "/"
-          )}";\n` + code;
+          code =
+            `import defineScript from "${path
+              .relative(path.dirname(id), "src/helpers/define-script")
+              .replace(/\\/g, "/")}";\n` + code;
           return code;
         }
-      }
+      },
     },
     resolve(),
     commonjs(),

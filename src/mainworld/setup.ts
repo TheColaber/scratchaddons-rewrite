@@ -7,7 +7,11 @@ window.scratchAddons = {
   events: new EventTarget(),
   redux: { target: new EventTarget() },
   sharedObserver,
-  classNames: { loaded: false, arr: [], promise: sharedObserver.watch({ query: "title" }).then(loadClasses) },
+  classNames: {
+    loaded: false,
+    arr: [],
+    promise: sharedObserver.watch({ query: "title" }).then(loadClasses),
+  },
 };
 
 async function loadClasses() {
@@ -39,3 +43,21 @@ async function loadClasses() {
   ];
   window.scratchAddons.classNames.loaded = true;
 }
+
+// let Blockly: any = undefined;
+// Object.defineProperty(Object.prototype, "ScratchBlocks", {
+//   set(data) {
+//     Blockly = data
+//     if (!data.WorkspaceSvg) return;
+
+//     const BlocklyCreateDom = Blockly.WorkspaceSvg.prototype.createDom;
+//     Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
+//       console.log("lmao we trapped it :PPPPPP");
+//       return BlocklyCreateDom.call(this, opt_backgroundClass)
+//     }
+//   },
+//   get() {
+//     return Blockly;
+//   }
+// }) 
+

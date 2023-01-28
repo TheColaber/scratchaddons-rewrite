@@ -8,9 +8,7 @@
     <div :class="$style.header">
       <div :class="$style.title">
         <img :src="'../../images/icon.svg'" :class="$style.logo" />
-        <span :class="$style.text">
-          Scratch Addons
-        </span>
+        <span :class="$style.text"> Scratch Addons </span>
       </div>
       <button :class="$style.themeSwitcher" @click="switchMode">
         <Icon :icon="darkTheme ? 'uil:moon' : 'uil:sun'" />
@@ -26,9 +24,10 @@ import { Icon } from "@iconify/vue";
 import colors from "../css/colors.module.scss";
 import "../css/sora.scss";
 
-let { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
-  ["darkTheme", "addonsEnabled"]
-);
+let { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get([
+  "darkTheme",
+  "addonsEnabled",
+]);
 
 export default {
   components: { Icon },
@@ -40,14 +39,13 @@ export default {
   },
   methods: {
     switchMode() {
-      darkTheme = !darkTheme
+      darkTheme = !darkTheme;
       this.darkTheme = darkTheme;
       chrome.storage.sync.set({ darkTheme: this.darkTheme });
     },
   },
 };
 </script>
-
 
 <style lang="scss" module>
 .container {
