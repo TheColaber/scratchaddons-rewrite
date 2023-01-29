@@ -41,13 +41,55 @@ class SharedObserver {
     }
 }
 
+const sharedObserver = new SharedObserver();
+let reactInternalKey = null;
 window.scratchAddons = {
     loaded: false,
     console: { ...console },
     events: new EventTarget(),
     redux: { target: new EventTarget() },
-    sharedObserver: new SharedObserver(),
-    classNames: { loaded: false, arr: [], promise: window.scratchAddons.sharedObserver.watch({ query: "title" }).then(loadClasses) },
+    sharedObserver,
+    classNames: {
+        loaded: false,
+        arr: [],
+        promise: sharedObserver.watch({ query: "title" }).then(loadClasses),
+    },
+    Blockly: null,
+    getInternalKey(elem) {
+        if (!reactInternalKey) {
+            const key = Object.keys(elem).find((key) => key.startsWith("__reactInternalInstance$"));
+            if (!key)
+                throw "Element is not a react element.";
+            reactInternalKey = key;
+        }
+        return reactInternalKey;
+    },
+    async getBlockly() {
+        if (!window.scratchAddons.Blockly) {
+            // if (!this.editorMode || this.editorMode === "embed") {
+            //   throw new Error(
+            //     `Cannot access Blockly on ${this.editorMode} page (${location.pathname})`
+            //   );
+            // }
+            const elem = await sharedObserver.watch({ query: '[class^="gui_blocks-wrapper"]' });
+            const internalKey = window.scratchAddons.getInternalKey(elem);
+            if (!internalKey) {
+                throw "React Internal Key not found on gui_blocks-wrapper";
+            }
+            // TODO: we shouldn't need to use any here.
+            const internal = elem[internalKey];
+            let childable = internal;
+            while (((childable = childable.child),
+                !childable ||
+                    !childable.stateNode ||
+                    !childable.stateNode.ScratchBlocks)) { }
+            window.scratchAddons.Blockly = childable.stateNode.ScratchBlocks;
+            if (!window.scratchAddons.Blockly) {
+                throw new Error(`Blockly was type ${typeof window.scratchAddons.Blockly} on page (${location.pathname})`);
+            }
+        }
+        return window.scratchAddons.Blockly;
+    },
 };
 async function loadClasses() {
     window.scratchAddons.classNames.arr = [
@@ -65,3 +107,18 @@ async function loadClasses() {
     ];
     window.scratchAddons.classNames.loaded = true;
 }
+// let Blockly: any = undefined;
+// Object.defineProperty(Object.prototype, "ScratchBlocks", {
+//   set(data) {
+//     Blockly = data
+//     if (!data.WorkspaceSvg) return;
+//     const BlocklyCreateDom = Blockly.WorkspaceSvg.prototype.createDom;
+//     Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
+//       console.log("lmao we trapped it :PPPPPP");
+//       return BlocklyCreateDom.call(this, opt_backgroundClass)
+//     }
+//   },
+//   get() {
+//     return Blockly;
+//   }
+// })

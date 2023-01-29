@@ -1,5 +1,5 @@
-import { d as defineComponent, i as isFunction, a as isString, b as createRenderer, h, c as createElementBlock, e as createBaseVNode, f as createVNode, r as resolveComponent, o as openBlock, p as pushScopeId, g as popScopeId, j as extend, k as isOn, l as isModelListener, m as isArray, q as hyphenate, s as camelize, u as capitalize, v as isSpecialBooleanAttr, w as includeBooleanAttr, x as callWithAsyncErrorHandling } from './chunk.runtime-core.esm-bundler.js';
-import { s as styleInject } from './chunk.style-inject.es.js';
+import { d as defineComponent, i as isFunction, a as isString, b as createRenderer, h, c as createElementBlock, e as createBaseVNode, n as normalizeClass, f as createVNode, r as resolveComponent, o as openBlock, g as extend, j as isOn, k as isModelListener, l as isArray, m as hyphenate, p as camelize, q as capitalize, s as isSpecialBooleanAttr, t as includeBooleanAttr, u as callWithAsyncErrorHandling } from './chunk.runtime-core.esm-bundler.js';
+import injectStyle from './mainworld/inject-style.js';
 
 const svgNS = 'http://www.w3.org/2000/svg';
 const doc = (typeof document !== 'undefined' ? document : null);
@@ -818,6 +818,7 @@ function calculateSize(size, ratio, precision) {
   }
 }
 
+const isUnsetKeyword = (value) => value === "unset" || value === "undefined" || value === "none";
 function iconToSVG(icon, customisations) {
   const fullIcon = {
     ...defaultIconProps,
@@ -909,15 +910,19 @@ function iconToSVG(icon, customisations) {
     width = customisationsWidth === "auto" ? boxWidth : customisationsWidth;
     height = customisationsHeight === null ? calculateSize(width, boxHeight / boxWidth) : customisationsHeight === "auto" ? boxHeight : customisationsHeight;
   }
-  const result = {
-    attributes: {
-      width: width.toString(),
-      height: height.toString(),
-      viewBox: box.left.toString() + " " + box.top.toString() + " " + boxWidth.toString() + " " + boxHeight.toString()
-    },
+  const attributes = {};
+  const setAttr = (prop, value) => {
+    if (!isUnsetKeyword(value)) {
+      attributes[prop] = value.toString();
+    }
+  };
+  setAttr("width", width);
+  setAttr("height", height);
+  attributes.viewBox = box.left.toString() + " " + box.top.toString() + " " + boxWidth.toString() + " " + boxHeight.toString();
+  return {
+    attributes,
     body
   };
-  return result;
 }
 
 const regex = /\sid="(\S+)"/g;
@@ -932,14 +937,16 @@ function replaceIDs(body, prefix = randomPrefix) {
   if (!ids.length) {
     return body;
   }
+  const suffix = "suffix" + (Math.random() * 16777216 | Date.now()).toString(16);
   ids.forEach((id) => {
     const newID = typeof prefix === "function" ? prefix(id) : prefix + (counter++).toString();
     const escapedID = id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     body = body.replace(
       new RegExp('([#;"])(' + escapedID + ')([")]|\\.[a-z])', "g"),
-      "$1" + newID + "$3"
+      "$1" + newID + suffix + "$3"
     );
   });
+  body = body.replace(new RegExp(suffix, "g"), "");
   return body;
 }
 
@@ -2304,9 +2311,10 @@ const Icon = defineComponent({
     },
 });
 
-const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
-  ["darkTheme", "addonsEnabled"]
-);
+let { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get([
+  "darkTheme",
+  "addonsEnabled",
+]);
 
 var script = {
   components: { Icon },
@@ -2316,48 +2324,63 @@ var script = {
     };
   },
   methods: {
-    async switchMode() {
-      this.darkTheme = !this.darkTheme;
-      await chrome.storage.sync.set({ darkTheme: this.darkTheme });
+    switchMode() {
+      darkTheme = !darkTheme;
+      this.darkTheme = darkTheme;
+      chrome.storage.sync.set({ darkTheme: this.darkTheme });
     },
   },
 };
 
-const _withScopeId = n => (pushScopeId("data-v-54bc769c"),n=n(),popScopeId(),n);
-const _hoisted_1 = { class: "container" };
-const _hoisted_2 = { class: "navbar" };
-const _hoisted_3 = ["src"];
-const _hoisted_4 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("div", { class: "title" }, "Settings", -1 /* HOISTED */));
-const _hoisted_5 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("div", { class: "main" }, null, -1 /* HOISTED */));
+const _hoisted_1 = ["src"];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Icon = resolveComponent("Icon");
 
-  return (openBlock(), createElementBlock("div", _hoisted_1, [
-    createBaseVNode("div", _hoisted_2, [
-      createBaseVNode("img", {
-        src: '../../images/icon.svg',
-        class: "logo"
-      }, null, 8 /* PROPS */, _hoisted_3),
-      _hoisted_4,
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass([
+      _ctx.$style.container,
+      { [_ctx.colors.darkTheme]: $data.darkTheme, [_ctx.colors.lightTheme]: !$data.darkTheme },
+    ])
+  }, [
+    createBaseVNode("div", {
+      class: normalizeClass(_ctx.$style.header)
+    }, [
+      createBaseVNode("div", {
+        class: normalizeClass(_ctx.$style.title)
+      }, [
+        createBaseVNode("img", {
+          src: '../../images/icon.svg',
+          class: normalizeClass(_ctx.$style.logo)
+        }, null, 10 /* CLASS, PROPS */, _hoisted_1),
+        createBaseVNode("span", {
+          class: normalizeClass(_ctx.$style.text)
+        }, " Scratch Addons ", 2 /* CLASS */)
+      ], 2 /* CLASS */),
       createBaseVNode("button", {
-        class: "themeSwitcher",
+        class: normalizeClass(_ctx.$style.themeSwitcher),
         onClick: _cache[0] || (_cache[0] = (...args) => ($options.switchMode && $options.switchMode(...args)))
       }, [
         createVNode(_component_Icon, {
           icon: $data.darkTheme ? 'uil:moon' : 'uil:sun'
         }, null, 8 /* PROPS */, ["icon"])
-      ])
-    ]),
-    _hoisted_5
-  ]))
+      ], 2 /* CLASS */)
+    ], 2 /* CLASS */),
+    createBaseVNode("div", {
+      class: normalizeClass(_ctx.$style.main)
+    }, "hello", 2 /* CLASS */)
+  ], 2 /* CLASS */))
 }
 
-var css_248z = "@import url(\"../css/colors.css\");\n@import url(\"../css/sora.css\");\n.logo[data-v-54bc769c] {\n  height: 30px;\n  margin-inline-end: 20px;\n}\n\n.themeSwitcher[data-v-54bc769c] {\n  padding: 0 20px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background: none;\n  color: inherit;\n}";
-styleInject(css_248z);
+var css_248z = "._container_64j6o_2 {\n  --gradient: linear-gradient(to right, var(--theme), hsl(24deg 100% 67%));\n  height: inherit;\n  display: flex;\n  flex-direction: column;\n  font-family: \"Sora\", sans-serif;\n}\n\n._header_64j6o_9 {\n  background-image: var(--gradient);\n  display: flex;\n  height: 60px;\n  width: 100%;\n  color: #fff;\n}\n._header_64j6o_9 ._title_64j6o_15 {\n  flex-grow: 1;\n  display: flex;\n  align-items: center;\n  padding: 0 20px;\n}\n._header_64j6o_9 ._title_64j6o_15 ._text_64j6o_20 {\n  font-size: 18px;\n  font-weight: 400;\n}\n._header_64j6o_9 ._title_64j6o_15 ._logo_64j6o_24 {\n  height: 30px;\n  margin-inline-end: 20px;\n}\n._header_64j6o_9 ._themeSwitcher_64j6o_29 {\n  padding: 0 20px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background: none;\n  color: inherit;\n}\n._header_64j6o_9 ._themeSwitcher_64j6o_29:focus-visible {\n  outline: none;\n  box-shadow: inset 0 0 0 3px #fff;\n}\n._header_64j6o_9 ._themeSwitcher_64j6o_29 svg {\n  font-size: 24px;\n}\n\n._main_64j6o_49 {\n  background-color: var(--background-primary);\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  color: var(--content-text);\n}";
+ injectStyle(css_248z);
+
+var style0 = {"container":"_container_64j6o_2","header":"_header_64j6o_9","title":"_title_64j6o_15","text":"_text_64j6o_20","logo":"_logo_64j6o_24","themeSwitcher":"_themeSwitcher_64j6o_29","main":"_main_64j6o_49"};
+
+const cssModules = script.__cssModules = {};
+cssModules["$style"] = style0;
 
 script.render = render;
-script.__scopeId = "data-v-54bc769c";
 script.__file = "src/webpages/settings/index.vue";
 
 export { Icon as I, createApp as c, script as s };

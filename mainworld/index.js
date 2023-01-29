@@ -1,7 +1,7 @@
 import { a as addons } from '../chunk._virtual__addons.js';
+import injectStyle from './inject-style.js';
 import MATCH_PATTERNS from './matches.js';
 import '../chunk.define-manifest.js';
-import '../chunk.style-inject.es.js';
 
 class Addon extends EventTarget {
     id;
@@ -94,25 +94,15 @@ class ReduxHandler extends EventTarget {
 
 class Tab {
     id;
-    _cache;
     _waitForElementSet;
     redux;
-    _react_internal_key;
     constructor(id) {
         this.id = id;
-        this._cache = { Blockly: null };
         this._waitForElementSet = new WeakSet();
         this.redux = new ReduxHandler();
-        this._react_internal_key = undefined;
-    }
-    get REACT_INTERNAL_PREFIX() {
-        return "__reactInternalInstance$";
     }
     getInternalKey(elem) {
-        if (!this._react_internal_key) {
-            this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
-        }
-        return this._react_internal_key;
+        return window.scratchAddons.getInternalKey(elem);
     }
     displayNoneWhileDisabled(el) {
         el.setAttribute("data-addon-disabled-" + this.id, "");
@@ -210,24 +200,7 @@ class Tab {
         return "projectpage";
     }
     async getBlockly() {
-        if (this._cache.Blockly)
-            return this._cache.Blockly;
-        if (!this.editorMode || this.editorMode === "embed") {
-            throw new Error(`Cannot access Blockly on ${this.editorMode} page (${location.pathname})`);
-        }
-        const elem = await this.waitForElement('[class^="gui_blocks-wrapper"]', {
-            reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-        });
-        const internalKey = this.getInternalKey(elem);
-        if (!internalKey) {
-            throw "React Internal Key not found on gui_blocks-wrapper";
-        }
-        // TODO: we shouldn't need to use any here.
-        const internal = elem[internalKey];
-        let childable = internal;
-        while (((childable = childable.child),
-            !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) { }
-        return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
+        return window.scratchAddons.getBlockly();
     }
 }
 
@@ -271,11 +244,13 @@ window.scratchAddons.events.addEventListener("addonDynamicEnable", ((event) => {
 async function index (addonsEnabled, l10nUrls) {
     window.scratchAddons.loaded = true;
     for (const id in addonsEnabled) {
-        if (addonsEnabled[id]) {
-            const addon = addons[id];
-            if (!addon || !addon.userscripts)
-                continue;
-            for (const { func, matches } of addon.userscripts) {
+        if (!addonsEnabled[id])
+            continue;
+        const addon = addons[id];
+        if (!addon)
+            continue;
+        if (addon.userscripts) {
+            for (const { script, matches } of addon.userscripts) {
                 let urlMatches = false;
                 for (const match of matches) {
                     if (MATCH_PATTERNS[match].test(window.location.pathname)) {
@@ -286,7 +261,7 @@ async function index (addonsEnabled, l10nUrls) {
                     window.scratchAddons.console.log(id, "is now running!");
                     const addonInstance = new UserscriptAddon(id, false);
                     AddonInstances.push(addonInstance);
-                    func({
+                    script({
                         addon: addonInstance,
                         console: window.scratchAddons.console,
                         msg: (msg) => {
@@ -294,6 +269,19 @@ async function index (addonsEnabled, l10nUrls) {
                             return "test";
                         },
                     });
+                }
+            }
+        }
+        if (addon.userstyles) {
+            for (const { style, matches } of addon.userstyles) {
+                let urlMatches = false;
+                for (const match of matches) {
+                    if (MATCH_PATTERNS[match].test(window.location.pathname)) {
+                        urlMatches = true;
+                    }
+                }
+                if (urlMatches) {
+                    injectStyle(style);
                 }
             }
         }
