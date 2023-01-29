@@ -1,5 +1,6 @@
 import * as addons from "#addons";
 import UserscriptAddon from "../addon-api/userscript";
+import injectStyle from "./inject-style";
 import MATCH_PATTERNS from "./matches";
 
 const AddonInstances: UserscriptAddon[] = [];
@@ -42,7 +43,7 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
 
     if (!addon) continue;
     if (addon.userscripts) {
-      for (const { func, matches } of addon.userscripts) {
+      for (const { script, matches } of addon.userscripts) {
         let urlMatches = false;
         for (const match of matches) {
           if (MATCH_PATTERNS[match].test(window.location.pathname)) {
@@ -53,7 +54,7 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
           window.scratchAddons.console.log(id, "is now running!");
           const addonInstance = new UserscriptAddon(id, false);
           AddonInstances.push(addonInstance);
-          func({
+          script({
             addon: addonInstance,
             console: window.scratchAddons.console,
             msg: (msg) => {
@@ -66,7 +67,7 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
       }
     }
     if (addon.userstyles) {
-      for (const { url, matches } of addon.userstyles) {
+      for (const { style, matches } of addon.userstyles) {
         let urlMatches = false;
         for (const match of matches) {
           if (MATCH_PATTERNS[match].test(window.location.pathname)) {
@@ -74,7 +75,7 @@ export default async function (addonsEnabled: any, l10nUrls: string[]) {
           }
         }
         if (urlMatches) {
-          const style = document.head.appendChild(document.createElement("style"))
+          injectStyle(style);
         }
       }
     }

@@ -3,30 +3,17 @@ import { Blockly } from "../../../types/apis/Blockly";
 
 export default class Tab {
   id: string;
-  _cache: { Blockly: any };
   _waitForElementSet: WeakSet<{}>;
   redux: ReduxHandler;
-  _react_internal_key?: string;
 
   constructor(id: string) {
     this.id = id;
-    this._cache = { Blockly: null };
     this._waitForElementSet = new WeakSet();
     this.redux = new ReduxHandler();
-    this._react_internal_key = undefined;
-  }
-
-  get REACT_INTERNAL_PREFIX() {
-    return "__reactInternalInstance$";
   }
 
   getInternalKey(elem: Element) {
-    if (!this._react_internal_key) {
-      this._react_internal_key = Object.keys(elem).find((key) =>
-        key.startsWith(this.REACT_INTERNAL_PREFIX)
-      );
-    }
-    return this._react_internal_key as keyof typeof elem;
+    return window.scratchAddons.getInternalKey(elem);
   }
 
   displayNoneWhileDisabled(el: Element) {
@@ -141,33 +128,7 @@ export default class Tab {
     return "projectpage";
   }
 
-  async getBlockly(): Promise<Blockly> {
-    if (this._cache.Blockly) return this._cache.Blockly;
-    if (!this.editorMode || this.editorMode === "embed") {
-      throw new Error(
-        `Cannot access Blockly on ${this.editorMode} page (${location.pathname})`
-      );
-    }
-    const elem = await this.waitForElement('[class^="gui_blocks-wrapper"]', {
-      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-    });
-    const internalKey = this.getInternalKey(elem);
-    if (!internalKey) {
-      throw "React Internal Key not found on gui_blocks-wrapper";
-    }
-    // TODO: we shouldn't need to use any here.
-    const internal: any | { child: any; stateNode: any } = elem[internalKey];
-    let childable = internal;
-    while (
-      ((childable = childable.child),
-      !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)
-    ) {};
-    this._cache.Blockly = childable.stateNode.ScratchBlocks;
-    if (!this._cache.Blockly) {
-      throw new Error(
-        `Blockly was type ${typeof this._cache.Blockly} on ${this.editorMode} page (${location.pathname})`
-      );
-    }
-    return (this._cache.Blockly);
+  async getBlockly() {
+    return window.scratchAddons.getBlockly();
   }
 }

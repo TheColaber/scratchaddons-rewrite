@@ -1,6 +1,5 @@
 import path from "path";
 import fs from "fs/promises";
-
 import virtual from "@rollup/plugin-virtual";
 import { chromeExtension } from "rollup-plugin-chrome-extension";
 import typescript from "@rollup/plugin-typescript";
@@ -27,8 +26,14 @@ export default {
       "#addons": addons,
       "#popups": popups,
     }),
-    vue({ target: "browser", styleInjector: "cry" }),
-    postcss(),
+    vue({ target: "browser" }),
+    postcss({ inject: (varName, file) => {
+      const isVue = path.basename(file).includes(".vue");
+      if (isVue) {
+        const injectStyle = (path.resolve('src/mainworld/inject-style.ts').replace(/\\/g, "/"));
+        return `import injectStyle from "${injectStyle}"; injectStyle(${varName});`
+      }
+    } }),
     typescript(),
     replace({
       "process.env.NODE_ENV": JSON.stringify("production"),
@@ -67,7 +72,6 @@ export default {
   ],
 };
 
-/** @returns {{id: string, manifest: any, path:string}[]} */
 async function getAddonManifests(dir, id) {
   const imports = await addAddonImport(dir, id);
   return imports.join("\n");

@@ -21,9 +21,6 @@
 <script lang="ts">
 import { Icon } from "@iconify/vue";
 
-import colors from "../css/colors.module.scss";
-import "../css/sora.scss";
-
 let { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get([
   "darkTheme",
   "addonsEnabled",
@@ -33,7 +30,6 @@ export default {
   components: { Icon },
   data() {
     return {
-      colors,
       darkTheme: !!darkTheme,
     };
   },

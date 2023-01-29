@@ -1,6 +1,8 @@
 import SharedObserver from "./classes/shared-observer";
+import { Blockly } from "../../types/apis/Blockly";
 
 const sharedObserver = new SharedObserver();
+let reactInternalKey: keyof Element | null = null;
 window.scratchAddons = {
   loaded: false,
   console: { ...console },
@@ -11,6 +13,49 @@ window.scratchAddons = {
     loaded: false,
     arr: [],
     promise: sharedObserver.watch({ query: "title" }).then(loadClasses),
+  },
+  Blockly: null,
+  getInternalKey(elem) {
+    if (!reactInternalKey) {
+      const key = Object.keys(elem).find((key) =>
+        key.startsWith("__reactInternalInstance$")
+      );
+      if (!key) throw "Element is not a react element.";
+      reactInternalKey = key as keyof Element;
+    }
+    return reactInternalKey;
+  },
+  async getBlockly() {
+    if (!window.scratchAddons.Blockly) {
+      // if (!this.editorMode || this.editorMode === "embed") {
+      //   throw new Error(
+      //     `Cannot access Blockly on ${this.editorMode} page (${location.pathname})`
+      //   );
+      // }
+      const elem = await sharedObserver.watch({ query: '[class^="gui_blocks-wrapper"]' });
+      const internalKey = window.scratchAddons.getInternalKey(elem);
+      if (!internalKey) {
+        throw "React Internal Key not found on gui_blocks-wrapper";
+      }
+      // TODO: we shouldn't need to use any here.
+      const internal: any | { child: any; stateNode: any } = elem[internalKey];
+      let childable = internal;
+      while (
+        ((childable = childable.child),
+        !childable ||
+          !childable.stateNode ||
+          !childable.stateNode.ScratchBlocks)
+      ) {}
+      window.scratchAddons.Blockly = childable.stateNode.ScratchBlocks;
+      if (!window.scratchAddons.Blockly) {
+        throw new Error(
+          `Blockly was type ${typeof window.scratchAddons.Blockly} on page (${
+            location.pathname
+          })`
+        );
+      }
+    }
+    return window.scratchAddons.Blockly;
   },
 };
 
@@ -59,5 +104,4 @@ async function loadClasses() {
 //   get() {
 //     return Blockly;
 //   }
-// }) 
-
+// })

@@ -1,4 +1,5 @@
-import userscript from "./userscript";
+import script from "./userscript";
+import style from "./userstyle.css";
 
 export default defineManifest({
   name: "Find bar",
@@ -7,14 +8,14 @@ export default defineManifest({
   versionAdded: "1.0.0",
   userscripts: [
     {
-      func: userscript,
+      script,
       matches: ["projects"],
       runAtComplete: false,
     },
   ],
   userstyles: [
     {
-      url: "userstyle.css",
+      style,
       matches: ["projects"],
     },
   ],

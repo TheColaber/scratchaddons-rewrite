@@ -1,3 +1,5 @@
+import { Blockly } from "./apis/Blockly";
+
 declare global {
   const defineScript: typeof import("../src/helpers/define-script").default;
   const defineManifest: typeof import("../src/helpers/define-manifest").default;
@@ -14,6 +16,9 @@ declare global {
         promise: Promise<void>;
         arr: string[];
       };
+      Blockly: null | Blockly;
+      getBlockly(): Promise<Blockly>;
+      getInternalKey(elem: Element): keyof Element;
     };
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: (...args: any) => void;
   }

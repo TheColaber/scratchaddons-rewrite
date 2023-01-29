@@ -29,9 +29,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
 
     func: async (script: string, addonsEnabled, l10nUrls) => {
       if (window.scratchAddons.loaded) return;
-      // TODO: lets rollupify or smth
-      console.log("cry");
-      
+      console.log("Scratch Addons is running.");
+
       const { default: module } = await import(script);
       module(addonsEnabled, l10nUrls);
     },

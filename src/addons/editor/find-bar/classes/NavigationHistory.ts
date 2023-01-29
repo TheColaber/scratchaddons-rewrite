@@ -1,5 +1,5 @@
 // Make these global so that every addon uses the same arrays.
-type pos = {left: number, top: number}
+type pos = { left: number; top: number };
 let views: pos[] = [];
 let forward: pos[] = [];
 
@@ -13,7 +13,7 @@ export default class NavigationHistory {
    */
   storeView(next: pos, dist: number) {
     forward = [];
-    const workspace = this.Blockly.getMainWorkspace()
+    const workspace = this.Blockly.getMainWorkspace();
     const metrics = workspace.getMetrics();
 
     let pos = { left: metrics.viewLeft, top: metrics.viewTop };
@@ -23,7 +23,9 @@ export default class NavigationHistory {
   }
 
   distance(pos: pos, next: pos) {
-    return Math.sqrt(Math.pow(pos.left - next.left, 2) + Math.pow(pos.top - next.top, 2));
+    return Math.sqrt(
+      Math.pow(pos.left - next.left, 2) + Math.pow(pos.top - next.top, 2)
+    );
   }
 
   peek() {
@@ -81,7 +83,7 @@ export default class NavigationHistory {
     }
     views.push(view);
 
-    let workspace = this.Blockly.getMainWorkspace()
+    let workspace = this.Blockly.getMainWorkspace();
     const metrics = workspace.getMetrics();
 
     let sx = view.left - metrics.contentLeft,

@@ -13,12 +13,12 @@ export interface AddonManifest {
     component: Component;
   };
   userscripts?: {
-    func: ReturnType<typeof defineScript>;
+    script: ReturnType<typeof defineScript>;
     matches: (keyof typeof matches)[];
     runAtComplete: boolean;
   }[];
   userstyles?: {
-    url: string;
+    style: string;
     matches: (keyof typeof matches)[];
   }[];
   worker?: Function;

@@ -1,6 +1,6 @@
 import UserscriptAddon from "../../../addon-api/userscript";
 import BlockItem from "./classes/BlockItem";
-import NavigationHistory from "./classes/NavigationHistory"
+import NavigationHistory from "./classes/NavigationHistory";
 
 // import BlockInstance from "./blockly/BlockInstance.js";
 // import Utils from "./blockly/Utils.js";
@@ -17,20 +17,20 @@ export default defineScript(async function ({ addon, console, msg }) {
       this.outerEl = document.createElement("div");
       this.outerEl.className = "sa-find-bar";
       addon.tab.displayNoneWhileDisabled(this.outerEl);
-  
+
       // Label
       const label = this.outerEl.appendChild(document.createElement("label"));
       label.htmlFor = "sa-find-input";
       label.textContent = msg("find");
-  
+
       // Wrapper
       const wrapper = this.outerEl.appendChild(document.createElement("div"));
       wrapper.className = "sa-find-wrapper";
-  
+
       // Dropdown
       const dropdown = wrapper.appendChild(document.createElement("div"));
       dropdown.className = "sa-find-dropdown-out";
-  
+
       // Input
       this.inputEl = dropdown.appendChild(document.createElement("input"));
       this.inputEl.className = addon.tab.scratchClass("input_input-form", {
@@ -40,8 +40,29 @@ export default defineScript(async function ({ addon, console, msg }) {
       this.inputEl.type = "search";
       this.inputEl.placeholder = msg("find-placeholder");
       this.inputEl.autocomplete = "off";
+
+      // const workspace = new Blockly.WorkspaceSvg({
+      //   getMetrics() {
+      //     return {
+      //       viewHeight: 100,
+      //       viewWidth: 100,
+      //       contentHeight: 100,
+      //       contentWidth: 100,
+      //       viewTop: 100,
+      //       viewLeft: 100,
+      //       contentTop: 100,
+      //       contentLeft: 100,
+      //       absoluteTop: 100,
+      //       absoluteLeft: 100,
+      //     };
+      //   },
+      // });
+      // const dom = workspace.createDom()
+      // const block = new Blockly.Block(workspace, "motion_movesteps");
+      // console.log(dom);
+      
     }
-  
+
     attachDom(root: Element) {
       root.appendChild(this.outerEl);
     }

@@ -177,7 +177,7 @@ declare namespace ScratchBlocks {
     getCommentById(id: string): WorkspaceComment | null;
     getFlyout(): Flyout | null;
     allInputsFilled(shadowBlocksAreFilled?: boolean): boolean;
-    centerOnBlock(id: string): void
+    centerOnBlock(id: string): void;
   }
 
   interface WorkspaceConstructor {
@@ -188,13 +188,14 @@ declare namespace ScratchBlocks {
   }
 
   class WorkspaceSvg extends Workspace {
-    prototype: {createDom: (optClass: string) => void;}
+    constructor(opt: { getMetrics: () => any });
+    prototype: { createDom: (optClass: string) => void };
   }
 
   interface RealBlockly {
     getMainWorkspace(): Workspace;
     Workspace: WorkspaceConstructor;
-    WorkspaceSvg: WorkspaceSvg;
+    WorkspaceSvg: typeof WorkspaceSvg;
   }
 
   interface BlocklyGlobal {
@@ -202,4 +203,4 @@ declare namespace ScratchBlocks {
   }
 }
 
-export type Blockly = ScratchBlocks.RealBlockly
+export type Blockly = ScratchBlocks.RealBlockly;

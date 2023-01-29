@@ -1,3 +1,8 @@
+body {
+  --theme: #ff7b26;
+  --gradient: linear-gradient(to right, var(--theme), hsl(24deg 100% 67%));
+}
+
 .lightTheme {
   --background-primary: #fcfcfc;
   --background-secondary: #ecebeb;

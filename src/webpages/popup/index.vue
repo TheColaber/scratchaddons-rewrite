@@ -2,7 +2,7 @@
   <div
     :class="[
       $style.container,
-      { [colors.darkTheme]: darkTheme, [colors.lightTheme]: !darkTheme },
+      { darkTheme: darkTheme, lightTheme: !darkTheme },
     ]"
   >
     <div :class="$style.header">
@@ -55,9 +55,6 @@ import { Icon } from "@iconify/vue";
 import * as popups from "#popups";
 import settingsComponent from "../settings/index.vue";
 
-import colors from "../css/colors.module.scss";
-import "../css/sora.scss";
-
 const { darkTheme = false, addonsEnabled = {} } = await chrome.storage.sync.get(
   ["darkTheme", "addonsEnabled"]
 );
@@ -86,7 +83,6 @@ export default {
       popups: enabledPopups,
       darkTheme: !!darkTheme,
       selectedTab: "",
-      colors,
     };
   },
   created() {
@@ -109,7 +105,6 @@ export default {
 
 <style lang="scss" module>
 .container {
-  --gradient: linear-gradient(to right, var(--theme), hsl(24deg 100% 67%));
   height: inherit;
   display: flex;
   flex-direction: column;
