@@ -3,7 +3,15 @@
   "description": "Customizable Features, themes, and more for the Scratch website.",
   "manifest_version": 3,
   "version": "2.0.0",
+  "background": {
+    "service_worker": "background/index.ts",
+    "type": "module"
+  },
   "action": {
     "default_popup": "popup/index.html"
+  },
+  "options_ui": {
+    "open_in_tab": true,
+    "page": "settings/index.html"
   }
 }
