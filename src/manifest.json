@@ -1,0 +1,9 @@
+{
+  "name": "Scratch Addons",
+  "description": "Customizable Features, themes, and more for the Scratch website.",
+  "manifest_version": 3,
+  "version": "2.0.0",
+  "action": {
+    "default_popup": "popup/index.html"
+  }
+}
