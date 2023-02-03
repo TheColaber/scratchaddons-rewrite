@@ -12,6 +12,8 @@
     "dev": "node rollup -w"
   },
   "devDependencies": {
+    "@extend-chrome/storage": "^1.5.0",
+    "@iconify/vue": "^4.1.0",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.2",
@@ -19,6 +21,7 @@
     "esbuild": "^0.17.5",
     "rollup": "^3.12.0",
     "rollup-plugin-chrome-extension": "^3.6.10",
+    "rollup-plugin-empty-dir": "^1.0.5",
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-vue": "^6.0.0",

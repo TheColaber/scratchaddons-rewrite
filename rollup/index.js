@@ -16,7 +16,7 @@ function watchConfig() {
     }
 
     if (event.code === "ERROR") {
-      console.log(event.error);
+      console.error("Error during bundling:", event.error.message);
     }
 
     if (event.code === "BUNDLE_END") {
