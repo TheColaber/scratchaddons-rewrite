@@ -2,8 +2,9 @@ import { chromeExtension, simpleReloader } from "rollup-plugin-chrome-extension"
 import vue from "rollup-plugin-vue"
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import typescript from "rollup-plugin-typescript2" // "@rollup/plugin-typescript"
+import esbuild from 'rollup-plugin-esbuild'
 import replace from '@rollup/plugin-replace';
+import postcss from "rollup-plugin-postcss"
 
 /** @type {import("rollup").RollupOptions} */
 export default {
@@ -16,7 +17,8 @@ export default {
     chromeExtension(),
     simpleReloader(),
 
-    typescript(),
+    postcss(),
+    esbuild(),
     vue({ target: "browser"}),
     // Vue needs NODE_ENV to be set to production.
     replace({

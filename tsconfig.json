@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "types": [
+      "chrome"
+  ],
+  "lib": ["DOM", "es2019", "dom.iterable"],
+  },
+}
