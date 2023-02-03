@@ -3,9 +3,7 @@
     "module": "es2022",
     "target": "ES2022",
     "moduleResolution": "node",
-    "types": [
-      "chrome"
-  ],
-  "lib": ["DOM", "es2019", "dom.iterable"],
-  },
+    "types": ["chrome"],
+    "lib": ["DOM", "es2019", "dom.iterable"]
+  }
 }

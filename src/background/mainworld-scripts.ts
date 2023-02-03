@@ -21,9 +21,12 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
 
   const l10nUrls = await getL10NURLs(url);
 
-  const {addonsEnabled} = await storage.get("addonsEnabled")
+  const { addonsEnabled } = await storage.get("addonsEnabled");
 
-  await chrome.scripting.executeScript<[string, typeof addonsEnabled, typeof l10nUrls], void>({
+  await chrome.scripting.executeScript<
+    [string, typeof addonsEnabled, typeof l10nUrls],
+    void
+  >({
     target: { tabId },
     injectImmediately: true,
     world: "MAIN",

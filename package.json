@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "build": "node rollup",
-    "dev": "node rollup -w"
+    "dev": "node rollup -w",
+    "prettier": "prettier --write ."
   },
   "devDependencies": {
     "@extend-chrome/storage": "^1.5.0",
@@ -19,8 +20,10 @@
     "@rollup/plugin-replace": "^5.0.2",
     "@types/chrome": "^0.0.211",
     "esbuild": "^0.17.5",
+    "prettier": "^2.8.3",
     "rollup": "^3.12.0",
     "rollup-plugin-chrome-extension": "^3.6.10",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-empty-dir": "^1.0.5",
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-postcss": "^4.0.2",

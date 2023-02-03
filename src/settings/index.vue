@@ -1,9 +1,9 @@
 <template>
-  <div>
-    Hello Settings
-  </div>
+  <Suspense>
+    <Content></Content>
+  </Suspense>
 </template>
 
 <script setup lang="ts">
-console.log("oj!!!");
+import Content from './content.vue';
 </script>

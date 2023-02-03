@@ -7,7 +7,7 @@
   >
     <div :class="$style.header">
       <div :class="$style.title">
-        <img :src="'../../images/icon.svg'" :class="$style.logo" />
+        <img :src="'../images/icon.svg'" :class="$style.logo" />
         <span :class="$style.text">
           Scratch Addons
           <a
@@ -50,12 +50,19 @@
   </div>
 </template>
 
+<script setup lang="ts">
+import storage from "../background/storage";
+// storage.get("darkTheme")
+</script>
+
 <style lang="scss" module>
 .container {
   height: inherit;
   display: flex;
   flex-direction: column;
   font-family: "Sora", sans-serif;
+  width: 400px;
+  height: 600px;
 }
 .header {
   background-image: var(--gradient);
