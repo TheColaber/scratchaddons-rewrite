@@ -6,7 +6,8 @@
     "types": ["chrome"],
     "lib": ["DOM", "es2019", "dom.iterable"],
     "paths": {
-      "#addons": ["./rollup/virtuals/addons.d.ts"]
+      "#addons": ["./rollup/virtuals/addons.d.ts"],
+      "#popups": ["./rollup/virtuals/popups.d.ts"]
     }
   }
 }

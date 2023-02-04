@@ -24,6 +24,7 @@ export interface AddonManifest {
   worker?: Function;
   hotkeys?: {
     id: string;
+    description: string;
     default: string[];
   }[];
   tags: string[];

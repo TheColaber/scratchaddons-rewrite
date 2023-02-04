@@ -1,12 +1,5 @@
 <template>
-  <div
-    :class="[
-      $style.container,
-      { darkTheme: darkTheme, lightTheme: !darkTheme },
-    ]"
-  >
-    <Header></Header>
-    <div :class="$style.popups">
+    <div :class="[$style.popups, { theme: true, darkTheme }]">
       <div :class="$style.tabs">
         <button
           :class="[$style.tab, { [$style.sel]: id === selectedTab }]"
@@ -29,13 +22,11 @@
         <component :is="selectedTab" />
       </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import storage from "../background/storage";
-import Header from "./header.vue";
 
 let darkTheme = false;
 
