@@ -4,6 +4,9 @@
     "target": "ES2022",
     "moduleResolution": "node",
     "types": ["chrome"],
-    "lib": ["DOM", "es2019", "dom.iterable"]
+    "lib": ["DOM", "es2019", "dom.iterable"],
+    "paths": {
+      "#addons": ["./rollup/virtuals/addons.d.ts"]
+    }
   }
 }

@@ -1,3 +1,4 @@
+import fs from "fs/promises";
 import {
   chromeExtension,
   simpleReloader,
@@ -8,8 +9,9 @@ import commonjs from "@rollup/plugin-commonjs";
 import esbuild from "rollup-plugin-esbuild";
 import replace from "@rollup/plugin-replace";
 import postcss from "rollup-plugin-postcss";
-import { emptyDir } from "rollup-plugin-empty-dir";
 import copy from "rollup-plugin-copy";
+import virtual from "@rollup/plugin-virtual";
+import path from "path";
 
 /** @type {import("rollup").RollupOptions} */
 export default {
@@ -28,6 +30,10 @@ export default {
       ],
     }),
 
+    virtual({
+      "#addons": importAddonDir("src/addons"),
+    }),
+
     vue({ target: "browser" }),
     // Must be after vue plugin
     esbuild(),
@@ -42,3 +48,28 @@ export default {
     commonjs(),
   ],
 };
+
+async function importAddonDir(dir, id) {
+  const imports = await addAddonImport(dir, id);
+  return imports.join("\n");
+}
+
+async function addAddonImport(dir, id) {
+  const dirents = await fs.readdir(dir, { withFileTypes: true });
+  const files = await Promise.all(
+    dirents.map(async (dirent) => {
+      const res = path.resolve(dir, dirent.name);
+      if (dirent.isDirectory()) {
+        return await addAddonImport(res, dirent.name);
+      } else if (dirent.name === "addon.ts") {
+        return `export { default as "${id}" } from "${res.replace(
+          /\\/g,
+          "/"
+        )}";`;
+      } else {
+        return null;
+      }
+    })
+  );
+  return files.filter((manifest) => !!manifest).flat();
+}
