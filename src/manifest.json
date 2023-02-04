@@ -26,5 +26,6 @@
       }
     }
   },
-  "permissions": ["storage", "contextMenus", "alarms"]
+  "host_permissions": ["https://*.scratch.mit.edu/*"],
+  "permissions": ["storage", "contextMenus", "alarms", "cookies"]
 }

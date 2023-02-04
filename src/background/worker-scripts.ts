@@ -1,6 +1,7 @@
 import storage from "./storage";
 import * as addons from "#addons";
 import * as popups from "#popups";
+import WorkerAddon from "../addon-api/worker";
 
 const allAddons = {...addons,...popups};
 const runningScripts = {}
@@ -12,8 +13,8 @@ storage.valueStream.subscribe(({addonsEnabled}) => {
       if (!addon.worker) continue;
       if (!addonsEnabled[id]) continue;
       if (runningScripts[id]) continue;
-      runningScripts[id] = true
-      addon.worker();
+      runningScripts[id] = new WorkerAddon(id)
+      addon.worker(runningScripts[id]);
     }
   }
 })
