@@ -36,7 +36,7 @@ function switchMode() {
 <style lang="scss" module>
 .container {
   --gradient: linear-gradient(to right, var(--theme), hsl(24deg 100% 67%));
-  height: inherit;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: "Sora", sans-serif;
