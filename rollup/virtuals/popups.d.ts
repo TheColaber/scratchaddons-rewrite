@@ -1,7 +1,7 @@
 import { PopupManifest } from "../../types/helpers/addon-manifest";
 
-declare var addons: {
+declare var popups: {
   [id: string]: PopupManifest;
 };
 
-export = addons;
+export = popups;

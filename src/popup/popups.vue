@@ -1,63 +1,61 @@
 <template>
-    <div :class="[$style.popups, { theme: true, darkTheme }]">
-      <div :class="$style.tabs">
-        <button
-          :class="[$style.tab, { [$style.sel]: id === selectedTab }]"
-          @click="selectedTab = id"
-          v-for="id of ORDER"
+  <div :class="[$style.popups, { theme: true, darkTheme }]">
+    <div :class="$style.tabs">
+      <button
+        :class="[$style.tab, { [$style.sel]: id === selectedTab }]"
+        @click="selectedTab = id"
+        v-for="id of ORDER"
+      >
+        <Icon :class="$style.icon" :icon="'uil:' + enabledPopups[id].icon" />
+        <span :class="$style.name">{{ enabledPopups[id].name }}</span>
+        <a
+          :class="$style.link"
+          target="_blank"
+          :href="'fullscreen.html?id=' + id"
+          v-if="id !== 'settings-page'"
         >
-          <Icon :icon="'uil:' + enabledPopups[id].icon" />
-          <span :class="$style.name">{{ enabledPopups[id].name }}</span>
-          <a
-            :class="$style.link"
-            target="_blank"
-            :href="'fullscreen.html?id=' + id"
-            v-if="id !== 'settings-page'"
-          >
-            <Icon icon="uil:external-link-alt" />
-          </a>
-        </button>
-      </div>
-      <div :class="$style.component">
-        <component :is="selectedTab" />
-      </div>
+          <Icon :class="$style.popout" icon="uil:external-link-alt" />
+        </a>
+      </button>
     </div>
+    <div :class="$style.component">
+      <component :is="enabledPopups[selectedTab].component" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import storage from "../background/storage";
+import { ref } from "vue";
+import * as popups from "#popups";
+import settingsComponent from "../settings/index.vue";
 
-let darkTheme = false;
+let darkTheme = ref(false);
 
 storage.valueStream.subscribe((values) => {
   if ("darkTheme" in values) {
-    darkTheme = values.darkTheme;
+    darkTheme.value = values.darkTheme;
   }
 });
 
-const ORDER = ["settings-page"];
-let selectedTab = "";
-</script>
+const ORDER = ["scratch-messaging", "settings-page"];
+let selectedTab = ref(ORDER[0]);
 
-<script lang="ts">
-import settingsComponent from "../settings/index.vue";
+const {addonsEnabled = {}} = await storage.get("addonsEnabled");
 
-const enabledPopups = /*Object.keys(popups)
+const enabledPopups = Object.keys(popups)
   .map((id) => {
     if (!addonsEnabled[id]) return {};
     return { [id]: popups[id].popup };
   })
-  .reduce((prev, curr) => ({ ...prev, ...curr }), {});*/ [];
+  .reduce((prev, curr) => ({ ...prev, ...curr }), {});  
 
 enabledPopups["settings-page"] = {
   name: "Addons",
   icon: "wrench",
   component: settingsComponent,
 };
-const components = Object.keys(enabledPopups)
-  .map((id) => ({ [id]: enabledPopups[id].component }))
-  .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 </script>
 
 <style lang="scss" module>
@@ -111,11 +109,8 @@ const components = Object.keys(enabledPopups)
         padding: 0px 8px;
         background-image: var(--gradient);
         color: #fff;
-        a svg {
-          color: #fff;
-        }
       }
-      svg {
+      .icon, .popout {
         font-size: 18px;
       }
       .name {
@@ -124,6 +119,7 @@ const components = Object.keys(enabledPopups)
       .link {
         display: none;
         outline: none;
+        color: inherit;
       }
       &.sel .link,
       &:focus-visible .link,
@@ -131,8 +127,7 @@ const components = Object.keys(enabledPopups)
         display: flex;
         height: 100%;
         align-items: center;
-        svg {
-          color: var(--content-text);
+        .popout {
           font-size: 10px;
           margin-left: 1px;
           padding: 2px;
@@ -142,7 +137,7 @@ const components = Object.keys(enabledPopups)
             color: var(--theme);
           }
         }
-        &:focus-visible svg {
+        &:focus-visible .popout {
           background: #fff;
           color: var(--theme);
         }

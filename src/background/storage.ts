@@ -3,7 +3,7 @@ import { getBucket } from "@extend-chrome/storage";
 export interface Storage {
   addonsEnabled: { [id: string]: boolean };
   darkTheme: boolean;
-  openedSettingsReason: "update" | "install" | null;
+  installedDetails: chrome.runtime.InstalledDetails | null;
 }
 
-export default getBucket<Storage>("addonsEnabled");
+export default getBucket<Storage>("storage", "sync");

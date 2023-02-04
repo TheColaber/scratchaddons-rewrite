@@ -19,6 +19,7 @@ export default {
   output: {
     dir: "dist",
     format: "esm",
+    chunkFileNames: "chunk.[name]-[hash].js",
   },
   plugins: [
     chromeExtension(),
@@ -33,7 +34,7 @@ export default {
     virtual({
       // TODO: Use globby thingy
       "#addons": importAddonDir("addons"),
-      "#addons": importAddonDir("popups"),
+      "#popups": importAddonDir("popups"),
     }),
 
     vue({ target: "browser" }),

@@ -2,14 +2,14 @@
   <div :class="$style.container">
     <Header></Header>
     <Suspense>
-    <Content></Content>
-  </Suspense>
+      <Popups></Popups>
+    </Suspense>
   </div>
 </template>
 
 <script setup lang="ts">
-import Header from './header.vue';
-import Content from "./content.vue";
+import Header from "./header.vue";
+import Popups from "./popups.vue";
 </script>
 
 <style lang="scss" module>

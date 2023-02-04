@@ -2,7 +2,7 @@
   <div
     :class="[
       $style.container,
-      { darkTheme: darkTheme, lightTheme: !darkTheme },
+      { theme: true, darkTheme },
     ]"
   >
     <div :class="$style.header">
@@ -20,13 +20,16 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue";
+import { ref } from "vue";
 import storage from "../background/storage";
 
-let { darkTheme } = await storage.get(["darkTheme", "addonsEnabled"]);
+const data = await storage.get(["darkTheme", "installedDetails", "addonsEnabled"]);
+const darkTheme = ref(data.darkTheme);
+console.log(data.installedDetails);
 
 function switchMode() {
-  darkTheme = !darkTheme;
-  storage.set({ darkTheme });
+  darkTheme.value = !darkTheme.value;
+  storage.set({ darkTheme: darkTheme.value });
 }
 </script>
 
