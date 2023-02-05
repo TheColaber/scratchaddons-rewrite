@@ -1,6 +1,7 @@
 <template>
   <div :class="[$style.popups, { theme: true, darkTheme }]">
-    <div :class="$style.tabs">
+    <div :class="$style.sticky">
+      <div :class="$style.tabs">
       <button
         :class="[$style.tab, { [$style.sel]: id === selectedTab }]"
         @click="selectedTab = id"
@@ -18,9 +19,8 @@
         </a>
       </button>
     </div>
-    <div :class="$style.component">
-      <component :is="enabledPopups[selectedTab].component" />
     </div>
+    <component v-for="(popup, id) in enabledPopups" v-show="id === selectedTab" :is="popup.component" />
   </div>
 </template>
 
@@ -29,7 +29,7 @@ import { Icon } from "@iconify/vue";
 import storage from "../background/storage";
 import { ref } from "vue";
 import * as popups from "#popups";
-import settingsComponent from "../settings/index.vue";
+import settingsComponent from "../settings/content.vue";
 
 let darkTheme = ref(false);
 
@@ -42,14 +42,14 @@ storage.valueStream.subscribe((values) => {
 const ORDER = ["scratch-messaging", "settings-page"];
 let selectedTab = ref(ORDER[0]);
 
-const {addonsEnabled = {}} = await storage.get("addonsEnabled");
+const { addonsEnabled = {} } = await storage.get("addonsEnabled");
 
 const enabledPopups = Object.keys(popups)
   .map((id) => {
     if (!addonsEnabled[id]) return {};
     return { [id]: popups[id].popup };
   })
-  .reduce((prev, curr) => ({ ...prev, ...curr }), {});  
+  .reduce((prev, curr) => ({ ...prev, ...curr }), {});
 
 enabledPopups["settings-page"] = {
   name: "Addons",
@@ -73,14 +73,23 @@ enabledPopups["settings-page"] = {
   flex: 1;
   display: flex;
   flex-direction: column;
-  .tabs {
-    margin: 10px;
-    background-color: var(--background-secondary);
-    border-radius: 12px;
+  overflow: auto;
+  .sticky {
+    background-color: var(--background-primary);
     padding: 10px;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex: 0 0 50px;
+    .tabs {
+    border-radius: 4px;
+    border: 1px solid var(--background-tertiary);
+    background: var(--background-secondary);
+    box-shadow: var(--content-shadow);
+    padding: 8px;
     display: flex;
     gap: 8px;
-    height: 35px;
+    width: 100%;
     overflow: hidden;
     .tab {
       display: flex;
@@ -110,7 +119,8 @@ enabledPopups["settings-page"] = {
         background-image: var(--gradient);
         color: #fff;
       }
-      .icon, .popout {
+      .icon,
+      .popout {
         font-size: 18px;
       }
       .name {
@@ -144,8 +154,24 @@ enabledPopups["settings-page"] = {
       }
     }
   }
-  .component {
-    flex: 1;
   }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 4px;
 }
 </style>

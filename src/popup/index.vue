@@ -14,7 +14,6 @@ import Popups from "./popups.vue";
 
 <style lang="scss" module>
 .container {
-  height: inherit;
   display: flex;
   flex-direction: column;
   font-family: "Sora", sans-serif;

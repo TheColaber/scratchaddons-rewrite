@@ -1,7 +1,6 @@
 <template>
   <div :class="$style.header">
-    <div :class="$style.title">
-      <img :src="'../images/icon.svg'" :class="$style.logo" />
+    <img :src="'../images/icon.svg'" :class="$style.logo" />
       <span :class="$style.text">
         Scratch Addons
         <a
@@ -13,9 +12,8 @@
           v2.0.0
         </a>
       </span>
-    </div>
     <button :class="$style.settings" @click="openSettingsPage()">
-      <Icon icon="uil:cog" />
+      <Icon :class="$style.icon" icon="uil:cog" />
     </button>
   </div>
 </template>
@@ -32,16 +30,12 @@ function openSettingsPage() {
 .header {
   background-image: var(--gradient);
   display: flex;
-  height: 60px;
+  align-items: center;
   color: #fff;
-  .title {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    .text {
+  .text {
       font-size: 18px;
       font-weight: 400;
+      flex: 1;
       .link {
         color: inherit;
         margin: 5px;
@@ -52,16 +46,15 @@ function openSettingsPage() {
         &:focus-visible {
           outline: none;
           box-shadow: 0 0 0 3px #fff;
-        }
       }
     }
-    .logo {
-      height: 30px;
-      margin-inline-end: 20px;
-    }
+  }
+  .logo {
+    height: 30px;
+    padding: 15px 20px;
   }
   .settings {
-    padding: 0 20px;
+    padding: 15px 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -73,7 +66,7 @@ function openSettingsPage() {
       outline: none;
       box-shadow: inset 0 0 0 3px #fff;
     }
-    svg {
+    .icon {
       font-size: 24px;
     }
   }

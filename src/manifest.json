@@ -27,5 +27,11 @@
     }
   },
   "host_permissions": ["https://*.scratch.mit.edu/*"],
-  "permissions": ["storage", "contextMenus", "alarms", "cookies"]
+  "permissions": ["storage", "contextMenus", "alarms", "scripting", "cookies"],
+  "web_accessible_resources": [
+    {
+      "resources": ["mainworld/**/*.ts", "chunk.*.js"],
+      "matches": ["https://*.scratch.mit.edu/*"]
+    }
+  ]
 }

@@ -3,9 +3,12 @@ import * as popups from "#popups";
 import storage from "./storage";
 
 chrome.runtime.onInstalled.addListener(async (details) => {
-  const {version} = chrome.runtime.getManifest()
-  
-  if (details.reason === "install" || (details.reason === "update"&& details.previousVersion !== version)) {
+  const { version } = chrome.runtime.getManifest();
+
+  if (
+    details.reason === "install" ||
+    (details.reason === "update" && details.previousVersion !== version)
+  ) {
     storage.set({ installedDetails: details });
     chrome.runtime.openOptionsPage();
   }
@@ -23,13 +26,13 @@ chrome.management.getSelf().then((info) => {
   }
 });
 
-storage.get("addonsEnabled").then(({addonsEnabled ={}}) => {
+storage.get("addonsEnabled").then(({ addonsEnabled = {} }) => {
   const allAddons = { ...addons, ...popups };
   for (const id in allAddons) {
     const manifest = allAddons[id];
     if (addonsEnabled[id] === undefined)
       addonsEnabled[id] = !!manifest.enabledByDefault;
   }
-  
+
   storage.set({ addonsEnabled });
 });
