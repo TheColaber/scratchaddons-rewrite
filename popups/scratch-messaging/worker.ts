@@ -18,11 +18,10 @@ type becomeownerstudio = {
   gallery_title: string;
 };
 
+export type messages = (followuser | curatorinvite | becomeownerstudio)[];
+
 const [sendRequest, requestStream] = getMessage<"requestData">("requestData");
-const [sendData, dataStream] =
-  getMessage<(followuser | curatorinvite | becomeownerstudio)[]>(
-    "scratchMessageData"
-  );
+const [sendData, dataStream] = getMessage<messages>("scratchMessageData");
 
 console.log("hi", Date.now());
 

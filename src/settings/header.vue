@@ -1,13 +1,13 @@
 <template>
-      <div :class="$style.header">
-      <div :class="$style.title">
-        <img :src="'../../images/icon.svg'" :class="$style.logo" />
-        <span :class="$style.text"> Scratch Addons </span>
-      </div>
-      <button :class="$style.themeSwitcher" @click="switchMode">
-        <Icon :icon="darkTheme ? 'uil:moon' : 'uil:sun'" />
-      </button>
+  <div :class="$style.header">
+    <div :class="$style.title">
+      <img :src="'../../images/icon.svg'" :class="$style.logo" />
+      <span :class="$style.text"> Scratch Addons </span>
     </div>
+    <button :class="$style.themeSwitcher" @click="switchMode">
+      <Icon :icon="darkTheme ? 'uil:moon' : 'uil:sun'" />
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">

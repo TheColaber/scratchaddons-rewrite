@@ -1,17 +1,16 @@
 <template>
   <div :class="$style.container">
     <Suspense>
-    <Header></Header>
-  </Suspense>
+      <Header></Header>
+    </Suspense>
     <Suspense>
       <Content></Content>
     </Suspense>
   </div>
-
 </template>
 
 <script setup lang="ts">
-import Header from './header.vue';
+import Header from "./header.vue";
 import Content from "./content.vue";
 </script>
 

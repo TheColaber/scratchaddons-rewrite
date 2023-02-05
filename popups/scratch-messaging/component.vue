@@ -1,14 +1,28 @@
 <template>
   <div :class="$style.container">
     <Section :section="follows" title="Follows" v-slot="{ item, itemClass }">
-      <a :href="'https://scratch.mit.edu/users/' + item" :class="itemClass">{{
-        item
-      }}</a>
+      <a :href="'https://scratch.mit.edu/users/' + item" :class="itemClass">
+        {{ item }}
+      </a>
     </Section>
-    <Section :section="studioInvites" title="Studio Invites" v-slot="{ item, itemClass }">
-      <a :href="'https://scratch.mit.edu/users/' + item" :class="itemClass">{{
-        item
-      }}</a>
+    <Section
+      :section="studioInvites"
+      title="Studio Invites"
+      v-slot="{ item, itemClass }"
+    >
+      <a
+        :href="'https://scratch.mit.edu/users/' + item.actor"
+        :class="itemClass"
+      >
+        {{ item.actor }}
+      </a>
+      invited you to curate
+      <a
+        :href="'https://scratch.mit.edu/studios/' + item.studioId"
+        :class="itemClass"
+      >
+        {{ item.studioTitle }}
+      </a>
     </Section>
   </div>
 </template>

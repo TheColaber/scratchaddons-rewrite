@@ -11,7 +11,7 @@
         {{ section.length }}
       </span>
     </div>
-    <div  v-show="extended" :class="$style.list">
+    <div v-show="extended" :class="$style.list">
       <slot
         v-for="item of section"
         :item="item"
@@ -25,8 +25,9 @@
 // https://icon-sets.iconify.design/uil/
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
+import { messages } from "./worker";
 
-defineProps<{ section: {}[]; title: string }>();
+defineProps<{ section: messages; title: string }>();
 
 const extended = ref(true);
 </script>

@@ -1,6 +1,6 @@
 import { Component } from "vue";
-// import matches from "../src/mainworld/matches";
-// import defineScript from "../src/helpers/define-script";
+import matches from "../../src/mainworld/matches";
+import defineScript from "./define-script";
 
 export interface AddonManifest {
   name: string;
@@ -13,13 +13,13 @@ export interface AddonManifest {
     component: Component;
   };
   userscripts?: {
-    // script: ReturnType<typeof defineScript>;
-    // matches: (keyof typeof matches)[];
+    script: ReturnType<typeof defineScript>;
+    matches: (keyof typeof matches)[];
     runAtComplete: boolean;
   }[];
   userstyles?: {
     style: string;
-    // matches: (keyof typeof matches)[];
+    matches: (keyof typeof matches)[];
   }[];
   worker?: Function;
   hotkeys?: {

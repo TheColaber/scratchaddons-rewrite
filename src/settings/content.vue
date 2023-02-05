@@ -1,6 +1,5 @@
 <template>
-    <div :class="[$style.main, { theme: true, darkTheme }]">hello</div>
-
+  <div :class="[$style.main, { theme: true, darkTheme }]">hello</div>
 </template>
 
 <script lang="ts" setup>

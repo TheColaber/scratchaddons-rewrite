@@ -1,18 +1,22 @@
 import storage from "./storage";
 
-chrome.scripting.registerContentScripts([
-  {
-    id: "content-scripts",
-    world: "MAIN",
-    runAt: "document_start",
-    matches: ["https://scratch.mit.edu/*"],
-    js: [
-      "mainworld/content-scripts/setup.js",
-      "mainworld/content-scripts/load-redux.js",
-    ],
-    allFrames: true,
-  },
-]).catch(() => {/* We catch because we might the error "Duplicate content script id" */});
+chrome.scripting
+  .registerContentScripts([
+    {
+      id: "content-scripts",
+      world: "MAIN",
+      runAt: "document_start",
+      matches: ["https://scratch.mit.edu/*"],
+      js: [
+        "mainworld/content-scripts/setup.js",
+        "mainworld/content-scripts/load-redux.js",
+      ],
+      allFrames: true,
+    },
+  ])
+  .catch(() => {
+    /* We catch because we might the error "Duplicate content script id" */
+  });
 
 chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
   if (!url) return;
