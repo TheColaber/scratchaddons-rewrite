@@ -56,6 +56,6 @@ export default class Auth extends EventTarget {
       ).json();
       pages.push(page);
     }
-    return pages;
+    return pages.flat();
   }
 }

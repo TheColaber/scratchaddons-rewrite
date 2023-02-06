@@ -36,6 +36,7 @@ export interface PopupManifest extends AddonManifest {
     name: string;
     icon: string;
     component: Component;
+    badge?: Component;
   };
 }
 

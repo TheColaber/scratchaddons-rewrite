@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style['message-type']" v-show="section.length">
+  <div :class="$style['message-type']" v-show="length">
     <div :class="[$style.title]" @click="extended = !extended">
       <Icon
         :class="$style.dropdown"
@@ -7,16 +7,15 @@
       ></Icon>
       <span :class="$style.text">{{ title }}</span>
       <span :class="$style.right">
-        <Icon :class="$style.icon" icon="uil:user-plus"></Icon>
-        {{ section.length }}
+        <Icon :class="$style.icon" :icon="'uil:' + icon"></Icon>
+        {{ length }}
       </span>
     </div>
-    <div v-show="extended" :class="$style.list">
-      <slot
-        v-for="item of section"
-        :item="item"
-        :itemClass="$style.item"
-      ></slot>
+    <div
+      v-show="extended"
+      :class="[$style.list, { [$style.noRowGap]: noRowGap }]"
+    >
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -25,11 +24,14 @@
 // https://icon-sets.iconify.design/uil/
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
-import { messages } from "./worker";
+defineProps<{
+  noRowGap?: boolean;
+  length: number;
+  icon: string;
+  title: string;
+}>();
 
-defineProps<{ section: messages; title: string }>();
-
-const extended = ref(true);
+const extended = ref(false);
 </script>
 
 <style module lang="scss">
@@ -82,20 +84,12 @@ const extended = ref(true);
   .list {
     color: var(--description-text);
     font-size: 12px;
-    padding-inline: 16px;
-    padding-bottom: 16px;
-    padding-top: 5px;
+    padding: 5px 16px 16px 16px;
     display: flex;
     flex-wrap: wrap;
-    gap: 0px 10px;
-
-    .item {
-      color: var(--blue-text);
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
+    gap: 10px;
+    &.noRowGap {
+      gap: 0px 10px;
     }
   }
 }

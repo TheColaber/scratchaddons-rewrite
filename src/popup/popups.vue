@@ -9,6 +9,12 @@
         >
           <Icon :class="$style.icon" :icon="'uil:' + enabledPopups[id].icon" />
           <span :class="$style.name">{{ enabledPopups[id].name }}</span>
+          <component
+          :class="$style.badge"
+      v-show="enabledPopups[id].badge"
+      :is="enabledPopups[id].badge"
+      :addon="instances[id]"
+    />
           <a
             :class="$style.link"
             target="_blank"
@@ -24,6 +30,7 @@
       v-for="(popup, id) in enabledPopups"
       v-show="id === selectedTab"
       :is="popup.component"
+      :addon="instances[id]"
     />
   </div>
 </template>
@@ -34,6 +41,7 @@ import storage from "../background/storage";
 import { ref } from "vue";
 import * as popups from "#popups";
 import settingsComponent from "../settings/content.vue";
+import PopupAddon from "../addon-api/popup"
 
 let darkTheme = ref(false);
 
@@ -60,6 +68,11 @@ enabledPopups["settings-page"] = {
   icon: "wrench",
   component: settingsComponent,
 };
+
+const instances = {}
+Object.keys(enabledPopups).forEach(id => {
+  instances[id] = new PopupAddon(id)
+})
 </script>
 
 <style lang="scss" module>
@@ -129,6 +142,12 @@ enabledPopups["settings-page"] = {
         }
         .name {
           padding: 0px 0px 0px 5px;
+        }
+        .badge {
+          background-color: var(--blue);
+          padding: 3px;
+          border-radius: 4px;
+          margin-left: 2px;
         }
         .link {
           display: none;
