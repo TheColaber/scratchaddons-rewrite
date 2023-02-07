@@ -6,7 +6,7 @@ import badge from "./badge.vue"
 export default definePopupManifest({
   name: "Scratch Messaging",
   description:
-    "Available when clicking the Scratch Addons icon. Provides easy reading and replying to your Scratch messages: groups messages by project, shows full comment text and context, allows direct comment replying.",
+    "Easy reading and replying to your Scratch messages: groups messages, shows full comment text and context, allows direct comment replying.",
   credits: [
     {
       name: "World_Languages",
@@ -17,7 +17,7 @@ export default definePopupManifest({
   ],
   popup: {
     component,
-    name: "Messaging",
+    name: "Messages",
     icon: "envelope",
     badge
   },
