@@ -1,194 +1,228 @@
-import { a as addons } from '../chunk._virtual__addons.js';
-import { p as popups } from '../chunk._virtual__popups.js';
-import '../chunk.runtime-core.esm-bundler.js';
-import '../chunk.define-manifest.js';
-import '../mainworld/inject-style.js';
+import { s as storage$1 } from '../chunk.style-inject.es-d8193a81.js';
+import { a as addons } from '../chunk._virtual__addons-85f3862d.js';
+import { p as popups } from '../chunk._virtual__popups-2838211a.js';
+import { A as Addon } from '../chunk.index-e4c60ce4.js';
 
-chrome.scripting
-    .getRegisteredContentScripts({ ids: ["load-redux"] })
-    .then((contentScript) => {
-    if (contentScript.find((cs) => cs.id === "load-redux"))
-        return;
-    chrome.scripting.registerContentScripts([
-        {
-            id: "load-redux",
-            world: "MAIN",
-            runAt: "document_start",
-            matches: ["https://scratch.mit.edu/*"],
-            js: ["mainworld/setup.js", "mainworld/load-redux.js"],
-            allFrames: true,
-        },
-    ]);
+chrome.commands.onCommand.addListener((command) => {
+  if (command === "open_settings_page") {
+    chrome.runtime.openOptionsPage();
+  }
 });
-chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
-    if (!url)
-        return;
-    if (status !== "loading")
-        return;
-    const l10nUrls = await getL10NURLs(url);
-    const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-    await chrome.scripting.executeScript({
-        target: { tabId },
-        injectImmediately: true,
-        world: "MAIN",
-        func: async (script, addonsEnabled, l10nUrls) => {
-            if (window.scratchAddons.loaded)
-                return;
-            console.log("Scratch Addons is running.");
-            const { default: module } = await import(script);
-            module(addonsEnabled, l10nUrls);
-        },
-        args: [
-            chrome.runtime.getURL("mainworld/index.js"),
-            addonsEnabled,
-            l10nUrls,
-        ],
-    });
-    // await new Promise((r) => setTimeout(r, 3000));
-    // await chrome.scripting.executeScript({
-    //   target: { tabId },
-    //   injectImmediately: true,
-    //   world: "MAIN",
-    //   func: async (id: string) => {
-    //     window.scratchAddons.events.dispatchEvent(
-    //       new CustomEvent("addonDynamicDisable", { detail: { id } })
-    //     );
-    //   },
-    //   args: ["find-bar"],
-    // });
-    // await new Promise((r) => setTimeout(r, 3000));
-    // await chrome.scripting.executeScript({
-    //   target: { tabId },
-    //   injectImmediately: true,
-    //   world: "MAIN",
-    //   func: async (id: string) => {
-    //     window.scratchAddons.events.dispatchEvent(
-    //       new CustomEvent("addonDynamicEnable", { detail: { id } })
-    //     );
-    //   },
-    //   args: ["find-bar"],
-    // });
-});
-async function getL10NURLs(url) {
-    const cookie = await chrome.cookies.get({ url, name: "scratchlanguage" });
-    const langCode = cookie ? cookie.value || "en" : "en";
-    const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
-    if (langCode === "pt") {
-        urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
-    }
-    if (langCode.includes("-")) {
-        urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
-    }
-    const enJSON = chrome.runtime.getURL("addons-l10n/en");
-    if (!urls.includes(enJSON))
-        urls.push(enJSON);
-    return urls;
-}
 
 const periods = [
-    {
-        id: "15min",
-        mins: 15,
-    },
-    {
-        id: "1hour",
-        mins: 60,
-    },
-    {
-        id: "8hours",
-        mins: 480,
-    },
-    {
-        id: "24hours",
-        mins: 1440,
-    },
-    {
-        id: "untilEnabled",
-        mins: Infinity,
-    },
+  {
+    id: "15min",
+    mins: 15
+  },
+  {
+    id: "1hour",
+    mins: 60
+  },
+  {
+    id: "8hours",
+    mins: 480
+  },
+  {
+    id: "24hours",
+    mins: 1440
+  },
+  {
+    id: "untilEnabled",
+    mins: Infinity
+  }
 ];
 chrome.contextMenus.removeAll();
 chrome.contextMenus.create({
-    id: "unmute",
-    title: chrome.i18n.getMessage("unmute"),
-    contexts: ["action"],
+  id: "unmute",
+  title: chrome.i18n.getMessage("unmute"),
+  contexts: ["action"]
 });
 chrome.contextMenus.create({
-    id: "mute",
-    title: chrome.i18n.getMessage("mute"),
-    contexts: ["action"],
+  id: "mute",
+  title: chrome.i18n.getMessage("mute"),
+  contexts: ["action"]
 });
 for (const period of periods) {
-    chrome.contextMenus.create({
-        id: period.id,
-        parentId: "mute",
-        title: chrome.i18n.getMessage(period.id),
-        contexts: ["action"],
-    });
+  chrome.contextMenus.create({
+    id: period.id,
+    parentId: "mute",
+    title: chrome.i18n.getMessage(period.id),
+    contexts: ["action"]
+  });
 }
-async function contextMenuSetup () {
-    const { muted = false } = await chrome.storage.local.get("muted");
-    contextMenuMuted(muted);
-}
-chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
+chrome.storage.local.get("muted").then(({ muted }) => contextMenuMuted(muted));
+chrome.contextMenus.onClicked.addListener(
+  ({ parentMenuItemId, menuItemId }) => {
     if (parentMenuItemId === "mute") {
-        const period = periods.find(({ id }) => menuItemId === id);
-        if (!period)
-            throw "Unknown context menu item";
-        contextMenuMuted(true);
-        if (period.mins !== Infinity)
-            chrome.alarms.create("muted", { delayInMinutes: period.mins });
+      const period = periods.find(({ id }) => menuItemId === id);
+      if (!period)
+        throw "Unknown context menu item";
+      contextMenuMuted(true);
+      if (period.mins !== Infinity)
+        chrome.alarms.create("muted", { delayInMinutes: period.mins });
+    } else if (menuItemId === "unmute") {
+      contextMenuMuted(false);
     }
-    else if (menuItemId === "unmute") {
-        contextMenuMuted(false);
-    }
-});
+  }
+);
 function contextMenuMuted(muted) {
-    chrome.contextMenus.update("mute", { visible: !muted });
-    chrome.contextMenus.update("unmute", { visible: muted });
-    chrome.storage.local.set({ muted });
-    const versionName = chrome.runtime.getManifest().version_name || "";
-    const prerelease = versionName.includes("-prerelease");
-    const icon = muted ? "icon-gray" : prerelease ? "icon-blue" : "icon";
-    chrome.action.setIcon({
-        path: {
-            16: `../images/${icon}-16.png`,
-            32: `../images/${icon}-32.png`,
-        },
-    });
+  chrome.contextMenus.update("mute", { visible: !muted });
+  chrome.contextMenus.update("unmute", { visible: muted });
+  chrome.storage.local.set({ muted });
+  const versionName = chrome.runtime.getManifest().version_name || "";
+  versionName.includes("-prerelease");
 }
 chrome.alarms.onAlarm.addListener((alarm) => {
-    if (alarm.name === "muted") {
-        contextMenuMuted(false);
-    }
+  if (alarm.name === "muted") {
+    contextMenuMuted(false);
+  }
 });
 
-async function addonSetup () {
-    const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-    const allAddons = { ...addons, ...popups };
-    for (const id in allAddons) {
-        const manifest = allAddons[id];
-        if (addonsEnabled[id] === undefined)
-            addonsEnabled[id] = !!manifest.enabledByDefault;
-    }
-    chrome.storage.sync.set({ addonsEnabled });
+chrome.scripting.registerContentScripts([
+  {
+    id: "content-scripts",
+    world: "MAIN",
+    runAt: "document_start",
+    matches: ["https://scratch.mit.edu/*"],
+    js: [
+      "mainworld/content-scripts/setup.js",
+      "mainworld/content-scripts/load-redux.js"
+    ],
+    allFrames: true
+  }
+]).catch(() => {
+});
+chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
+  if (!url)
+    return;
+  if (status !== "loading")
+    return;
+  const l10nUrls = await getL10NURLs(url);
+  const { addonsEnabled } = await storage$1.get("addonsEnabled");
+  await chrome.scripting.executeScript({
+    target: { tabId },
+    injectImmediately: true,
+    world: "MAIN",
+    func: async (script, addonsEnabled2, l10nUrls2) => {
+      if (window.scratchAddons.loaded)
+        return;
+      console.log("Scratch Addons is running.");
+      const { default: module } = await import(script);
+      module(addonsEnabled2, l10nUrls2);
+    },
+    args: [
+      chrome.runtime.getURL("mainworld/index.js"),
+      addonsEnabled,
+      l10nUrls
+    ]
+  });
+});
+async function getL10NURLs(url) {
+  const cookie = await chrome.cookies.get({ url, name: "scratchlanguage" });
+  const langCode = cookie ? cookie.value || "en" : "en";
+  const urls = [langCode];
+  if (langCode === "pt") {
+    urls.push("pt-br");
+  }
+  if (langCode.includes("-")) {
+    urls.push(langCode.split("-")[0]);
+  }
+  if (!urls.includes("en"))
+    urls.push("en");
+  return urls;
 }
 
-var workerScripts = async () => {
-    const { addonsEnabled = {} } = await chrome.storage.sync.get("addonsEnabled");
-    for (const id in addons) {
-        const addon = addons[id];
-        if (!addon.worker)
-            continue;
-        if (!addonsEnabled[id])
-            continue;
-        addon.worker();
-    }
-};
+chrome.runtime.onInstalled.addListener(async (details) => {
+  const { version } = chrome.runtime.getManifest();
+  if (details.reason === "install" || details.reason === "update" && details.previousVersion !== version) {
+    storage$1.set({ installedDetails: details });
+    chrome.runtime.openOptionsPage();
+  }
+});
+chrome.management.getSelf().then((info) => {
+  if (info.installType === "development") {
+    const uiLanguage = chrome.i18n.getUILanguage();
+    const utm = "?utm_source=extension&utm_medium=tabscreate&utm_campaign=v" + info.version;
+    const url = info.homepageUrl + uiLanguage.split("-")[0] + "/farewell" + utm;
+    console.log(url);
+    chrome.runtime.setUninstallURL(url);
+  }
+});
+storage$1.get("addonsEnabled").then(({ addonsEnabled = {} }) => {
+  const allAddons = { ...addons, ...popups };
+  for (const id in allAddons) {
+    const manifest = allAddons[id];
+    if (addonsEnabled[id] === void 0)
+      addonsEnabled[id] = !!manifest.enabledByDefault;
+  }
+  storage$1.set({ addonsEnabled });
+});
 
-// Creates Listener
-contextMenuSetup();
-(async () => {
-    await addonSetup();
-    await workerScripts();
-})();
+class Auth extends EventTarget {
+  id;
+  constructor(id) {
+    super();
+    this.id = id;
+    chrome.cookies.onChanged.addListener(async ({ cookie, removed }) => {
+      if (cookie.name === "scratchsessionsid") {
+        this.dispatchEvent(new CustomEvent("updatedSession"));
+      }
+    });
+  }
+  async getSession() {
+    return await (await fetch("https://scratch.mit.edu/session/", {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    })).json();
+  }
+  async getMessageCount() {
+    const session = await this.getSession();
+    if (!session.user)
+      return 0;
+    const { count } = await (await fetch(
+      `https://api.scratch.mit.edu/users/${session.user.username}/messages/count?timestamp=${Date.now()}`
+    )).json();
+    return count;
+  }
+  async getMessages() {
+    const session = await this.getSession();
+    if (!session.user)
+      return [];
+    const messageCount = await this.getMessageCount();
+    const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
+    const pages = [];
+    for (let i = 0; i < maxPages; i++) {
+      const page = await (await fetch(
+        `https://api.scratch.mit.edu/users/${session.user.username}/messages?limit=40&offset=${40 * i}`,
+        {
+          headers: {
+            "x-token": session.user.token
+          }
+        }
+      )).json();
+      pages.push(page);
+    }
+    return pages.flat();
+  }
+}
+
+class WorkerAddon extends Addon {
+  auth;
+  constructor(id) {
+    super(id);
+    this.auth = new Auth(id);
+  }
+}
+
+const allAddons = { ...addons, ...popups };
+const runningScripts = {};
+for (const id in allAddons) {
+  const addon = allAddons[id];
+  if (!addon.worker)
+    continue;
+  if (runningScripts[id])
+    continue;
+  runningScripts[id] = new WorkerAddon(id);
+  addon.worker(runningScripts[id]);
+}

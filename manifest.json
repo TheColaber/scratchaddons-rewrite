@@ -1,47 +1,49 @@
 {
   "manifest_version": 3,
-  "name": "__MSG_name__",
+  "name": "Scratch Addons",
   "version": "2.0.0",
-  "description": "The Revamped, Rewritten version of Scratch Addons!",
-  "version_name": "2.0.0-prerelease",
+  "description": "Customizable Features, themes, and more for the Scratch website.",
   "default_locale": "en",
+  "homepage_url": "https://scratchaddons.com",
   "background": {
     "service_worker": "background/index.js",
     "type": "module"
   },
-  "options_ui": {
-    "open_in_tab": true,
-    "page": "webpages/settings/index.html"
-  },
   "action": {
-    "default_popup": "webpages/popup/index.html"
+    "default_popup": "popup/index.html"
   },
+  "options_page": "settings/index.html",
   "icons": {
-    "16": "images/icon-blue-16.png",
-    "32": "images/icon-blue-32.png",
-    "1024": "images/icon.png"
+    "16": "images/icon/16.png",
+    "32": "images/icon/32.png",
+    "1024": "images/icon/1024.png"
+  },
+  "commands": {
+    "open_settings_page": {
+      "description": "Opens the settings page",
+      "suggested_key": {
+        "default": "Alt+S"
+      }
+    }
   },
   "host_permissions": [
     "https://*.scratch.mit.edu/*"
   ],
   "permissions": [
     "storage",
-    "scripting",
-    "cookies",
     "contextMenus",
-    "alarms"
+    "alarms",
+    "scripting",
+    "cookies"
   ],
   "web_accessible_resources": [
     {
       "resources": [
-        "mainworld/*.js",
-        "images/*",
-        "webpages/css/*.ttf",
+        "mainworld/**/*.js",
         "chunk.*.js"
       ],
       "matches": [
-        "https://*.scratch.mit.edu/*",
-        "https://scratchaddons.com/*"
+        "https://*.scratch.mit.edu/*"
       ]
     }
   ]
