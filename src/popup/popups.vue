@@ -9,12 +9,14 @@
         >
           <Icon :class="$style.icon" :icon="'uil:' + enabledPopups[id].icon" />
           <span :class="$style.name">{{ enabledPopups[id].name }}</span>
-          <component
-          :class="$style.badge"
-      v-show="enabledPopups[id].badge"
-      :is="enabledPopups[id].badge"
-      :addon="instances[id]"
-    />
+          <Suspense>
+            <component
+              :class="$style.badge"
+              v-show="enabledPopups[id].badge"
+              :is="enabledPopups[id].badge"
+              :addon="instances[id]"
+            />
+          </Suspense>
           <a
             :class="$style.link"
             target="_blank"
@@ -41,7 +43,7 @@ import storage from "../background/storage";
 import { ref } from "vue";
 import * as popups from "#popups";
 import settingsComponent from "../settings/content.vue";
-import PopupAddon from "../addon-api/popup"
+import PopupAddon from "../addon-api/popup";
 
 let darkTheme = ref(false);
 
@@ -69,10 +71,10 @@ enabledPopups["settings-page"] = {
   component: settingsComponent,
 };
 
-const instances = {}
-Object.keys(enabledPopups).forEach(id => {
-  instances[id] = new PopupAddon(id)
-})
+const instances = {};
+Object.keys(enabledPopups).forEach((id) => {
+  instances[id] = new PopupAddon(id);
+});
 </script>
 
 <style lang="scss" module>
@@ -116,7 +118,7 @@ Object.keys(enabledPopups).forEach(id => {
         color: var(--content-text);
         background: none;
         border: none;
-        border-radius: 12px;
+        border-radius: 8px;
         transition: 0.2s ease background;
         font-family: inherit;
         &:has(.link) {
@@ -136,18 +138,17 @@ Object.keys(enabledPopups).forEach(id => {
           background-image: var(--gradient);
           color: #fff;
         }
-        .icon,
-        .popout {
+        .icon {
           font-size: 18px;
         }
         .name {
           padding: 0px 0px 0px 5px;
         }
         .badge {
-          background-color: var(--blue);
-          padding: 3px;
+          background-color: #00000044;
+          padding: 4px;
           border-radius: 4px;
-          margin-left: 2px;
+          margin-left: 4px;
         }
         .link {
           display: none;
@@ -165,12 +166,8 @@ Object.keys(enabledPopups).forEach(id => {
             margin-left: 1px;
             padding: 2px;
             border-radius: 2px;
-            &:hover {
-              background: #fff;
-              color: var(--theme);
-            }
           }
-          &:focus-visible .popout {
+          &:hover .popout {
             background: #fff;
             color: var(--theme);
           }

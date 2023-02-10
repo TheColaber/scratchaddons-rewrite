@@ -54,7 +54,8 @@ function openSettingsPage() {
     padding: 15px 20px;
   }
   .settings {
-    padding: 15px 20px;
+    height: 100%;
+    padding: 0px 20px;
     cursor: pointer;
     display: flex;
     align-items: center;

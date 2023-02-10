@@ -1,6 +1,9 @@
 <template>
   <div :class="$style.container">
-    <div v-if="loading">Loading Messages...</div>
+    <div :class="$style.loader" v-show="loading !== 100">
+      Loading...
+      <div :class="$style.bar" :style="{ width: loading + '%'}"></div>
+    </div>
     <Section
       :length="follows.length"
       title="Follows"
@@ -114,20 +117,14 @@
         There was new activity in
         <a
           target="_blank"
-          :href="
-            'https://scratch.mit.edu/studios/' + item.gallery_id
-          "
+          :href="'https://scratch.mit.edu/studios/' + item.gallery_id"
           :class="$style.link"
         >
           {{ item.title }}
         </a>
       </span>
     </Section>
-    <Section
-      :length="remixes.length"
-      title="Remixes"
-      icon="arrow-random"
-    >
+    <Section :length="remixes.length" title="Remixes" icon="arrow-random">
       <span v-for="item of remixes">
         <a
           target="_blank"
@@ -136,16 +133,13 @@
         >
           {{ item.actor_username }}
         </a>
-        remixed your project "{{ item.parent_title }}" as
-        "<a
+        remixed your project "{{ item.parent_title }}" as "<a
           target="_blank"
-          :href="
-            'https://scratch.mit.edu/projects/' + item.project_id
-          "
+          :href="'https://scratch.mit.edu/projects/' + item.project_id"
           :class="$style.link"
         >
-          {{ item.title }}
-        </a>"
+          {{ item.title }} </a
+        >"
       </span>
     </Section>
   </div>
@@ -153,54 +147,198 @@
 
 <script setup lang="ts">
 import Section from "./section.vue";
-import { ref } from "vue";
-import {
-  followuser,
-  becomeownerstudio,
-  curatorinvite,
-  becomehoststudio,
-  forumpost,
-  studioactivity,
-  remixproject
-} from "./worker";
 import PopupAddon from "../../src/addon-api/popup";
+import { ref } from "vue";
 
-const follows = ref<followuser[]>([]);
-const studioInvites = ref<curatorinvite[]>([]);
-const studioPromotions = ref<becomeownerstudio[]>([]);
-const studioHostTransfers = ref<becomehoststudio[]>([]);
-const forumActivity = ref<forumpost[]>([]);
-const studioActivity = ref<studioactivity[]>([]);
-const remixes = ref<remixproject[]>([]);
+const { addon } = defineProps<{ addon: PopupAddon }>();
+
+let follows = ref<followuser[]>([]);
+let studioInvites = ref<curatorinvite[]>([])
+let studioPromotions = ref<becomeownerstudio[]>([])
+let studioHostTransfers = ref<becomehoststudio[]>([])
+let forumActivity = ref<forumpost[]>([])
+let studioActivity = ref<studioactivity[]>([])
+let remixes = ref<remixproject[]>([])
 const profiles = [];
 const studios = [];
-const projects = [];
-let loading = true;
+const projects = ref<{
+  id: number;
+  title: string;
+  unreadComments: number;
+  commentChains: string[],
+  loveCount: number;
+  favoriteCount: number;
+  loversAndFavers: { username: string, loved: boolean, faved: boolean }[],
+  loadedComments: boolean,
+}[]>([]);
 
-const { addon } = defineProps<{ addon: PopupAddon }>()
-addon.port.postMessage("sendMessages")
-addon.port.onMessage.addListener(({ messages }) => {  
-  if (messages) {
-    loading = false;
-  for (const message of messages) {
-    if (message.type === "followuser") {
-      follows.value.push(message);
-    } else if (message.type === "curatorinvite") {
-      studioInvites.value.push(message);
-    } else if (message.type === "becomeownerstudio") {
-      studioPromotions.value.push(message);
-    } else if (message.type === "becomehoststudio") {
-      studioHostTransfers.value.push(message);
-    } else if (message.type === "forumpost") {
-      forumActivity.value.push(message);
-    } else if (message.type === "studioactivity") {
-      studioActivity.value.push(message)
-    } else if (message.type === "remixproject") {
-      remixes.value.push(message)
-    }
+let loading = ref(0);
+
+async function loadMessages() {
+  const session = await addon.auth.getSession();
+  if (!session.user) return;
+  const messageCount = await addon.auth.getMessageCount();
+  const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
+  for (let i = 0; i < maxPages; i++, loading.value = 100 * i / maxPages) {    
+    const page: 
+      (
+        | followuser
+        | curatorinvite
+        | becomeownerstudio
+        | becomehoststudio
+        | forumpost
+        | studioactivity
+        | remixproject
+        | loveproject
+        | favoriteproject
+      )[]
+     = await (
+      await fetch(
+        `https://api.scratch.mit.edu/users/${
+          session.user.username
+        }/messages?limit=40&offset=${40 * i}`,
+        {
+          headers: {
+            "x-token": session.user.token,
+          },
+        }
+      )
+    ).json();
+    for (const message of page) {
+      switch (message.type) {
+        case "followuser":
+          follows.value.push(message);
+          break;
+        case "curatorinvite":
+          studioInvites.value.push(message);
+          break;
+        case "becomeownerstudio":
+          studioPromotions.value.push(message);
+          break;
+        case "becomehoststudio":
+          studioHostTransfers.value.push(message);
+          break;
+        case "forumpost":
+          forumActivity.value.push(message);
+          break;
+        case "studioactivity":
+          studioActivity.value.push(message);
+          break;
+        case "remixproject":
+          remixes.value.push(message);
+          break;
+        case "loveproject": {     
+          const project = getProject(message.project_id, message.title);
+          project.loveCount++;
+          const findLover = project.loversAndFavers.find((obj) => obj.username === message.actor_username);
+          if (findLover) findLover.loved = true;
+          else project.loversAndFavers.push({ username: message.actor_username, loved: true, faved: false });
+          break;
+        }
+        case "favoriteproject": {          
+          const project = getProject(message.project_id, message.project_title);
+          project.favoriteCount++;
+          const findFaver = project.loversAndFavers.find((obj) => obj.username === message.actor_username);
+          if (findFaver) findFaver.faved = true;
+          else project.loversAndFavers.push({ username: message.actor_username, loved: false, faved: true });
+          break;
+        }
+        default:
+          // console.error("UNKNOWN MESSAGE! Please send to SA Devs:", message);
+          break;
+      }
+    }        
   }
-  }
-});
+  console.log(projects.value);
+}
+loadMessages();
+
+
+function getProject(projectId: number, title: string) {
+  const search = projects.value.find((project) => project.id === projectId);
+  if (search) return search;
+  const project = {
+    id: projectId,
+    title,
+    unreadComments: 0,
+    commentChains: [],
+    loveCount: 0,
+    favoriteCount: 0,
+    loversAndFavers: [],
+    loadedComments: false,
+  };
+  projects.value.push(project);
+  return project;
+}
+//   // //         } else if (message.type === "addcomment") {
+//   // //           const resourceId = message.comment_type === 1 ? message.comment_obj_title : message.comment_obj_id;
+//   // //           let location = commentLocations[message.comment_type].find((obj) => obj.resourceId === resourceId);
+//   // //           if (!location) {
+//   // //             location = { resourceId, commentIds: [] };
+//   // //             commentLocations[message.comment_type].push(location);
+//   // //           }
+//   // //           location.commentIds.push(message.comment_id);
+//   // //           let resourceObject;
+//   // //           if (message.comment_type === 0)
+//   // //             resourceObject = this.getProjectObject(resourceId, message.comment_obj_title);
+//   // //           else if (message.comment_type === 1) resourceObject = this.getProfileObject(resourceId);
+//   // //           else if (message.comment_type === 2)
+//   // //             resourceObject = this.getStudioObject(resourceId, message.comment_obj_title);
+//   // //           resourceObject.unreadComments++;
+//   // //         }
+
+type followuser = {
+  type: "followuser";
+  actor_username: string;
+};
+type curatorinvite = {
+  type: "curatorinvite";
+  actor_username: string;
+  gallery_id: string;
+  title: string;
+};
+type becomeownerstudio = {
+  type: "becomeownerstudio";
+  actor_username: string;
+  gallery_id: string;
+  gallery_title: string;
+};
+type becomehoststudio = {
+  type: "becomehoststudio";
+  admin_actor: boolean;
+  actor_username: string;
+  gallery_id: string;
+  gallery_title: string;
+};
+type forumpost = {
+  type: "forumpost";
+  topic_id: string;
+  topic_title: string;
+};
+type studioactivity = {
+  type: "studioactivity";
+  gallery_id: string;
+  title: string;
+};
+type remixproject = {
+  type: "remixproject";
+  actor_username: string;
+  parent_title: string;
+  title: string;
+  project_id: string;
+};
+type loveproject = {
+  type: "loveproject";
+  project_id: number;
+  title: string;
+  actor_username: string;
+}
+type favoriteproject = {
+  type: "favoriteproject";
+  project_id: number;
+  project_title: string;
+  actor_username: string;
+}
 </script>
 
 <style lang="scss" module>
@@ -220,6 +358,26 @@ addon.port.onMessage.addListener(({ messages }) => {
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 10%);
+  padding: 15px 20px;
+  overflow: hidden;
+  background-color: var(--button-hover-background);
+  border-radius: 8px;
+  box-shadow: var(--large-shadow);
+  font-weight: 600;
+  .bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background-image: var(--gradient);
   }
 }
 </style>
