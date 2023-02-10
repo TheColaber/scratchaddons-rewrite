@@ -1,5 +1,5 @@
 import { a as definePopupManifest } from './chunk.index-e4c60ce4.js';
-import { a as styleInject, d as defineComponent, r as ref, w as withDirectives, v as vShow, c as createElementBlock, b as createBaseVNode, e as createVNode, n as normalizeClass, u as unref, t as toDisplayString, f as createTextVNode, g as renderSlot, h as createCommentVNode, i as withCtx, o as openBlock, I as Icon, F as Fragment, j as renderList } from './chunk.style-inject.es-d8193a81.js';
+import { a as styleInject, d as defineComponent, r as ref, w as withDirectives, v as vShow, c as createElementBlock, b as createBaseVNode, e as createVNode, n as normalizeClass, u as unref, t as toDisplayString, f as createTextVNode, g as renderSlot, h as normalizeStyle, i as withCtx, j as withAsyncContext, o as openBlock, I as Icon, F as Fragment, k as renderList } from './chunk.style-inject.es-e9a35701.js';
 
 var script$2 = /* @__PURE__ */ defineComponent({
   __name: "section",
@@ -95,19 +95,18 @@ cssModules$1["$style"] = style0$1;
 
 script$2.__file = "popups/scratch-messaging/section.vue";
 
-const _hoisted_1 = { key: 0 };
+const _hoisted_1 = ["href"];
 const _hoisted_2 = ["href"];
 const _hoisted_3 = ["href"];
 const _hoisted_4 = ["href"];
 const _hoisted_5 = ["href"];
-const _hoisted_6 = ["href"];
-const _hoisted_7 = { key: 0 };
+const _hoisted_6 = { key: 0 };
+const _hoisted_7 = ["href"];
 const _hoisted_8 = ["href"];
 const _hoisted_9 = ["href"];
 const _hoisted_10 = ["href"];
 const _hoisted_11 = ["href"];
 const _hoisted_12 = ["href"];
-const _hoisted_13 = ["href"];
 var script$1 = /* @__PURE__ */ defineComponent({
   __name: "component",
   props: {
@@ -115,37 +114,96 @@ var script$1 = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const { addon } = __props;
-    const follows = ref([]);
-    const studioInvites = ref([]);
-    const studioPromotions = ref([]);
-    const studioHostTransfers = ref([]);
-    const forumActivity = ref([]);
-    const studioActivity = ref([]);
-    const remixes = ref([]);
-    let loading = true;
-    addon.port.postMessage("sendMessages");
-    addon.port.onMessage.addListener(({ messages }) => {
-      if (messages) {
-        loading = false;
-        for (const message of messages) {
-          if (message.type === "followuser") {
-            follows.value.push(message);
-          } else if (message.type === "curatorinvite") {
-            studioInvites.value.push(message);
-          } else if (message.type === "becomeownerstudio") {
-            studioPromotions.value.push(message);
-          } else if (message.type === "becomehoststudio") {
-            studioHostTransfers.value.push(message);
-          } else if (message.type === "forumpost") {
-            forumActivity.value.push(message);
-          } else if (message.type === "studioactivity") {
-            studioActivity.value.push(message);
-          } else if (message.type === "remixproject") {
-            remixes.value.push(message);
+    let follows = ref([]);
+    let studioInvites = ref([]);
+    let studioPromotions = ref([]);
+    let studioHostTransfers = ref([]);
+    let forumActivity = ref([]);
+    let studioActivity = ref([]);
+    let remixes = ref([]);
+    const projects = ref([]);
+    let loading = ref(0);
+    async function loadMessages() {
+      const session = await addon.auth.getSession();
+      if (!session.user)
+        return;
+      const messageCount = await addon.auth.getMessageCount();
+      const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
+      for (let i = 0; i < maxPages; i++, loading.value = 100 * i / maxPages) {
+        const page = await (await fetch(
+          `https://api.scratch.mit.edu/users/${session.user.username}/messages?limit=40&offset=${40 * i}`,
+          {
+            headers: {
+              "x-token": session.user.token
+            }
+          }
+        )).json();
+        for (const message of page) {
+          switch (message.type) {
+            case "followuser":
+              follows.value.push(message);
+              break;
+            case "curatorinvite":
+              studioInvites.value.push(message);
+              break;
+            case "becomeownerstudio":
+              studioPromotions.value.push(message);
+              break;
+            case "becomehoststudio":
+              studioHostTransfers.value.push(message);
+              break;
+            case "forumpost":
+              forumActivity.value.push(message);
+              break;
+            case "studioactivity":
+              studioActivity.value.push(message);
+              break;
+            case "remixproject":
+              remixes.value.push(message);
+              break;
+            case "loveproject": {
+              const project = getProject(message.project_id, message.title);
+              project.loveCount++;
+              const findLover = project.loversAndFavers.find((obj) => obj.username === message.actor_username);
+              if (findLover)
+                findLover.loved = true;
+              else
+                project.loversAndFavers.push({ username: message.actor_username, loved: true, faved: false });
+              break;
+            }
+            case "favoriteproject": {
+              const project = getProject(message.project_id, message.project_title);
+              project.favoriteCount++;
+              const findFaver = project.loversAndFavers.find((obj) => obj.username === message.actor_username);
+              if (findFaver)
+                findFaver.faved = true;
+              else
+                project.loversAndFavers.push({ username: message.actor_username, loved: false, faved: true });
+              break;
+            }
           }
         }
       }
-    });
+      console.log(projects.value);
+    }
+    loadMessages();
+    function getProject(projectId, title) {
+      const search = projects.value.find((project2) => project2.id === projectId);
+      if (search)
+        return search;
+      const project = {
+        id: projectId,
+        title,
+        unreadComments: 0,
+        commentChains: [],
+        loveCount: 0,
+        favoriteCount: 0,
+        loversAndFavers: [],
+        loadedComments: false
+      };
+      projects.value.push(project);
+      return project;
+    }
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(
         "div",
@@ -153,9 +211,31 @@ var script$1 = /* @__PURE__ */ defineComponent({
           class: normalizeClass(_ctx.$style.container)
         },
         [
-          unref(loading) ? (openBlock(), createElementBlock("div", _hoisted_1, "Loading Messages...")) : createCommentVNode("v-if", true),
+          withDirectives(createBaseVNode(
+            "div",
+            {
+              class: normalizeClass(_ctx.$style.loader)
+            },
+            [
+              createTextVNode(" Loading... "),
+              createBaseVNode(
+                "div",
+                {
+                  class: normalizeClass(_ctx.$style.bar),
+                  style: normalizeStyle({ width: unref(loading) + "%" })
+                },
+                null,
+                6
+                /* CLASS, STYLE */
+              )
+            ],
+            2
+            /* CLASS */
+          ), [
+            [vShow, unref(loading) !== 100]
+          ]),
           createVNode(script$2, {
-            length: follows.value.length,
+            length: unref(follows).length,
             title: "Follows",
             icon: "user-plus",
             "no-row-gap": true
@@ -164,12 +244,12 @@ var script$1 = /* @__PURE__ */ defineComponent({
               (openBlock(true), createElementBlock(
                 Fragment,
                 null,
-                renderList(follows.value, (item) => {
+                renderList(unref(follows), (item) => {
                   return openBlock(), createElementBlock("a", {
                     target: "_blank",
                     href: "https://scratch.mit.edu/users/" + item.actor_username,
                     class: normalizeClass(_ctx.$style.link)
-                  }, toDisplayString(item.actor_username), 11, _hoisted_2);
+                  }, toDisplayString(item.actor_username), 11, _hoisted_1);
                 }),
                 256
                 /* UNKEYED_FRAGMENT */
@@ -179,7 +259,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             /* STABLE */
           }, 8, ["length"]),
           createVNode(script$2, {
-            length: studioInvites.value.length,
+            length: unref(studioInvites).length,
             title: "Studio Invites",
             icon: "envelope-add"
           }, {
@@ -187,19 +267,19 @@ var script$1 = /* @__PURE__ */ defineComponent({
               (openBlock(true), createElementBlock(
                 Fragment,
                 null,
-                renderList(studioInvites.value, (item) => {
+                renderList(unref(studioInvites), (item) => {
                   return openBlock(), createElementBlock("span", null, [
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/users/" + item.actor_username,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.actor_username), 11, _hoisted_3),
+                    }, toDisplayString(item.actor_username), 11, _hoisted_2),
                     createTextVNode(" invited you to curate "),
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/studios/" + item.gallery_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.title), 11, _hoisted_4)
+                    }, toDisplayString(item.title), 11, _hoisted_3)
                   ]);
                 }),
                 256
@@ -210,7 +290,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             /* STABLE */
           }, 8, ["length"]),
           createVNode(script$2, {
-            length: studioPromotions.value.length,
+            length: unref(studioPromotions).length,
             title: "Studio promotions",
             icon: "shield-plus"
           }, {
@@ -218,19 +298,19 @@ var script$1 = /* @__PURE__ */ defineComponent({
               (openBlock(true), createElementBlock(
                 Fragment,
                 null,
-                renderList(studioPromotions.value, (item) => {
+                renderList(unref(studioPromotions), (item) => {
                   return openBlock(), createElementBlock("span", null, [
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/users/" + item.actor_username,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.actor_username), 11, _hoisted_5),
+                    }, toDisplayString(item.actor_username), 11, _hoisted_4),
                     createTextVNode(" promoted you to manager for the studio "),
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/studios/" + item.gallery_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.gallery_title), 11, _hoisted_6)
+                    }, toDisplayString(item.gallery_title), 11, _hoisted_5)
                   ]);
                 }),
                 256
@@ -241,7 +321,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             /* STABLE */
           }, 8, ["length"]),
           createVNode(script$2, {
-            length: studioPromotions.value.length,
+            length: unref(studioPromotions).length,
             title: "Studio host transfers",
             icon: "users-alt"
           }, {
@@ -249,20 +329,20 @@ var script$1 = /* @__PURE__ */ defineComponent({
               (openBlock(true), createElementBlock(
                 Fragment,
                 null,
-                renderList(studioHostTransfers.value, (item) => {
+                renderList(unref(studioHostTransfers), (item) => {
                   return openBlock(), createElementBlock("span", null, [
-                    item.admin_actor ? (openBlock(), createElementBlock("span", _hoisted_7, "A Scratch Team member")) : (openBlock(), createElementBlock("a", {
+                    item.admin_actor ? (openBlock(), createElementBlock("span", _hoisted_6, "A Scratch Team member")) : (openBlock(), createElementBlock("a", {
                       key: 1,
                       target: "_blank",
                       href: "https://scratch.mit.edu/users/" + item.actor_username,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.actor_username), 11, _hoisted_8)),
+                    }, toDisplayString(item.actor_username), 11, _hoisted_7)),
                     createTextVNode(" made you the host of the studio "),
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/studios/" + item.gallery_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.gallery_title), 11, _hoisted_9)
+                    }, toDisplayString(item.gallery_title), 11, _hoisted_8)
                   ]);
                 }),
                 256
@@ -273,7 +353,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             /* STABLE */
           }, 8, ["length"]),
           createVNode(script$2, {
-            length: forumActivity.value.length,
+            length: unref(forumActivity).length,
             title: "Forum activity",
             icon: "comments-alt"
           }, {
@@ -281,14 +361,14 @@ var script$1 = /* @__PURE__ */ defineComponent({
               (openBlock(true), createElementBlock(
                 Fragment,
                 null,
-                renderList(forumActivity.value, (item) => {
+                renderList(unref(forumActivity), (item) => {
                   return openBlock(), createElementBlock("span", null, [
                     createTextVNode(" There are new posts in the forum thread "),
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/discuss/topic/" + item.topic_id + "/unread",
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.topic_title), 11, _hoisted_10)
+                    }, toDisplayString(item.topic_title), 11, _hoisted_9)
                   ]);
                 }),
                 256
@@ -299,7 +379,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             /* STABLE */
           }, 8, ["length"]),
           createVNode(script$2, {
-            length: studioActivity.value.length,
+            length: unref(studioActivity).length,
             title: "Studio activity",
             icon: "folder-exclamation"
           }, {
@@ -307,14 +387,14 @@ var script$1 = /* @__PURE__ */ defineComponent({
               (openBlock(true), createElementBlock(
                 Fragment,
                 null,
-                renderList(studioActivity.value, (item) => {
+                renderList(unref(studioActivity), (item) => {
                   return openBlock(), createElementBlock("span", null, [
                     createTextVNode(" There was new activity in "),
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/studios/" + item.gallery_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.title), 11, _hoisted_11)
+                    }, toDisplayString(item.title), 11, _hoisted_10)
                   ]);
                 }),
                 256
@@ -325,7 +405,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             /* STABLE */
           }, 8, ["length"]),
           createVNode(script$2, {
-            length: remixes.value.length,
+            length: unref(remixes).length,
             title: "Remixes",
             icon: "arrow-random"
           }, {
@@ -333,13 +413,13 @@ var script$1 = /* @__PURE__ */ defineComponent({
               (openBlock(true), createElementBlock(
                 Fragment,
                 null,
-                renderList(remixes.value, (item) => {
+                renderList(unref(remixes), (item) => {
                   return openBlock(), createElementBlock("span", null, [
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/users/" + item.actor_username,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.actor_username), 11, _hoisted_12),
+                    }, toDisplayString(item.actor_username), 11, _hoisted_11),
                     createTextVNode(
                       ' remixed your project "' + toDisplayString(item.parent_title) + '" as "',
                       1
@@ -349,7 +429,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
                       target: "_blank",
                       href: "https://scratch.mit.edu/projects/" + item.project_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.title), 11, _hoisted_13),
+                    }, toDisplayString(item.title), 11, _hoisted_12),
                     createTextVNode('" ')
                   ]);
                 }),
@@ -368,10 +448,10 @@ var script$1 = /* @__PURE__ */ defineComponent({
   }
 });
 
-var css_248z = "._container_185b5_2 {\n  flex: 1;\n  display: flex;\n  gap: 10px;\n  flex-direction: column;\n  background: var(--background-primary);\n  color: var(--content-text);\n  padding-bottom: 10px;\n}\n\n._link_185b5_12 {\n  color: var(--blue-text);\n  text-decoration: none;\n}\n._link_185b5_12:hover {\n  text-decoration: underline;\n}";
+var css_248z = "._container_1hq45_2 {\n  flex: 1;\n  display: flex;\n  gap: 10px;\n  flex-direction: column;\n  background: var(--background-primary);\n  color: var(--content-text);\n  padding-bottom: 10px;\n}\n\n._link_1hq45_12 {\n  color: var(--blue-text);\n  text-decoration: none;\n}\n._link_1hq45_12:hover {\n  text-decoration: underline;\n}\n\n._loader_1hq45_21 {\n  position: absolute;\n  left: 50%;\n  transform: translate(-50%, 10%);\n  padding: 15px 20px;\n  overflow: hidden;\n  background-color: var(--button-hover-background);\n  border-radius: 8px;\n  box-shadow: var(--large-shadow);\n  font-weight: 600;\n}\n._loader_1hq45_21 ._bar_1hq45_31 {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 0;\n  height: 4px;\n  background-image: var(--gradient);\n}";
 styleInject(css_248z);
 
-var style0 = { "container": "_container_185b5_2", "link": "_link_185b5_12" };
+var style0 = { "container": "_container_1hq45_2", "link": "_link_1hq45_12", "loader": "_loader_1hq45_21", "bar": "_bar_1hq45_31" };
 
 const cssModules = script$1.__cssModules = {};
 cssModules["$style"] = style0;
@@ -379,41 +459,15 @@ cssModules["$style"] = style0;
 
 script$1.__file = "popups/scratch-messaging/component.vue";
 
-var worker = async (addon) => {
-  chrome.runtime.onConnect.addListener(async (port) => {
-    if (port.name !== "scratch-messaging")
-      return;
-    port.onMessage.addListener(async (message) => {
-      if (message === "sendMessages") {
-        const messages = await addon.auth.getMessages();
-        port.postMessage({ messages });
-      }
-      if (message === "sendCount") {
-        console.log("got it!");
-        const count = await addon.auth.getMessageCount();
-        console.log("sent");
-        port.postMessage({ count });
-      }
-    });
-  });
-};
-
 var script = /* @__PURE__ */ defineComponent({
   __name: "badge",
   props: {
     addon: { type: null, required: true }
   },
-  setup(__props) {
+  async setup(__props) {
+    let __temp, __restore;
     const { addon } = __props;
-    let messageCount = ref();
-    addon.port.postMessage("sendCount");
-    console.log("SENT COuNt");
-    addon.port.onMessage.addListener(({ count }) => {
-      console.log(count);
-      if (count) {
-        messageCount.value = count;
-      }
-    });
+    const messageCount = ([__temp, __restore] = withAsyncContext(() => addon.auth.getMessageCount()), __temp = await __temp, __restore(), __temp);
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(
         "div",
@@ -445,7 +499,6 @@ var addon = definePopupManifest({
     icon: "envelope",
     badge: script
   },
-  worker,
   versionAdded: "1.0.0",
   tags: ["recommended"],
   enabledByDefault: true
