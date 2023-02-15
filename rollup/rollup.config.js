@@ -33,8 +33,8 @@ export default {
 
     virtual({
       // TODO: Use globby thingy
-      "#addons": importAddonDir("addons"),
-      "#popups": importAddonDir("popups"),
+      "#addons": importAddonDir("src/addons"),
+      "#popups": importAddonDir("src/popup/popups"),
     }),
 
     vue({ target: "browser" }),

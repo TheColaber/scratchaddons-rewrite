@@ -12,15 +12,12 @@ export interface AddonManifest {
     icon: string;
     component: Component;
   };
-  userscripts?: {
-    script: ReturnType<typeof defineScript>;
+  scripts?: {
+    scripts?: ReturnType<typeof defineScript>[]
+    styles?: string[]
     matches: (keyof typeof matches)[];
-    runAtComplete: boolean;
-  }[];
-  userstyles?: {
-    style: string;
-    matches: (keyof typeof matches)[];
-  }[];
+    runAtComplete?: boolean;
+  }[]
   worker?: Function;
   hotkeys?: {
     id: string;

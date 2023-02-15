@@ -1,16 +1,18 @@
-import { defineAddonManifest } from "../../../types/helpers/addon-manifest";
-
+import { defineAddonManifest } from "../../../../types/helpers/addon-manifest";
+import script from "./userscript"
 export default defineAddonManifest({
   name: "Find bar",
   description:
     "Creates a search bar next to the sounds tab to find and jump to scripts, costumes and sounds.",
   versionAdded: "1.0.0",
-  userscripts: [
+  scripts: [
     {
+      scripts: [script],
+      styles: [],
+      matches: ["projects"],
       runAtComplete: false,
-    },
+    }
   ],
-  userstyles: [],
   hotkeys: [
     {
       id: "previousLocation",

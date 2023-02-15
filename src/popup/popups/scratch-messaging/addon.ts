@@ -1,4 +1,4 @@
-import { definePopupManifest } from "../../types/helpers/addon-manifest";
+import { definePopupManifest } from "../../../../types/helpers/addon-manifest";
 import component from "./component.vue";
 import badge from "./badge.vue";
 
