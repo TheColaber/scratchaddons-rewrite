@@ -1,8 +1,13 @@
 <template>
   <div :class="$style.container">
-    <div :class="$style.loader" v-show="loading !== 100">
-      Loading...
-      <div :class="$style.bar" :style="{ width: loading + '%'}"></div>
+    <div :class="$style.loader" v-if="loading !== 100">
+      <div v-if="loading === 'notloggedin'">
+        Not logged in.
+      </div>
+      <div v-else>
+        Loading...
+        <div :class="$style.bar" :style="{ width: loading + '%'}"></div>
+      </div>
     </div>
     <Section
       :length="follows.length"
@@ -172,11 +177,14 @@ const projects = ref<{
   loadedComments: boolean,
 }[]>([]);
 
-let loading = ref(0);
+let loading = ref<number | string>(0);
 
 async function loadMessages() {
   const session = await addon.auth.getSession();
-  if (!session.user) return;
+  if (!session.user) {
+    loading.value = "notloggedin"
+    return
+  };
   const messageCount = await addon.auth.getMessageCount();
   const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
   for (let i = 0; i < maxPages; i++, loading.value = 100 * i / maxPages) {    
