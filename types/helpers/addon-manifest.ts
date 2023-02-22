@@ -13,11 +13,11 @@ export interface AddonManifest {
     component: Component;
   };
   scripts?: {
-    scripts?: ReturnType<typeof defineScript>[]
-    styles?: string[]
+    scripts?: ReturnType<typeof defineScript>[];
+    styles?: string[];
     matches: (keyof typeof matches)[];
     runAtComplete?: boolean;
-  }[]
+  }[];
   worker?: Function;
   hotkeys?: {
     id: string;

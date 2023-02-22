@@ -1,12 +1,10 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.loader" v-if="loading !== 100">
-      <div v-if="loading === 'notloggedin'">
-        Not logged in.
-      </div>
+      <div v-if="loading === 'notloggedin'">Not logged in.</div>
       <div v-else>
         Loading...
-        <div :class="$style.bar" :style="{ width: loading + '%'}"></div>
+        <div :class="$style.bar" :style="{ width: loading + '%' }"></div>
       </div>
     </div>
     <Section
@@ -158,49 +156,49 @@ import { ref } from "vue";
 const { addon } = defineProps<{ addon: PopupAddon }>();
 
 let follows = ref<followuser[]>([]);
-let studioInvites = ref<curatorinvite[]>([])
-let studioPromotions = ref<becomeownerstudio[]>([])
-let studioHostTransfers = ref<becomehoststudio[]>([])
-let forumActivity = ref<forumpost[]>([])
-let studioActivity = ref<studioactivity[]>([])
-let remixes = ref<remixproject[]>([])
+let studioInvites = ref<curatorinvite[]>([]);
+let studioPromotions = ref<becomeownerstudio[]>([]);
+let studioHostTransfers = ref<becomehoststudio[]>([]);
+let forumActivity = ref<forumpost[]>([]);
+let studioActivity = ref<studioactivity[]>([]);
+let remixes = ref<remixproject[]>([]);
 const profiles = [];
 const studios = [];
-const projects = ref<{
-  id: number;
-  title: string;
-  unreadComments: number;
-  commentChains: string[],
-  loveCount: number;
-  favoriteCount: number;
-  loversAndFavers: { username: string, loved: boolean, faved: boolean }[],
-  loadedComments: boolean,
-}[]>([]);
+const projects = ref<
+  {
+    id: number;
+    title: string;
+    unreadComments: number;
+    commentChains: string[];
+    loveCount: number;
+    favoriteCount: number;
+    loversAndFavers: { username: string; loved: boolean; faved: boolean }[];
+    loadedComments: boolean;
+  }[]
+>([]);
 
 let loading = ref<number | string>(0);
 
 async function loadMessages() {
   const session = await addon.auth.getSession();
   if (!session.user) {
-    loading.value = "notloggedin"
-    return
-  };
+    loading.value = "notloggedin";
+    return;
+  }
   const messageCount = await addon.auth.getMessageCount();
   const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
-  for (let i = 0; i < maxPages; i++, loading.value = 100 * i / maxPages) {    
-    const page: 
-      (
-        | followuser
-        | curatorinvite
-        | becomeownerstudio
-        | becomehoststudio
-        | forumpost
-        | studioactivity
-        | remixproject
-        | loveproject
-        | favoriteproject
-      )[]
-     = await (
+  for (let i = 0; i < maxPages; i++, loading.value = (100 * i) / maxPages) {
+    const page: (
+      | followuser
+      | curatorinvite
+      | becomeownerstudio
+      | becomehoststudio
+      | forumpost
+      | studioactivity
+      | remixproject
+      | loveproject
+      | favoriteproject
+    )[] = await (
       await fetch(
         `https://api.scratch.mit.edu/users/${
           session.user.username
@@ -235,32 +233,45 @@ async function loadMessages() {
         case "remixproject":
           remixes.value.push(message);
           break;
-        case "loveproject": {     
+        case "loveproject": {
           const project = getProject(message.project_id, message.title);
           project.loveCount++;
-          const findLover = project.loversAndFavers.find((obj) => obj.username === message.actor_username);
+          const findLover = project.loversAndFavers.find(
+            (obj) => obj.username === message.actor_username
+          );
           if (findLover) findLover.loved = true;
-          else project.loversAndFavers.push({ username: message.actor_username, loved: true, faved: false });
+          else
+            project.loversAndFavers.push({
+              username: message.actor_username,
+              loved: true,
+              faved: false,
+            });
           break;
         }
-        case "favoriteproject": {          
+        case "favoriteproject": {
           const project = getProject(message.project_id, message.project_title);
           project.favoriteCount++;
-          const findFaver = project.loversAndFavers.find((obj) => obj.username === message.actor_username);
+          const findFaver = project.loversAndFavers.find(
+            (obj) => obj.username === message.actor_username
+          );
           if (findFaver) findFaver.faved = true;
-          else project.loversAndFavers.push({ username: message.actor_username, loved: false, faved: true });
+          else
+            project.loversAndFavers.push({
+              username: message.actor_username,
+              loved: false,
+              faved: true,
+            });
           break;
         }
         default:
           // console.error("UNKNOWN MESSAGE! Please send to SA Devs:", message);
           break;
       }
-    }        
+    }
   }
   console.log(projects.value);
 }
 loadMessages();
-
 
 function getProject(projectId: number, title: string) {
   const search = projects.value.find((project) => project.id === projectId);
@@ -340,13 +351,13 @@ type loveproject = {
   project_id: number;
   title: string;
   actor_username: string;
-}
+};
 type favoriteproject = {
   type: "favoriteproject";
   project_id: number;
   project_title: string;
   actor_username: string;
-}
+};
 </script>
 
 <style lang="scss" module>

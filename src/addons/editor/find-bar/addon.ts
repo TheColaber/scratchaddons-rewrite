@@ -1,5 +1,6 @@
 import { defineAddonManifest } from "../../../../types/helpers/addon-manifest";
-import script from "./userscript"
+import script from "./userscript";
+
 export default defineAddonManifest({
   name: "Find bar",
   description:
@@ -11,7 +12,7 @@ export default defineAddonManifest({
       styles: [],
       matches: ["projects"],
       runAtComplete: false,
-    }
+    },
   ],
   hotkeys: [
     {

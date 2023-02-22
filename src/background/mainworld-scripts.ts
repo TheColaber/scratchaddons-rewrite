@@ -7,15 +7,12 @@ chrome.scripting
       world: "MAIN",
       runAt: "document_start",
       matches: ["https://scratch.mit.edu/*"],
-      js: [
-        "mainworld/content-scripts/setup.js",
-        "mainworld/content-scripts/load-redux.js",
-      ],
+      js: ["mainworld/importer.js"],
       allFrames: true,
     },
   ])
   .catch(() => {
-    /* We catch because we might the error "Duplicate content script id" */
+    /* We catch because we might error "Duplicate content script id" */
   });
 
 chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
@@ -27,25 +24,21 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
   const { addonsEnabled } = await storage.get("addonsEnabled");
 
   await chrome.scripting.executeScript<
-    [string, typeof addonsEnabled, typeof l10nUrls],
+    [typeof addonsEnabled, typeof l10nUrls],
     void
   >({
     target: { tabId },
     injectImmediately: true,
     world: "MAIN",
-
-    func: async (script, addonsEnabled, l10nUrls) => {
+    func: async (addonsEnabled, l10nUrls) => {
+      await window.scratchAddonsReady
       if (window.scratchAddons.loaded) return;
-      console.log("Scratch Addons is running.");
-
-      const { default: module } = await import(script);
-      module(addonsEnabled, l10nUrls);
+      window.scratchAddons.loaded = true;
+      window.scratchAddons.events.dispatchEvent(
+        new CustomEvent("loaded", { detail: { addonsEnabled, l10nUrls } })
+      );
     },
-    args: [
-      chrome.runtime.getURL("mainworld/index.js"),
-      addonsEnabled,
-      l10nUrls,
-    ],
+    args: [addonsEnabled, l10nUrls],
   });
 
   // await new Promise((r) => setTimeout(r, 3000));

@@ -30,7 +30,7 @@
   "permissions": ["storage", "contextMenus", "alarms", "scripting", "cookies"],
   "web_accessible_resources": [
     {
-      "resources": ["mainworld/**/*.ts", "chunk.*.js"],
+      "resources": ["mainworld/importer.ts", "chunk.*.js"],
       "matches": ["https://*.scratch.mit.edu/*"]
     }
   ]
