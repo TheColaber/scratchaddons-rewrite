@@ -1,7 +1,8 @@
-import { a as styleInject, l as createApp, d as defineComponent, c as createElementBlock, b as createBaseVNode, n as normalizeClass, f as createTextVNode, e as createVNode, u as unref, r as ref, s as storage$1, j as withAsyncContext, F as Fragment, k as renderList, m as createBlock, i as withCtx, S as Suspense, o as openBlock, I as Icon, p as isRef, t as toDisplayString, w as withDirectives, v as vShow, q as resolveDynamicComponent, x as createCommentVNode } from '../chunk.style-inject.es-e9a35701.js';
-import { p as popups } from '../chunk._virtual__popups-0512d671.js';
-import { s as script$3 } from '../chunk.content-8cf42449.js';
-import { A as Addon } from '../chunk.index-e4c60ce4.js';
+import { a as styleInject, m as createApp, d as defineComponent, c as createElementBlock, b as createBaseVNode, n as normalizeClass, f as createTextVNode, e as createVNode, u as unref, r as ref, s as storage$1, k as withAsyncContext, F as Fragment, l as renderList, p as createBlock, j as withCtx, S as Suspense, o as openBlock, I as Icon, q as isRef, t as toDisplayString, w as withDirectives, v as vShow, x as resolveDynamicComponent, i as createCommentVNode } from '../chunk.style-inject.es-35aae750.js';
+import { p as popups } from '../chunk._virtual__popups-220219d4.js';
+import { s as script$3 } from '../chunk.content-2ea5b3c2.js';
+import { A as Addon } from '../chunk.index-b6ece9ed.js';
+import '../chunk._virtual__addons-19cb23e2.js';
 
 const _hoisted_1$1 = ["src"];
 var script$2 = /* @__PURE__ */ defineComponent({
@@ -81,10 +82,12 @@ script$2.__file = "src/popup/header.vue";
 class Auth extends EventTarget {
   id;
   messageCache;
+  sessionCache;
   constructor(id) {
     super();
     this.id = id;
     this.messageCache = { timestamp: 0, value: null };
+    this.sessionCache = { timestamp: 0, value: null };
     chrome.cookies.onChanged.addListener(async ({ cookie, removed }) => {
       if (cookie.name === "scratchsessionsid") {
         this.dispatchEvent(new CustomEvent("updatedSession"));
@@ -92,11 +95,17 @@ class Auth extends EventTarget {
     });
   }
   async getSession() {
-    return await (await fetch("https://scratch.mit.edu/session/", {
+    const date = Date.now();
+    if (this.sessionCache.value instanceof Promise && date - this.sessionCache.timestamp < 1e3) {
+      return await this.sessionCache.value;
+    }
+    this.sessionCache.timestamp = date;
+    this.sessionCache.value = fetch("https://scratch.mit.edu/session/", {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
       }
-    })).json();
+    }).then((res) => res.json());
+    return await this.sessionCache.value;
   }
   async getMessageCount() {
     const date = Date.now();

@@ -1,5 +1,5 @@
-import { a as definePopupManifest } from './chunk.index-e4c60ce4.js';
-import { a as styleInject, d as defineComponent, r as ref, w as withDirectives, v as vShow, c as createElementBlock, b as createBaseVNode, e as createVNode, n as normalizeClass, u as unref, t as toDisplayString, f as createTextVNode, g as renderSlot, h as normalizeStyle, i as withCtx, j as withAsyncContext, o as openBlock, I as Icon, F as Fragment, k as renderList } from './chunk.style-inject.es-e9a35701.js';
+import { d as definePopupManifest } from './chunk._virtual__addons-19cb23e2.js';
+import { a as styleInject, d as defineComponent, r as ref, w as withDirectives, v as vShow, c as createElementBlock, b as createBaseVNode, e as createVNode, n as normalizeClass, u as unref, t as toDisplayString, f as createTextVNode, g as renderSlot, h as normalizeStyle, i as createCommentVNode, j as withCtx, k as withAsyncContext, o as openBlock, I as Icon, F as Fragment, l as renderList } from './chunk.style-inject.es-35aae750.js';
 
 var script$2 = /* @__PURE__ */ defineComponent({
   __name: "section",
@@ -93,20 +93,22 @@ const cssModules$1 = script$2.__cssModules = {};
 cssModules$1["$style"] = style0$1;
 
 
-script$2.__file = "popups/scratch-messaging/section.vue";
+script$2.__file = "src/popup/popups/scratch-messaging/section.vue";
 
-const _hoisted_1 = ["href"];
-const _hoisted_2 = ["href"];
+const _hoisted_1$1 = { key: 0 };
+const _hoisted_2 = { key: 1 };
 const _hoisted_3 = ["href"];
 const _hoisted_4 = ["href"];
 const _hoisted_5 = ["href"];
-const _hoisted_6 = { key: 0 };
+const _hoisted_6 = ["href"];
 const _hoisted_7 = ["href"];
-const _hoisted_8 = ["href"];
+const _hoisted_8 = { key: 0 };
 const _hoisted_9 = ["href"];
 const _hoisted_10 = ["href"];
 const _hoisted_11 = ["href"];
 const _hoisted_12 = ["href"];
+const _hoisted_13 = ["href"];
+const _hoisted_14 = ["href"];
 var script$1 = /* @__PURE__ */ defineComponent({
   __name: "component",
   props: {
@@ -125,8 +127,10 @@ var script$1 = /* @__PURE__ */ defineComponent({
     let loading = ref(0);
     async function loadMessages() {
       const session = await addon.auth.getSession();
-      if (!session.user)
+      if (!session.user) {
+        loading.value = "notloggedin";
         return;
+      }
       const messageCount = await addon.auth.getMessageCount();
       const maxPages = Math.min(Math.ceil(messageCount / 40) + 1, 25);
       for (let i = 0; i < maxPages; i++, loading.value = 100 * i / maxPages) {
@@ -164,21 +168,33 @@ var script$1 = /* @__PURE__ */ defineComponent({
             case "loveproject": {
               const project = getProject(message.project_id, message.title);
               project.loveCount++;
-              const findLover = project.loversAndFavers.find((obj) => obj.username === message.actor_username);
+              const findLover = project.loversAndFavers.find(
+                (obj) => obj.username === message.actor_username
+              );
               if (findLover)
                 findLover.loved = true;
               else
-                project.loversAndFavers.push({ username: message.actor_username, loved: true, faved: false });
+                project.loversAndFavers.push({
+                  username: message.actor_username,
+                  loved: true,
+                  faved: false
+                });
               break;
             }
             case "favoriteproject": {
               const project = getProject(message.project_id, message.project_title);
               project.favoriteCount++;
-              const findFaver = project.loversAndFavers.find((obj) => obj.username === message.actor_username);
+              const findFaver = project.loversAndFavers.find(
+                (obj) => obj.username === message.actor_username
+              );
               if (findFaver)
                 findFaver.faved = true;
               else
-                project.loversAndFavers.push({ username: message.actor_username, loved: false, faved: true });
+                project.loversAndFavers.push({
+                  username: message.actor_username,
+                  loved: false,
+                  faved: true
+                });
               break;
             }
           }
@@ -211,29 +227,30 @@ var script$1 = /* @__PURE__ */ defineComponent({
           class: normalizeClass(_ctx.$style.container)
         },
         [
-          withDirectives(createBaseVNode(
+          unref(loading) !== 100 ? (openBlock(), createElementBlock(
             "div",
             {
+              key: 0,
               class: normalizeClass(_ctx.$style.loader)
             },
             [
-              createTextVNode(" Loading... "),
-              createBaseVNode(
-                "div",
-                {
-                  class: normalizeClass(_ctx.$style.bar),
-                  style: normalizeStyle({ width: unref(loading) + "%" })
-                },
-                null,
-                6
-                /* CLASS, STYLE */
-              )
+              unref(loading) === "notloggedin" ? (openBlock(), createElementBlock("div", _hoisted_1$1, "Not logged in.")) : (openBlock(), createElementBlock("div", _hoisted_2, [
+                createTextVNode(" Loading... "),
+                createBaseVNode(
+                  "div",
+                  {
+                    class: normalizeClass(_ctx.$style.bar),
+                    style: normalizeStyle({ width: unref(loading) + "%" })
+                  },
+                  null,
+                  6
+                  /* CLASS, STYLE */
+                )
+              ]))
             ],
             2
             /* CLASS */
-          ), [
-            [vShow, unref(loading) !== 100]
-          ]),
+          )) : createCommentVNode("v-if", true),
           createVNode(script$2, {
             length: unref(follows).length,
             title: "Follows",
@@ -249,7 +266,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
                     target: "_blank",
                     href: "https://scratch.mit.edu/users/" + item.actor_username,
                     class: normalizeClass(_ctx.$style.link)
-                  }, toDisplayString(item.actor_username), 11, _hoisted_1);
+                  }, toDisplayString(item.actor_username), 11, _hoisted_3);
                 }),
                 256
                 /* UNKEYED_FRAGMENT */
@@ -273,13 +290,13 @@ var script$1 = /* @__PURE__ */ defineComponent({
                       target: "_blank",
                       href: "https://scratch.mit.edu/users/" + item.actor_username,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.actor_username), 11, _hoisted_2),
+                    }, toDisplayString(item.actor_username), 11, _hoisted_4),
                     createTextVNode(" invited you to curate "),
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/studios/" + item.gallery_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.title), 11, _hoisted_3)
+                    }, toDisplayString(item.title), 11, _hoisted_5)
                   ]);
                 }),
                 256
@@ -304,13 +321,13 @@ var script$1 = /* @__PURE__ */ defineComponent({
                       target: "_blank",
                       href: "https://scratch.mit.edu/users/" + item.actor_username,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.actor_username), 11, _hoisted_4),
+                    }, toDisplayString(item.actor_username), 11, _hoisted_6),
                     createTextVNode(" promoted you to manager for the studio "),
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/studios/" + item.gallery_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.gallery_title), 11, _hoisted_5)
+                    }, toDisplayString(item.gallery_title), 11, _hoisted_7)
                   ]);
                 }),
                 256
@@ -331,18 +348,18 @@ var script$1 = /* @__PURE__ */ defineComponent({
                 null,
                 renderList(unref(studioHostTransfers), (item) => {
                   return openBlock(), createElementBlock("span", null, [
-                    item.admin_actor ? (openBlock(), createElementBlock("span", _hoisted_6, "A Scratch Team member")) : (openBlock(), createElementBlock("a", {
+                    item.admin_actor ? (openBlock(), createElementBlock("span", _hoisted_8, "A Scratch Team member")) : (openBlock(), createElementBlock("a", {
                       key: 1,
                       target: "_blank",
                       href: "https://scratch.mit.edu/users/" + item.actor_username,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.actor_username), 11, _hoisted_7)),
+                    }, toDisplayString(item.actor_username), 11, _hoisted_9)),
                     createTextVNode(" made you the host of the studio "),
                     createBaseVNode("a", {
                       target: "_blank",
                       href: "https://scratch.mit.edu/studios/" + item.gallery_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.gallery_title), 11, _hoisted_8)
+                    }, toDisplayString(item.gallery_title), 11, _hoisted_10)
                   ]);
                 }),
                 256
@@ -368,7 +385,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
                       target: "_blank",
                       href: "https://scratch.mit.edu/discuss/topic/" + item.topic_id + "/unread",
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.topic_title), 11, _hoisted_9)
+                    }, toDisplayString(item.topic_title), 11, _hoisted_11)
                   ]);
                 }),
                 256
@@ -394,7 +411,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
                       target: "_blank",
                       href: "https://scratch.mit.edu/studios/" + item.gallery_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.title), 11, _hoisted_10)
+                    }, toDisplayString(item.title), 11, _hoisted_12)
                   ]);
                 }),
                 256
@@ -419,7 +436,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
                       target: "_blank",
                       href: "https://scratch.mit.edu/users/" + item.actor_username,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.actor_username), 11, _hoisted_11),
+                    }, toDisplayString(item.actor_username), 11, _hoisted_13),
                     createTextVNode(
                       ' remixed your project "' + toDisplayString(item.parent_title) + '" as "',
                       1
@@ -429,7 +446,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
                       target: "_blank",
                       href: "https://scratch.mit.edu/projects/" + item.project_id,
                       class: normalizeClass(_ctx.$style.link)
-                    }, toDisplayString(item.title), 11, _hoisted_12),
+                    }, toDisplayString(item.title), 11, _hoisted_14),
                     createTextVNode('" ')
                   ]);
                 }),
@@ -457,8 +474,9 @@ const cssModules = script$1.__cssModules = {};
 cssModules["$style"] = style0;
 
 
-script$1.__file = "popups/scratch-messaging/component.vue";
+script$1.__file = "src/popup/popups/scratch-messaging/component.vue";
 
+const _hoisted_1 = { key: 0 };
 var script = /* @__PURE__ */ defineComponent({
   __name: "badge",
   props: {
@@ -467,20 +485,22 @@ var script = /* @__PURE__ */ defineComponent({
   async setup(__props) {
     let __temp, __restore;
     const { addon } = __props;
+    const session = ([__temp, __restore] = withAsyncContext(() => addon.auth.getSession()), __temp = await __temp, __restore(), __temp);
+    const show = !!session.user;
     const messageCount = ([__temp, __restore] = withAsyncContext(() => addon.auth.getMessageCount()), __temp = await __temp, __restore(), __temp);
     return (_ctx, _cache) => {
-      return openBlock(), createElementBlock(
+      return show ? (openBlock(), createElementBlock(
         "div",
-        null,
+        _hoisted_1,
         toDisplayString(unref(messageCount)),
         1
         /* TEXT */
-      );
+      )) : createCommentVNode("v-if", true);
     };
   }
 });
 
-script.__file = "popups/scratch-messaging/badge.vue";
+script.__file = "src/popup/popups/scratch-messaging/badge.vue";
 
 var addon = definePopupManifest({
   name: "Scratch Messaging",

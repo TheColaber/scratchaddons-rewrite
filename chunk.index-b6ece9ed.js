@@ -1,10 +1,3 @@
-function defineAddonManifest(manifest) {
-  return manifest;
-}
-function definePopupManifest(manifest) {
-  return manifest;
-}
-
 class Addon extends EventTarget {
   id;
   browser;
@@ -19,4 +12,4 @@ class Addon extends EventTarget {
   }
 }
 
-export { Addon as A, definePopupManifest as a, defineAddonManifest as d };
+export { Addon as A };

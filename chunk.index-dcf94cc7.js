@@ -1,7 +1,76 @@
-import { a as addons } from '../chunk._virtual__addons-85f3862d.js';
-import { A as Addon } from '../chunk.index-e4c60ce4.js';
-import injectStyle from './inject-style.js';
-import MATCH_PATTERNS from './matches.js';
+import { A as Addon } from './chunk.index-b6ece9ed.js';
+import { a as addons } from './chunk._virtual__addons-19cb23e2.js';
+
+class SharedObserver {
+  inactive;
+  pending;
+  observer;
+  constructor() {
+    this.inactive = true;
+    this.pending = /* @__PURE__ */ new Set();
+    this.observer = new MutationObserver((mutation, observer) => {
+      for (const item of this.pending) {
+        if (item.condition && !item.condition())
+          continue;
+        for (const match of document.querySelectorAll(item.query)) {
+          if (item.seen?.has(match))
+            continue;
+          if (item.elementCondition && !item.elementCondition(match))
+            continue;
+          item.seen?.add(match);
+          this.pending.delete(item);
+          item.resolve(match);
+          break;
+        }
+      }
+      if (this.pending.size === 0) {
+        this.inactive = true;
+        this.observer.disconnect();
+      }
+    });
+  }
+  watch(opts) {
+    if (this.inactive) {
+      this.inactive = false;
+      this.observer.observe(document.documentElement, {
+        subtree: true,
+        childList: true
+      });
+    }
+    return new Promise(
+      (resolve) => this.pending.add({
+        resolve,
+        ...opts
+      })
+    );
+  }
+}
+
+var MATCH_PATTERNS = {
+  projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,
+  projectEmbeds: /^\/projects\/\d+\/embed\/?$/,
+  studios: /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/,
+  profiles: /^\/users\/[\w-]+\/?$/,
+  topics: /^\/discuss\/topic\/\d+\/?$/,
+  newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
+  editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
+  forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
+  // scratch-www routes, not including project pages
+  // Matches /projects (an error page) but not /projects/<id>
+  scratchWWWNoProject: /^\/(?:(?:about|annual-report(?:\/\d+)?|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|code-of-ethics|credits|developers|DMCA|download(?:\/(?:scratch2|scratch-link))?|educators(?:\/(?:faq|register|waiting))?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|community_guidelines|faq|ideas|join|messages|parents|privacy_policy(?:\/apps)?|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?|components|become-a-scratcher|projects)\/?)?$/
+};
+
+function injectStyle(css) {
+  if (!globalThis.document)
+    return;
+  const style = document.createElement("style");
+  style.classList.add("scratch-addons-style");
+  style.textContent = css;
+  if (document.body)
+    document.documentElement.insertBefore(style, document.body);
+  else
+    document.documentElement.appendChild(style);
+}
 
 class ReduxHandler extends EventTarget {
   initialized;
@@ -210,7 +279,112 @@ class UserscriptAddon extends Addon {
   }
 }
 
+const sharedObserver = new SharedObserver();
+let reactInternalKey = null;
+window.scratchAddons = {
+  loaded: false,
+  console: { ...console },
+  events: new EventTarget(),
+  redux: { target: new EventTarget() },
+  sharedObserver,
+  classNames: {
+    loaded: false,
+    arr: [],
+    promise: sharedObserver.watch({ query: "title" }).then(loadClasses)
+  },
+  Blockly: null,
+  getInternalKey(elem) {
+    if (!reactInternalKey) {
+      const key = Object.keys(elem).find(
+        (key2) => key2.startsWith("__reactInternalInstance$")
+      );
+      if (!key)
+        throw "Element is not a react element.";
+      reactInternalKey = key;
+    }
+    return reactInternalKey;
+  },
+  async getBlockly() {
+    if (!window.scratchAddons.Blockly) {
+      const elem = await sharedObserver.watch({
+        query: '[class^="gui_blocks-wrapper"]'
+      });
+      const internalKey = window.scratchAddons.getInternalKey(elem);
+      if (!internalKey) {
+        throw "React Internal Key not found on gui_blocks-wrapper";
+      }
+      const internal = elem[internalKey];
+      let childable = internal;
+      while (childable = childable.child, !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks) {
+      }
+      window.scratchAddons.Blockly = childable.stateNode.ScratchBlocks;
+      if (!window.scratchAddons.Blockly) {
+        throw new Error(
+          `Blockly was type ${typeof window.scratchAddons.Blockly} on page (${location.pathname})`
+        );
+      }
+    }
+    return window.scratchAddons.Blockly;
+  }
+};
+const ranAt = (/* @__PURE__ */ new Date()).getTime();
 const AddonInstances = [];
+window.scratchAddons.events.addEventListener(
+  "loaded",
+  async ({ detail }) => {
+    console.log(
+      "Scratch Addons: Data received from storage",
+      (/* @__PURE__ */ new Date()).getTime() - ranAt,
+      "ms"
+    );
+    const { addonsEnabled, l10nUrls } = detail;
+    for (const id in addonsEnabled) {
+      if (!addonsEnabled[id])
+        continue;
+      const addon = addons[id];
+      if (!addon || !addon.scripts)
+        continue;
+      for (const { matches, scripts, styles, runAtComplete } of addon.scripts) {
+        let urlMatches = false;
+        for (const match of matches) {
+          if (MATCH_PATTERNS[match].test(window.location.pathname)) {
+            urlMatches = true;
+          }
+        }
+        if (!urlMatches)
+          continue;
+        if (scripts) {
+          for (const script of scripts) {
+            window.scratchAddons.console.log(id, "is now running!");
+            const addonInstance = new UserscriptAddon(id, false);
+            AddonInstances.push(addonInstance);
+            script({
+              addon: addonInstance,
+              console: window.scratchAddons.console,
+              msg: (msg) => {
+                console.log(l10nUrls);
+                return "test";
+              }
+            });
+          }
+        }
+        if (styles) {
+          for (const style of styles) {
+            let urlMatches2 = false;
+            for (const match of matches) {
+              if (MATCH_PATTERNS[match].test(window.location.pathname)) {
+                urlMatches2 = true;
+              }
+            }
+            if (urlMatches2) {
+              injectStyle(style);
+            }
+          }
+        }
+      }
+    }
+  }
+);
 window.scratchAddons.events.addEventListener("addonDynamicDisable", (event) => {
   const id = event.detail.id;
   const addon = AddonInstances.find((addon2) => addon2.id === id);
@@ -237,51 +411,19 @@ window.scratchAddons.events.addEventListener("addonDynamicEnable", (event) => {
     disabledStyle.remove();
   }
 });
-async function index(addonsEnabled, l10nUrls) {
-  window.scratchAddons.loaded = true;
-  for (const id in addonsEnabled) {
-    if (!addonsEnabled[id])
-      continue;
-    const addon = addons[id];
-    if (!addon)
-      continue;
-    if (addon.userscripts) {
-      for (const { script, matches } of addon.userscripts) {
-        let urlMatches = false;
-        for (const match of matches) {
-          if (MATCH_PATTERNS[match].test(window.location.pathname)) {
-            urlMatches = true;
-          }
-        }
-        if (urlMatches) {
-          window.scratchAddons.console.log(id, "is now running!");
-          const addonInstance = new UserscriptAddon(id, false);
-          AddonInstances.push(addonInstance);
-          script({
-            addon: addonInstance,
-            console: window.scratchAddons.console,
-            msg: (msg) => {
-              console.log(l10nUrls);
-              return "test";
-            }
-          });
-        }
-      }
-    }
-    if (addon.userstyles) {
-      for (const { style, matches } of addon.userstyles) {
-        let urlMatches = false;
-        for (const match of matches) {
-          if (MATCH_PATTERNS[match].test(window.location.pathname)) {
-            urlMatches = true;
-          }
-        }
-        if (urlMatches) {
-          injectStyle(style);
-        }
-      }
-    }
-  }
+async function loadClasses() {
+  window.scratchAddons.classNames.arr = [
+    ...new Set(
+      [...document.styleSheets].filter(
+        (styleSheet) => !(styleSheet.ownerNode && styleSheet.ownerNode.textContent && styleSheet.ownerNode.textContent.startsWith(
+          "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library."
+        ) && (styleSheet.ownerNode.textContent.includes("input_input-form") || styleSheet.ownerNode.textContent.includes("label_input-group_")))
+      ).flatMap((styleSheet) => [...styleSheet.cssRules]).filter(
+        (cssRule) => cssRule instanceof CSSStyleRule
+      ).map((styleRule) => styleRule.selectorText).flatMap(
+        (selectorTest) => selectorTest.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g)
+      ).filter((regexMatch) => !!regexMatch)
+    )
+  ];
+  window.scratchAddons.classNames.loaded = true;
 }
-
-export { index as default };

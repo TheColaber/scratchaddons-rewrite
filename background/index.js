@@ -1,7 +1,7 @@
-import { s as storage$1 } from '../chunk.style-inject.es-e9a35701.js';
-import { a as addons } from '../chunk._virtual__addons-85f3862d.js';
-import { p as popups } from '../chunk._virtual__popups-0512d671.js';
-import { A as Addon } from '../chunk.index-e4c60ce4.js';
+import { s as storage$1 } from '../chunk.style-inject.es-35aae750.js';
+import { a as addons } from '../chunk._virtual__addons-19cb23e2.js';
+import { p as popups } from '../chunk._virtual__popups-220219d4.js';
+import { A as Addon } from '../chunk.index-b6ece9ed.js';
 
 chrome.commands.onCommand.addListener((command) => {
   if (command === "open_settings_page") {
@@ -84,10 +84,7 @@ chrome.scripting.registerContentScripts([
     world: "MAIN",
     runAt: "document_start",
     matches: ["https://scratch.mit.edu/*"],
-    js: [
-      "mainworld/content-scripts/setup.js",
-      "mainworld/content-scripts/load-redux.js"
-    ],
+    js: ["mainworld/importer.js"],
     allFrames: true
   }
 ]).catch(() => {
@@ -103,18 +100,16 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     target: { tabId },
     injectImmediately: true,
     world: "MAIN",
-    func: async (script, addonsEnabled2, l10nUrls2) => {
+    func: async (addonsEnabled2, l10nUrls2) => {
+      await window.scratchAddonsReady;
       if (window.scratchAddons.loaded)
         return;
-      console.log("Scratch Addons is running.");
-      const { default: module } = await import(script);
-      module(addonsEnabled2, l10nUrls2);
+      window.scratchAddons.loaded = true;
+      window.scratchAddons.events.dispatchEvent(
+        new CustomEvent("loaded", { detail: { addonsEnabled: addonsEnabled2, l10nUrls: l10nUrls2 } })
+      );
     },
-    args: [
-      chrome.runtime.getURL("mainworld/index.js"),
-      addonsEnabled,
-      l10nUrls
-    ]
+    args: [addonsEnabled, l10nUrls]
   });
 });
 async function getL10NURLs(url) {

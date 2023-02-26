@@ -39,7 +39,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "mainworld/**/*.js",
+        "mainworld/importer.js",
         "chunk.*.js"
       ],
       "matches": [
