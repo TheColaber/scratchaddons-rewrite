@@ -156,7 +156,6 @@ window.scratchAddons.events.addEventListener("addonDynamicEnable", ((
   }
 }) as EventListener);
 
-
 async function loadClasses() {
   window.scratchAddons.classNames.arr = [
     ...new Set(

@@ -1,1 +1,1 @@
-window.scratchAddonsReady = new Promise((r) => import("./index").then(r))
+window.scratchAddonsReady = new Promise((r) => import("./index").then(r));

@@ -9,7 +9,7 @@ import defineScript from "../../../../types/helpers/define-script";
 export default defineScript(async function ({ addon, console, msg }) {
   const Blockly = await addon.tab.getBlockly();
   const workspace = Blockly.getMainWorkspace();
-  await addon.tab.waitUntilScratchClassesLoaded()
+  await addon.tab.waitUntilScratchClassesLoaded();
 
   class FindBar {
     outerEl: HTMLDivElement;
@@ -55,10 +55,10 @@ export default defineScript(async function ({ addon, console, msg }) {
       //   getMetrics: this.getMetrics.bind(this),
       //   setMetrics: this.setMetrics.bind(this)
       // };
-    
+
       // this.workspace_ = new Blockly.WorkspaceSvg(options);
       // console.log(this.workspace_);
-      
+
       // const workspace = new Blockly.WorkspaceSvg({
       //   getMetrics() {
       //     return {
@@ -78,7 +78,6 @@ export default defineScript(async function ({ addon, console, msg }) {
       // const dom = workspace.createDom()
       // const block = new Blockly.Block(workspace, "motion_movesteps");
       // console.log(dom);
-      
     }
 
     attachDom(root: Element) {
@@ -95,9 +94,9 @@ export default defineScript(async function ({ addon, console, msg }) {
         xMin: contentBounds.x,
         yMin: contentBounds.y,
         xMax: contentBounds.x + contentBounds.width,
-        yMax: contentBounds.y + contentBounds.height
+        yMax: contentBounds.y + contentBounds.height,
       };
-    
+
       return {
         x: bounds.xMin,
         y: bounds.yMin,
@@ -111,20 +110,20 @@ export default defineScript(async function ({ addon, console, msg }) {
         // Flyout is hidden.
         return null;
       }
-    
+
       var optionBox = this.getContentBoundingBox();
-    
+
       // Padding for the end of the scrollbar.
       var absoluteTop = 0;
       var absoluteLeft = 0;
-    
+
       var viewHeight = 200;
       var viewWidth = 200;
-    
+
       // Add padding to the bottom of the flyout, so we can scroll to the top of
       // the last category.
       var contentHeight = optionBox.height * this.workspace_.scale;
-    
+
       var metrics = {
         viewHeight: viewHeight,
         viewWidth: viewWidth,
@@ -135,11 +134,11 @@ export default defineScript(async function ({ addon, console, msg }) {
         contentTop: optionBox.y,
         contentLeft: optionBox.x,
         absoluteTop: absoluteTop,
-        absoluteLeft: absoluteLeft
+        absoluteLeft: absoluteLeft,
       };
       return metrics;
-    };
-    
+    }
+
     setMetrics(xyRatio) {
       var metrics = this.getMetrics();
       // This is a fix to an apparent race condition.
@@ -149,14 +148,16 @@ export default defineScript(async function ({ addon, console, msg }) {
       if (typeof xyRatio.y === "number") {
         this.workspace_.scrollY = -metrics.contentHeight * xyRatio.y;
       }
-      this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
-          this.workspace_.scrollY + metrics.absoluteTop);
-    
+      this.workspace_.translate(
+        this.workspace_.scrollX + metrics.absoluteLeft,
+        this.workspace_.scrollY + metrics.absoluteTop
+      );
+
       console.log(Math.max(0, metrics.viewHeight), metrics.viewWidth);
-      
+
       // this.clipRect_.setAttribute('height', Math.max(0, metrics.viewHeight) + 'px');
       // this.clipRect_.setAttribute('width', metrics.viewWidth + 'px');
-    };
+    }
   }
 
   const findBar = new FindBar();

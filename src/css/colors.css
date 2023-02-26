@@ -1,5 +1,8 @@
 body {
   --theme: #ff7b26;
+  --blue: #175ef8;
+  --gray-text: #808080;
+
   --gradient: linear-gradient(to right, var(--theme), hsl(24deg 100% 67%));
 }
 
@@ -12,9 +15,13 @@ body {
   --background-secondary: #f7f7f7;
   --background-tertiary: #cfcfcf;
 
+  --switch-background: #888;
+  --switch-inner-background: #fff;
+
+  --button-border: #aaa;
+
   --content-text: #000;
   --description-text: #444;
-  --blue: #175ef8;
   --blue-text: var(--blue);
 
   --button-hover-background: #d4d3d3;
@@ -28,9 +35,14 @@ body {
   --background-secondary: #2a2a2a;
   --background-tertiary: #333;
 
+  --switch-background: #111;
+  --switch-inner-background: #aaa;
+
+  --button-border: #000;
+
   --content-text: #fff;
   --description-text: #ddd;
-  --blue-text: #1aa0d8;
+  --blue-text: #33c3ff;
 
   --button-hover-background: #1a1a1a;
 }

@@ -1,18 +1,17 @@
 <template>
-  <div :class="[$style.main, { theme: true, darkTheme }]">hello</div>
+  <div :class="$style.main">
+    <addon-body
+      v-for="(addon, id) of addons"
+      :id="id"
+      :addon="addon"
+    ></addon-body>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import storage from "../background/storage";
-import { ref } from "vue";
-
-let darkTheme = ref(false);
-
-storage.valueStream.subscribe((values) => {
-  if ("darkTheme" in values) {
-    darkTheme.value = values.darkTheme;
-  }
-});
+import * as addons from "#addons";
+import * as popups from "#popups";
+import addonBody from "./components/addon-body.vue";
 </script>
 
 <style lang="scss" module>

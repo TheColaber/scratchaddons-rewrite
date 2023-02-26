@@ -31,7 +31,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
     injectImmediately: true,
     world: "MAIN",
     func: async (addonsEnabled, l10nUrls) => {
-      await window.scratchAddonsReady
+      await window.scratchAddonsReady;
       if (window.scratchAddons.loaded) return;
       window.scratchAddons.loaded = true;
       window.scratchAddons.events.dispatchEvent(

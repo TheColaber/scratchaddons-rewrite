@@ -20,7 +20,7 @@ declare global {
       getBlockly(): Promise<Blockly>;
       getInternalKey(elem: Element): keyof Element;
     };
-    scratchAddonsReady: Promise<any>
+    scratchAddonsReady: Promise<any>;
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: (...args: any) => void;
   }
 }

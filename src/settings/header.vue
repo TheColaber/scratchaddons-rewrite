@@ -15,6 +15,7 @@ import { Icon } from "@iconify/vue";
 import { ref } from "vue";
 import storage from "../background/storage";
 
+// TODO this should be in a more settings place
 const data = await storage.get(["darkTheme"]);
 const darkTheme = ref(data.darkTheme);
 
