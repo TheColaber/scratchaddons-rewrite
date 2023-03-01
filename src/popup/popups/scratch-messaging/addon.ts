@@ -17,7 +17,7 @@ export default definePopupManifest({
   popup: {
     component,
     name: "Messages",
-    icon: "envelope",
+    icon: "mail",
     badge,
   },
   versionAdded: "1.0.0",

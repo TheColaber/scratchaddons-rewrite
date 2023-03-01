@@ -7,7 +7,10 @@
           @click="selectedTab = id"
           v-for="id of ORDER"
         >
-          <Icon :class="$style.icon" :icon="'uil:' + enabledPopups[id].icon" />
+          <Icon
+            :class="$style.icon"
+            :icon="'tabler:' + enabledPopups[id].icon"
+          />
           <span :class="$style.name">{{ enabledPopups[id].name }}</span>
           <Suspense>
             <component
@@ -67,7 +70,7 @@ const enabledPopups = Object.keys(popups)
 
 enabledPopups["settings-page"] = {
   name: "Addons",
-  icon: "wrench",
+  icon: "tool",
   component: settingsComponent,
 };
 

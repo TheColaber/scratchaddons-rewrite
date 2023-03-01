@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import Page from './page.vue';
+import Page from "./page.vue";
 </script>
