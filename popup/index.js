@@ -1,6 +1,6 @@
-import { a as styleInject, m as createApp, d as defineComponent, c as createElementBlock, b as createBaseVNode, n as normalizeClass, f as createTextVNode, e as createVNode, u as unref, r as ref, s as storage$1, k as withAsyncContext, F as Fragment, l as renderList, p as createBlock, j as withCtx, S as Suspense, o as openBlock, I as Icon, q as isRef, t as toDisplayString, w as withDirectives, v as vShow, x as resolveDynamicComponent, i as createCommentVNode } from '../chunk.style-inject.es-35aae750.js';
-import { p as popups } from '../chunk._virtual__popups-220219d4.js';
-import { s as script$3 } from '../chunk.content-2ea5b3c2.js';
+import { a as styleInject, m as createApp, d as defineComponent, c as createElementBlock, b as createBaseVNode, n as normalizeClass, f as createTextVNode, e as createVNode, u as unref, r as ref, s as storage$1, k as withAsyncContext, F as Fragment, l as renderList, p as createBlock, j as withCtx, S as Suspense, o as openBlock, I as Icon, q as isRef, t as toDisplayString, w as withDirectives, v as vShow, x as resolveDynamicComponent, i as createCommentVNode } from '../chunk.style-inject.es-cbd22147.js';
+import { p as popups } from '../chunk._virtual__popups-11514f3e.js';
+import { s as script$3 } from '../chunk.content-54072954.js';
 import { A as Addon } from '../chunk.index-b6ece9ed.js';
 import '../chunk._virtual__addons-19cb23e2.js';
 
@@ -190,7 +190,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
     }).reduce((prev, curr) => ({ ...prev, ...curr }), {});
     enabledPopups["settings-page"] = {
       name: "Addons",
-      icon: "wrench",
+      icon: "tool",
       component: script$3
     };
     const instances = {};
@@ -226,7 +226,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
                       }, [
                         createVNode(unref(Icon), {
                           class: normalizeClass(_ctx.$style.icon),
-                          icon: "uil:" + unref(enabledPopups)[id].icon
+                          icon: "tabler:" + unref(enabledPopups)[id].icon
                         }, null, 8, ["class", "icon"]),
                         createBaseVNode(
                           "span",

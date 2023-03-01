@@ -1,5 +1,5 @@
 import { d as definePopupManifest } from './chunk._virtual__addons-19cb23e2.js';
-import { a as styleInject, d as defineComponent, r as ref, w as withDirectives, v as vShow, c as createElementBlock, b as createBaseVNode, e as createVNode, n as normalizeClass, u as unref, t as toDisplayString, f as createTextVNode, g as renderSlot, h as normalizeStyle, i as createCommentVNode, j as withCtx, k as withAsyncContext, o as openBlock, I as Icon, F as Fragment, l as renderList } from './chunk.style-inject.es-35aae750.js';
+import { a as styleInject, d as defineComponent, r as ref, w as withDirectives, v as vShow, c as createElementBlock, b as createBaseVNode, e as createVNode, n as normalizeClass, u as unref, t as toDisplayString, f as createTextVNode, g as renderSlot, h as normalizeStyle, i as createCommentVNode, j as withCtx, k as withAsyncContext, o as openBlock, I as Icon, F as Fragment, l as renderList } from './chunk.style-inject.es-cbd22147.js';
 
 var script$2 = /* @__PURE__ */ defineComponent({
   __name: "section",
@@ -516,7 +516,7 @@ var addon = definePopupManifest({
   popup: {
     component: script$1,
     name: "Messages",
-    icon: "envelope",
+    icon: "mail",
     badge: script
   },
   versionAdded: "1.0.0",

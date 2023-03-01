@@ -1,6 +1,6 @@
-import { s as storage$1 } from '../chunk.style-inject.es-35aae750.js';
+import { s as storage$1 } from '../chunk.style-inject.es-cbd22147.js';
 import { a as addons } from '../chunk._virtual__addons-19cb23e2.js';
-import { p as popups } from '../chunk._virtual__popups-220219d4.js';
+import { p as popups } from '../chunk._virtual__popups-11514f3e.js';
 import { A as Addon } from '../chunk.index-b6ece9ed.js';
 
 chrome.commands.onCommand.addListener((command) => {
