@@ -1,4 +1,3 @@
-import storage from "./storage";
 import * as addons from "#addons";
 import * as popups from "#popups";
 import WorkerAddon from "../addon-api/worker";

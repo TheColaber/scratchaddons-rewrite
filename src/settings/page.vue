@@ -2,11 +2,15 @@
   <div :class="[$style.container, { theme: true, darkTheme }]">
     <Onboarding
       v-if="installedDetails && installedDetails.reason === 'install'"
-      @exit="removeInstallDetails"
+      @exit="removeInstalledDetails"
     ></Onboarding>
     <template v-else>
-      <Header></Header>
+      <Header
+        @open-settings="showSettings = true"
+        @open-support="showSupport = true"
+      ></Header>
       <Content></Content>
+      <MoreSettings v-if="showSettings"></MoreSettings>
     </template>
   </div>
 </template>
@@ -14,31 +18,32 @@
 <script setup lang="ts">
 import Header from "./header.vue";
 import Content from "./content.vue";
-import storage from "../background/storage";
+import { syncStorage, localStorage } from "../background/storage";
 import Onboarding from "./components/onboarding.vue";
 import { ref } from "vue";
+import MoreSettings from "./components/more-settings.vue";
 
-const data = await storage.get([
-  "darkTheme",
-  "addonsEnabled",
-  "installedDetails",
-]);
+const data = await syncStorage.get(["darkTheme", "addonsEnabled"]);
+const localData = await localStorage.get("installedDetails");
 const darkTheme = ref(data.darkTheme);
 
-const installedDetails = ref(data.installedDetails);
+const installedDetails = ref(localData.installedDetails);
 if (installedDetails.value && installedDetails.value.reason === "install") {
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  storage.set({ darkTheme: prefersDark });
+  syncStorage.set({ darkTheme: prefersDark });
   darkTheme.value = prefersDark;
 }
-storage.valueStream.subscribe((values) => {
-  darkTheme.value = values.darkTheme;
-});
+syncStorage.valueStream.subscribe(
+  (values) => (darkTheme.value = values.darkTheme)
+);
 
-function removeInstallDetails() {
-  storage.set({ installedDetails: null });
+function removeInstalledDetails() {
+  localStorage.set({ installedDetails: null });
   installedDetails.value = null;
 }
+
+const showSettings = ref(false);
+const showSupport = ref(false);
 </script>
 
 <style module>

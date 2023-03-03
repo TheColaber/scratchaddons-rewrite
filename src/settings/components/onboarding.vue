@@ -21,6 +21,10 @@
   </div>
 </template>
 
+<script setup lang="ts">
+defineEmits("exit");
+</script>
+
 <style module lang="scss">
 .overlay {
   display: flex;

@@ -1,4 +1,4 @@
-import storage from "./storage";
+import { syncStorage } from "./storage";
 
 chrome.scripting
   .registerContentScripts([
@@ -21,7 +21,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
 
   const l10nUrls = await getL10NURLs(url);
 
-  const { addonsEnabled } = await storage.get("addonsEnabled");
+  const { addonsEnabled } = await syncStorage.get("addonsEnabled");
 
   await chrome.scripting.executeScript<
     [typeof addonsEnabled, typeof l10nUrls],

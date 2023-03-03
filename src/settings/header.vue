@@ -15,11 +15,11 @@
       </button>
     </div>
     <div :class="$style.tabs">
-      <button :class="$style.tab" @click="openSupport">
+      <button :class="$style.tab" @click="$emit('open-support')">
         <Icon :class="$style.icon" icon="tabler:message" />
         <span :class="$style.name">Support</span>
       </button>
-      <button :class="$style.tab" @click="openSettings">
+      <button :class="$style.tab" @click="$emit('open-settings')">
         <Icon :class="$style.icon" icon="tabler:tool" />
         <span :class="$style.name">More Settings</span>
       </button>
@@ -33,18 +33,18 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
-import storage from "../background/storage";
+import { syncStorage } from "../background/storage";
 
 // TODO this should be in a more settings place
-const data = await storage.get(["darkTheme"]);
+const data = await syncStorage.get(["darkTheme"]);
 const darkTheme = ref(data.darkTheme);
 
 function switchMode() {
   darkTheme.value = !darkTheme.value;
-  storage.set({ darkTheme: darkTheme.value });
+  syncStorage.set({ darkTheme: darkTheme.value });
 }
 
-let selectedTab = "all";
+let selectedTab = ref("all");
 
 const tabs = [
   {
@@ -65,12 +65,7 @@ const tabs = [
   },
 ];
 
-function openSupport() {
-  console.log("openning support");
-}
-function openSettings() {
-  console.log("openning settings");
-}
+defineEmits(["open-settings", "open-support"]);
 </script>
 
 <style module lang="scss">
@@ -126,7 +121,7 @@ function openSettings() {
       align-items: center;
       padding: 0px 8px;
       font-size: 12px;
-      color: var(--content-text);
+      color: #fff;
       background: none;
       border: none;
       border-radius: 8px;

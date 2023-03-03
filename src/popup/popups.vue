@@ -4,7 +4,7 @@
       <div :class="$style.tabs">
         <button
           :class="[$style.tab, { [$style.sel]: id === selectedTab }]"
-          @click="selectedTab = id"
+          @click="switchTab(id)"
           v-for="id of ORDER"
         >
           <Icon
@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import storage from "../background/storage";
+import { syncStorage, localStorage } from "../background/storage";
 import { ref } from "vue";
 import * as popups from "#popups";
 import settingsComponent from "../settings/content.vue";
@@ -50,7 +50,7 @@ import PopupAddon from "../addon-api/popup";
 
 let darkTheme = ref(false);
 
-storage.valueStream.subscribe((values) => {
+syncStorage.valueStream.subscribe((values) => {
   if ("darkTheme" in values) {
     darkTheme.value = values.darkTheme;
   }
@@ -59,7 +59,25 @@ storage.valueStream.subscribe((values) => {
 const ORDER = ["scratch-messaging", "settings-page"];
 let selectedTab = ref(ORDER[0]);
 
-const { addonsEnabled = {} } = await storage.get("addonsEnabled");
+function switchTab(id) {
+  if (id === selectedTab.value) return;
+  localStorage.set({ lastSelectedPopup: id });
+  console.log(id);
+
+  selectedTab.value = id;
+}
+
+const { lastSelectedPopup } = await localStorage.get("lastSelectedPopup");
+console.log(lastSelectedPopup);
+
+if (lastSelectedPopup) {
+  const selectedId = ORDER.find((id) => id === lastSelectedPopup);
+  if (selectedId) {
+    selectedTab.value = selectedId;
+  }
+}
+
+const { addonsEnabled = {} } = await syncStorage.get("addonsEnabled");
 
 const enabledPopups = Object.keys(popups)
   .map((id) => {

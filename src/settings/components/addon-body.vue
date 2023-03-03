@@ -12,10 +12,7 @@
         {{ addon.name }}
       </div>
       <div :class="$style.description">
-        Hides the sprite properties panel by default, like in Scratch 2.0. Use
-        the info button on the currently selected sprite or double-click a
-        sprite to show the properties panel again. To re-hide it, use the
-        collapse button in the properties panel or double-click a sprite.
+        {{ addon.description }}
       </div>
       <div :class="$style.buttons">
         <div
@@ -40,7 +37,7 @@ const { addon, id } = defineProps<{
 }>();
 
 const showing = ref(true);
-const enabled = ref(true);
+const enabled = ref(false);
 </script>
 
 <style lang="scss" module>
@@ -52,9 +49,9 @@ const enabled = ref(true);
   box-shadow: var(--content-shadow);
   .title-bar {
     height: 52px;
-    display: grid;
-    grid-auto-flow: column;
+    display: flex;
     align-items: center;
+    justify-content: center;
     padding: 0px 10px;
     .clickable-area {
       cursor: pointer;
@@ -85,6 +82,7 @@ const enabled = ref(true);
     }
 
     .description {
+      flex: 1;
       margin-inline: 15px;
       color: var(--gray-text);
       overflow: hidden;
