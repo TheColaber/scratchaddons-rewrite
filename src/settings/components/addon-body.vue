@@ -2,25 +2,28 @@
   <div :class="$style.container">
     <div :class="$style['title-bar']">
       <div :class="$style['clickable-area']" @click="showing = !showing">
-        <div :class="$style.dropdown">
+        <button :class="$style.dropdown">
           <Icon
             icon="uil:angle-down"
             :class="[$style['dropdown-icon'], { [$style.reverted]: showing }]"
           ></Icon>
+        </button>
+        <div :class="$style.name">
+          <Icon icon="tabler:puzzle" :class="$style.icon"></Icon>
+          {{ addon.name }}
         </div>
-        <Icon icon="uil:puzzle-piece" :class="$style.icon"></Icon>
-        {{ addon.name }}
       </div>
       <div :class="$style.description">
         {{ addon.description }}
       </div>
       <div :class="$style.buttons">
-        <div
+        <button
           :class="$style['switch-background']"
           :state="enabled ? 'on' : 'off'"
+          @click="enabled = !enabled"
         >
-          <div :class="$style.switch" @click="enabled = !enabled"></div>
-        </div>
+          <div :class="$style.switch"></div>
+        </button>
       </div>
     </div>
   </div>
@@ -53,13 +56,29 @@ const enabled = ref(false);
     align-items: center;
     justify-content: center;
     padding: 0px 10px;
+    gap: 15px;
     .clickable-area {
       cursor: pointer;
       display: flex;
       align-self: stretch;
       align-items: center;
+      gap: 10px;
       user-select: none;
       .dropdown {
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        border-radius: 4px;
+        transition: 0.2s ease background-color;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: inherit;
+        &:focus-visible {
+          outline: none;
+          box-shadow: inset 0 0 0 3px var(--content-text);
+        }
+
         .dropdown-icon {
           font-size: 24px;
           transition: 0.2s ease transform;
@@ -67,23 +86,22 @@ const enabled = ref(false);
             transform: scaleY(-1);
           }
         }
-        display: flex;
-        align-items: center;
-        padding: 4px;
-        border-radius: 4px;
-        transition: 0.2s ease background-color;
       }
       &:hover .dropdown {
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: var(--hover-highlight);
       }
-      .icon {
-        font-size: 16px;
+      .name {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        .icon {
+          font-size: 16px;
+        }
       }
     }
 
     .description {
       flex: 1;
-      margin-inline: 15px;
       color: var(--gray-text);
       overflow: hidden;
       white-space: nowrap;
@@ -98,6 +116,16 @@ const enabled = ref(false);
         background-color: var(--switch-background);
         border-radius: 10px;
         overflow: hidden;
+        cursor: pointer;
+        border: none;
+        color: inherit;
+        padding: 0px;
+
+        &:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 3px var(--content-text);
+        }
+
         &[state="on"] {
           .switch {
             background-image: var(--gradient);

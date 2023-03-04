@@ -33,16 +33,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
-import { syncStorage } from "../background/storage";
-
-// TODO this should be in a more settings place
-const data = await syncStorage.get(["darkTheme"]);
-const darkTheme = ref(data.darkTheme);
-
-function switchMode() {
-  darkTheme.value = !darkTheme.value;
-  syncStorage.set({ darkTheme: darkTheme.value });
-}
 
 let selectedTab = ref("all");
 
@@ -137,7 +127,7 @@ defineEmits(["open-settings", "open-support"]);
       &:focus-visible {
         padding: 0px 8px;
         outline: none;
-        box-shadow: inset 0 0 0 3px var(--content-text);
+        box-shadow: inset 0 0 0 3px #fff;
       }
       &.sel {
         padding: 0px 8px;

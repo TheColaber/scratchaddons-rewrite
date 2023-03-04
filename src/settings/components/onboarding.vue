@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-defineEmits("exit");
+defineEmits(["exit"]);
 </script>
 
 <style module lang="scss">
