@@ -7,10 +7,11 @@
           @click="switchTab(id)"
           v-for="id of ORDER"
         >
-          <Icon
-            :class="$style.icon"
-            :icon="'tabler:' + enabledPopups[id].icon"
-          />
+        <component
+          :class="$style.icon"
+          width="18px"
+          :is="enabledPopups[id].icon"
+        />
           <span :class="$style.name">{{ enabledPopups[id].name }}</span>
           <Suspense>
             <component
@@ -26,7 +27,7 @@
             :href="'fullscreen.html?id=' + id"
             v-if="id !== 'settings-page'"
           >
-            <Icon :class="$style.popout" icon="uil:external-link-alt" />
+            <IconExternalLink :class="$style.popout" height="10px" width="10px" />
           </a>
         </button>
       </div>
@@ -41,12 +42,12 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import { syncStorage, localStorage } from "../background/storage";
 import { ref } from "vue";
 import * as popups from "#popups";
 import settingsComponent from "../settings/content.vue";
 import PopupAddon from "../addon-api/popup";
+import { IconTool, IconExternalLink } from "@tabler/icons-vue"
 
 let darkTheme = ref(false);
 
@@ -88,7 +89,7 @@ const enabledPopups = Object.keys(popups)
 
 enabledPopups["settings-page"] = {
   name: "Addons",
-  icon: "tool",
+  icon: IconTool,
   component: settingsComponent,
 };
 
@@ -159,9 +160,6 @@ Object.keys(enabledPopups).forEach((id) => {
           background-image: var(--gradient);
           color: #fff;
         }
-        .icon {
-          font-size: 18px;
-        }
         .name {
           padding: 0px 0px 0px 5px;
         }
@@ -183,7 +181,6 @@ Object.keys(enabledPopups).forEach((id) => {
           height: 100%;
           align-items: center;
           .popout {
-            font-size: 10px;
             margin-left: 1px;
             padding: 2px;
             border-radius: 2px;

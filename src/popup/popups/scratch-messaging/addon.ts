@@ -1,6 +1,7 @@
 import { definePopupManifest } from "../../../../types/helpers/addon-manifest";
 import component from "./component.vue";
 import badge from "./badge.vue";
+import { IconMail } from '@tabler/icons-vue';
 
 export default definePopupManifest({
   name: "Scratch Messaging",
@@ -17,7 +18,7 @@ export default definePopupManifest({
   popup: {
     component,
     name: "Messages",
-    icon: "mail",
+    icon: IconMail,
     badge,
   },
   versionAdded: "1.0.0",

@@ -10,28 +10,28 @@
         @click="selectedTab = tab.id"
         v-for="tab of tabs"
       >
-        <Icon :class="$style.icon" :icon="'tabler:' + tab.icon" />
+        <component :is="tab.icon" />
         <span :class="$style.name">{{ tab.id }}</span>
       </button>
     </div>
     <div :class="$style.tabs">
       <button :class="$style.tab" @click="$emit('open-support')">
-        <Icon :class="$style.icon" icon="tabler:message" />
+        <IconMessage />
         <span :class="$style.name">Support</span>
       </button>
       <button :class="$style.tab" @click="$emit('open-settings')">
-        <Icon :class="$style.icon" icon="tabler:tool" />
+        <IconTool />
         <span :class="$style.name">More Settings</span>
       </button>
     </div>
     <div :class="$style.menu">
-      <Icon :class="$style.icon" icon="tabler:menu-2" />
+      <IconMenu />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import { IconAppWindow, IconWorld, IconFlag, IconKeyboard, IconMessage, IconTool, IconMenu } from "@tabler/icons-vue";
 import { ref } from "vue";
 
 let selectedTab = ref("all");
@@ -39,19 +39,19 @@ let selectedTab = ref("all");
 const tabs = [
   {
     id: "popup",
-    icon: "app-window",
+    icon: IconAppWindow,
   },
   {
     id: "website",
-    icon: "world",
+    icon: IconWorld,
   },
   {
     id: "editor",
-    icon: "flag",
+    icon: IconFlag,
   },
   {
     id: "hotkeys",
-    icon: "keyboard",
+    icon: IconKeyboard,
   },
 ];
 
@@ -133,9 +133,6 @@ defineEmits(["open-settings", "open-support"]);
         padding: 0px 8px;
         background-image: var(--gradient);
         color: #fff;
-      }
-      .icon {
-        font-size: 24px;
       }
       .name {
         padding: 0px 0px 0px 5px;

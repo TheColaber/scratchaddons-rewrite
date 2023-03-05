@@ -13,13 +13,14 @@
       </a>
     </span>
     <button :class="$style.settings" @click="openSettingsPage()">
-      <Icon :class="$style.icon" icon="uil:cog" />
+      <IconSettings />
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import { IconSettings } from '@tabler/icons-vue';
+
 
 function openSettingsPage() {
   chrome.runtime.openOptionsPage();
@@ -66,9 +67,6 @@ function openSettingsPage() {
     &:focus-visible {
       outline: none;
       box-shadow: inset 0 0 0 3px #fff;
-    }
-    .icon {
-      font-size: 24px;
     }
   }
 }

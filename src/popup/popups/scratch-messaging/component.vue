@@ -150,7 +150,7 @@
 
 <script setup lang="ts">
 import Section from "./section.vue";
-import PopupAddon from "../../src/addon-api/popup";
+import PopupAddon from "../../../addon-api/popup";
 import { ref } from "vue";
 
 const { addon } = defineProps<{ addon: PopupAddon }>();

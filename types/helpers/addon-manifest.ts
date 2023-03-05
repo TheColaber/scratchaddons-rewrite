@@ -7,11 +7,6 @@ export interface AddonManifest {
   description: string;
   versionAdded: string;
   credits?: { name: string }[];
-  popup?: {
-    name: string;
-    icon: string;
-    component: Component;
-  };
   scripts?: {
     scripts?: ReturnType<typeof defineScript>[];
     styles?: string[];
@@ -31,9 +26,9 @@ export interface AddonManifest {
 export interface PopupManifest extends AddonManifest {
   popup: {
     name: string;
-    icon: string;
+    icon: Component;
     component: Component;
-    badge?: Component;
+    badge?: Component
   };
 }
 

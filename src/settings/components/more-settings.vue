@@ -1,13 +1,16 @@
 <template>
   <div :class="$style.container">
     <button :class="$style.themeSwitcher" @click="switchTheme">
-      <Icon :class="$style.icon" :icon="'tabler:' + (darkTheme ? 'moon' : 'sun')"></Icon>
+      <component :is="darkTheme ? IconMoon : IconSun" />
+    </button>
+    <button @click="$emit('close')">
+      <IconX />
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
+import { IconMoon, IconSun, IconX } from "@tabler/icons-vue";
 import { ref } from "vue";
 import { syncStorage } from "../../background/storage";
 const data = await syncStorage.get(["darkTheme"]);
@@ -38,9 +41,6 @@ function switchTheme() {
     &:focus-visible {
       outline: none;
       box-shadow: inset 0 0 0 3px #fff;
-    }
-    .icon {
-      font-size: 24px;
     }
   }
 }

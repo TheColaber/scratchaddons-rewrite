@@ -3,10 +3,9 @@
     <div :class="$style['title-bar']">
       <div :class="$style['clickable-area']" @click="showing = !showing">
         <button :class="$style.dropdown">
-          <Icon
-            icon="uil:angle-down"
+          <IconChevronDown
             :class="[$style['dropdown-icon'], { [$style.reverted]: showing }]"
-          ></Icon>
+          />
         </button>
         <div :class="$style.name">
           <Icon icon="tabler:puzzle" :class="$style.icon"></Icon>
@@ -31,6 +30,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue";
+import { IconChevronDown } from "@tabler/icons-vue";
 import { ref } from "vue";
 import { AddonManifest } from "../../../types/helpers/addon-manifest";
 
@@ -80,7 +80,6 @@ const enabled = ref(false);
         }
 
         .dropdown-icon {
-          font-size: 24px;
           transition: 0.2s ease transform;
           &.reverted {
             transform: scaleY(-1);

@@ -20,6 +20,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-virtual": "^3.0.1",
+    "@tabler/icons-vue": "^2.7.0",
     "@types/chrome": "^0.0.211",
     "esbuild": "^0.17.5",
     "prettier": "^2.8.3",

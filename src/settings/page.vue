@@ -10,7 +10,7 @@
         @open-support="showSupport = true"
       ></Header>
       <Content></Content>
-      <MoreSettings v-if="showSettings"></MoreSettings>
+      <MoreSettings @close="showSettings = false" v-if="showSettings"></MoreSettings>
     </template>
   </div>
 </template>
