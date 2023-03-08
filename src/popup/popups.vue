@@ -117,7 +117,7 @@ Object.keys(enabledPopups).forEach((id) => {
   overflow: auto;
   .sticky {
     background-color: var(--background-primary);
-    padding: 10px;
+    padding: 10px 10px 0px 10px;
     position: sticky;
     top: 0;
     display: flex;

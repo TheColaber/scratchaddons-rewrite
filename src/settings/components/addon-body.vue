@@ -50,13 +50,18 @@ const enabled = ref(false);
   border: 1px solid var(--background-tertiary);
   border-radius: 4px;
   box-shadow: var(--content-shadow);
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
   .title-bar {
     height: 52px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0px 10px;
     gap: 15px;
+    overflow: hidden;
     .clickable-area {
       cursor: pointer;
       display: flex;

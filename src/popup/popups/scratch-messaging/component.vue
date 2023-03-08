@@ -369,6 +369,7 @@ type favoriteproject = {
   background: var(--background-primary);
   color: var(--content-text);
   padding-bottom: 10px;
+  margin-top: 10px;
 }
 
 .link {
