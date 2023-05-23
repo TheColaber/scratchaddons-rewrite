@@ -3,7 +3,7 @@ import {
   chromeExtension,
   simpleReloader,
 } from "rollup-plugin-chrome-extension";
-import vue from "rollup-plugin-vue";
+import vue from "@vitejs/plugin-vue";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import esbuild from "rollup-plugin-esbuild";

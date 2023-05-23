@@ -12,6 +12,7 @@ function watchConfig() {
   const watcher = watch(config);
   watcher.on("event", (event) => {
     if (event.code === "BUNDLE_START") {
+      console.clear()
       console.log("Bundling...");
     }
 
