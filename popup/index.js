@@ -1,11 +1,44 @@
-import { a as styleInject, m as createApp, d as defineComponent, c as createElementBlock, b as createBaseVNode, n as normalizeClass, f as createTextVNode, e as createVNode, u as unref, r as ref, s as storage$1, k as withAsyncContext, F as Fragment, l as renderList, p as createBlock, j as withCtx, S as Suspense, o as openBlock, I as Icon, q as isRef, t as toDisplayString, w as withDirectives, v as vShow, x as resolveDynamicComponent, i as createCommentVNode } from '../chunk.style-inject.es-cbd22147.js';
-import { p as popups } from '../chunk._virtual__popups-11514f3e.js';
-import { s as script$3 } from '../chunk.content-54072954.js';
+import { a as styleInject, q as createApp, _ as _export_sfc, d as defineComponent, o as openBlock, b as createElementBlock, i as createVNode, x as createBlock, w as withCtx, S as Suspense, n as normalizeClass, f as createBaseVNode, e as createTextVNode, u as unref, c as createVueComponent, r as ref, s as syncStorage, j as withAsyncContext, l as localStorage, F as Fragment, k as renderList, z as resolveDynamicComponent, t as toDisplayString, m as withDirectives, v as vShow, h as createCommentVNode } from '../chunk.createVueComponent-bde6c1e7.js';
+import { p as popups } from '../chunk._virtual__popups-ed3e2cce.js';
+import { I as IconTool, s as settingsComponent } from '../chunk.content-dbef4882.js';
 import { A as Addon } from '../chunk.index-b6ece9ed.js';
 import '../chunk._virtual__addons-19cb23e2.js';
 
+/**
+ * @tabler/icons-vue v2.20.0 - MIT
+ */
+
+
+var IconExternalLink = createVueComponent("external-link", "IconExternalLink", [
+  [
+    "path",
+    {
+      d: "M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6",
+      key: "svg-0"
+    }
+  ],
+  ["path", { d: "M11 13l9 -9", key: "svg-1" }],
+  ["path", { d: "M15 4h5v5", key: "svg-2" }]
+]);
+
+/**
+ * @tabler/icons-vue v2.20.0 - MIT
+ */
+
+
+var IconSettings = createVueComponent("settings", "IconSettings", [
+  [
+    "path",
+    {
+      d: "M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z",
+      key: "svg-0"
+    }
+  ],
+  ["path", { d: "M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0", key: "svg-1" }]
+]);
+
 const _hoisted_1$1 = ["src"];
-var script$2 = /* @__PURE__ */ defineComponent({
+var _sfc_main$2 = /* @__PURE__ */ defineComponent({
   __name: "header",
   setup(__props) {
     function openSettingsPage() {
@@ -52,10 +85,7 @@ var script$2 = /* @__PURE__ */ defineComponent({
               onClick: _cache[0] || (_cache[0] = ($event) => openSettingsPage())
             },
             [
-              createVNode(unref(Icon), {
-                class: normalizeClass(_ctx.$style.icon),
-                icon: "uil:cog"
-              }, null, 8, ["class"])
+              createVNode(unref(IconSettings))
             ],
             2
             /* CLASS */
@@ -68,16 +98,14 @@ var script$2 = /* @__PURE__ */ defineComponent({
   }
 });
 
-var css_248z$2 = "._header_ao8zp_2 {\n  background-image: var(--gradient);\n  display: flex;\n  align-items: center;\n  color: #fff;\n}\n._header_ao8zp_2 ._text_ao8zp_7 {\n  font-size: 18px;\n  font-weight: 400;\n  flex: 1;\n}\n._header_ao8zp_2 ._text_ao8zp_7 ._link_ao8zp_11 {\n  color: inherit;\n  margin: 5px;\n  text-decoration: none;\n  opacity: 0.75;\n  font-size: 12px;\n  border-radius: 4px;\n}\n._header_ao8zp_2 ._text_ao8zp_7 ._link_ao8zp_11:focus-visible {\n  outline: none;\n  box-shadow: 0 0 0 3px #fff;\n}\n._header_ao8zp_2 ._logo_ao8zp_24 {\n  height: 30px;\n  padding: 15px 20px;\n}\n._header_ao8zp_2 ._settings_ao8zp_28 {\n  height: 100%;\n  padding: 0px 20px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background: none;\n  color: inherit;\n}\n._header_ao8zp_2 ._settings_ao8zp_28:focus-visible {\n  outline: none;\n  box-shadow: inset 0 0 0 3px #fff;\n}\n._header_ao8zp_2 ._settings_ao8zp_28 ._icon_ao8zp_42 {\n  font-size: 24px;\n}";
+var css_248z$2 = ".header-vue-vue-type-style-index-0-lang-module_header__RHOQw {\n  background-image: var(--gradient);\n  display: flex;\n  align-items: center;\n  color: #fff;\n}\n.header-vue-vue-type-style-index-0-lang-module_header__RHOQw .header-vue-vue-type-style-index-0-lang-module_text__oWMFf {\n  font-size: 18px;\n  font-weight: 400;\n  flex: 1;\n}\n.header-vue-vue-type-style-index-0-lang-module_header__RHOQw .header-vue-vue-type-style-index-0-lang-module_text__oWMFf .header-vue-vue-type-style-index-0-lang-module_link__a9BfL {\n  color: inherit;\n  margin: 5px;\n  text-decoration: none;\n  opacity: 0.75;\n  font-size: 12px;\n  border-radius: 4px;\n}\n.header-vue-vue-type-style-index-0-lang-module_header__RHOQw .header-vue-vue-type-style-index-0-lang-module_text__oWMFf .header-vue-vue-type-style-index-0-lang-module_link__a9BfL:focus-visible {\n  outline: none;\n  box-shadow: 0 0 0 3px #fff;\n}\n.header-vue-vue-type-style-index-0-lang-module_header__RHOQw .header-vue-vue-type-style-index-0-lang-module_logo__Hd5Kc {\n  height: 30px;\n  padding: 15px 20px;\n}\n.header-vue-vue-type-style-index-0-lang-module_header__RHOQw .header-vue-vue-type-style-index-0-lang-module_settings__G5oxG {\n  height: 100%;\n  padding: 0px 20px;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  background: none;\n  color: inherit;\n}\n.header-vue-vue-type-style-index-0-lang-module_header__RHOQw .header-vue-vue-type-style-index-0-lang-module_settings__G5oxG:focus-visible {\n  outline: none;\n  box-shadow: inset 0 0 0 3px #fff;\n}";
+var style0$2 = {"header":"header-vue-vue-type-style-index-0-lang-module_header__RHOQw","text":"header-vue-vue-type-style-index-0-lang-module_text__oWMFf","link":"header-vue-vue-type-style-index-0-lang-module_link__a9BfL","logo":"header-vue-vue-type-style-index-0-lang-module_logo__Hd5Kc","settings":"header-vue-vue-type-style-index-0-lang-module_settings__G5oxG"};
 styleInject(css_248z$2);
 
-var style0$2 = { "header": "_header_ao8zp_2", "text": "_text_ao8zp_7", "link": "_link_ao8zp_11", "logo": "_logo_ao8zp_24", "settings": "_settings_ao8zp_28", "icon": "_icon_ao8zp_42" };
-
-const cssModules$2 = script$2.__cssModules = {};
-cssModules$2["$style"] = style0$2;
-
-
-script$2.__file = "src/popup/header.vue";
+const cssModules$2 = {
+  "$style": style0$2
+};
+var Header = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__cssModules", cssModules$2], ["__file", "/home/runner/work/scratchaddons-rewrite/scratchaddons-rewrite/src/popup/header.vue"]]);
 
 class Auth extends EventTarget {
   id;
@@ -170,19 +198,34 @@ class PopupAddon extends Addon {
 
 const _hoisted_1 = ["onClick"];
 const _hoisted_2 = ["href"];
-var script$1 = /* @__PURE__ */ defineComponent({
+var _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "popups",
   async setup(__props) {
     let __temp, __restore;
     let darkTheme = ref(false);
-    storage$1.valueStream.subscribe((values) => {
+    syncStorage.valueStream.subscribe((values) => {
       if ("darkTheme" in values) {
         darkTheme.value = values.darkTheme;
       }
     });
     const ORDER = ["scratch-messaging", "settings-page"];
     let selectedTab = ref(ORDER[0]);
-    const { addonsEnabled = {} } = ([__temp, __restore] = withAsyncContext(() => storage$1.get("addonsEnabled")), __temp = await __temp, __restore(), __temp);
+    function switchTab(id) {
+      if (id === selectedTab.value)
+        return;
+      localStorage.set({ lastSelectedPopup: id });
+      console.log(id);
+      selectedTab.value = id;
+    }
+    const { lastSelectedPopup } = ([__temp, __restore] = withAsyncContext(() => localStorage.get("lastSelectedPopup")), __temp = await __temp, __restore(), __temp);
+    console.log(lastSelectedPopup);
+    if (lastSelectedPopup) {
+      const selectedId = ORDER.find((id) => id === lastSelectedPopup);
+      if (selectedId) {
+        selectedTab.value = selectedId;
+      }
+    }
+    const { addonsEnabled = {} } = ([__temp, __restore] = withAsyncContext(() => syncStorage.get("addonsEnabled")), __temp = await __temp, __restore(), __temp);
     const enabledPopups = Object.keys(popups).map((id) => {
       if (!addonsEnabled[id])
         return {};
@@ -190,8 +233,8 @@ var script$1 = /* @__PURE__ */ defineComponent({
     }).reduce((prev, curr) => ({ ...prev, ...curr }), {});
     enabledPopups["settings-page"] = {
       name: "Addons",
-      icon: "tool",
-      component: script$3
+      icon: IconTool,
+      component: settingsComponent
     };
     const instances = {};
     Object.keys(enabledPopups).forEach((id) => {
@@ -222,12 +265,12 @@ var script$1 = /* @__PURE__ */ defineComponent({
                     renderList(ORDER, (id) => {
                       return createBaseVNode("button", {
                         class: normalizeClass([_ctx.$style.tab, { [_ctx.$style.sel]: id === unref(selectedTab) }]),
-                        onClick: ($event) => isRef(selectedTab) ? selectedTab.value = id : selectedTab = id
+                        onClick: ($event) => switchTab(id)
                       }, [
-                        createVNode(unref(Icon), {
+                        (openBlock(), createBlock(resolveDynamicComponent(unref(enabledPopups)[id].icon), {
                           class: normalizeClass(_ctx.$style.icon),
-                          icon: "tabler:" + unref(enabledPopups)[id].icon
-                        }, null, 8, ["class", "icon"]),
+                          width: "18px"
+                        }, null, 8, ["class"])),
                         createBaseVNode(
                           "span",
                           {
@@ -261,9 +304,10 @@ var script$1 = /* @__PURE__ */ defineComponent({
                           target: "_blank",
                           href: "fullscreen.html?id=" + id
                         }, [
-                          createVNode(unref(Icon), {
+                          createVNode(unref(IconExternalLink), {
                             class: normalizeClass(_ctx.$style.popout),
-                            icon: "uil:external-link-alt"
+                            height: "10px",
+                            width: "10px"
                           }, null, 8, ["class"])
                         ], 10, _hoisted_2)) : createCommentVNode("v-if", true)
                       ], 10, _hoisted_1);
@@ -300,18 +344,16 @@ var script$1 = /* @__PURE__ */ defineComponent({
   }
 });
 
-var css_248z$1 = "._container_k97y6_2 {\n  height: inherit;\n  display: flex;\n  flex-direction: column;\n  font-family: \"Sora\", sans-serif;\n  width: 400px;\n  height: 600px;\n}\n\n._popups_k97y6_11 {\n  background-color: var(--background-primary);\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  overflow: auto;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 {\n  background-color: var(--background-primary);\n  padding: 10px;\n  position: sticky;\n  top: 0;\n  display: flex;\n  flex: 0 0 50px;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 {\n  border-radius: 4px;\n  border: 1px solid var(--background-tertiary);\n  background: var(--background-secondary);\n  box-shadow: var(--content-shadow);\n  padding: 8px;\n  display: flex;\n  gap: 8px;\n  width: 100%;\n  overflow: hidden;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24 {\n  display: flex;\n  align-items: center;\n  padding: 0px 8px;\n  font-size: 12px;\n  color: var(--content-text);\n  background: none;\n  border: none;\n  border-radius: 8px;\n  transition: 0.2s ease background;\n  font-family: inherit;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:has(._link_k97y6_45) {\n  padding: 0px 15.5px;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:hover {\n  background-color: var(--button-hover-background);\n  padding: 0px 8px;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:focus-visible {\n  padding: 0px 8px;\n  outline: none;\n  box-shadow: inset 0 0 0 3px var(--content-text);\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24._sel_k97y6_57 {\n  padding: 0px 8px;\n  background-image: var(--gradient);\n  color: #fff;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24 ._icon_k97y6_62 {\n  font-size: 18px;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24 ._name_k97y6_65 {\n  padding: 0px 0px 0px 5px;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24 ._badge_k97y6_68 {\n  background-color: rgba(0, 0, 0, 0.2666666667);\n  padding: 4px;\n  border-radius: 4px;\n  margin-left: 4px;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24 ._link_k97y6_45 {\n  display: none;\n  outline: none;\n  color: inherit;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24._sel_k97y6_57 ._link_k97y6_45, ._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:focus-visible ._link_k97y6_45, ._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:hover ._link_k97y6_45 {\n  display: flex;\n  height: 100%;\n  align-items: center;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24._sel_k97y6_57 ._link_k97y6_45 ._popout_k97y6_85, ._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:focus-visible ._link_k97y6_45 ._popout_k97y6_85, ._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:hover ._link_k97y6_45 ._popout_k97y6_85 {\n  font-size: 10px;\n  margin-left: 1px;\n  padding: 2px;\n  border-radius: 2px;\n}\n._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24._sel_k97y6_57 ._link_k97y6_45:hover ._popout_k97y6_85, ._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:focus-visible ._link_k97y6_45:hover ._popout_k97y6_85, ._popups_k97y6_11 ._sticky_k97y6_17 ._tabs_k97y6_24 ._tab_k97y6_24:hover ._link_k97y6_45:hover ._popout_k97y6_85 {\n  background: #fff;\n  color: var(--theme);\n}\n\n/* width */\n::-webkit-scrollbar {\n  width: 7px;\n  height: 7px;\n}\n\n/* hide track */\n::-webkit-scrollbar-track,\n::-webkit-scrollbar-corner {\n  background: none;\n}\n\n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: gray;\n  border-radius: 4px;\n}";
+var css_248z$1 = ".popups-vue-vue-type-style-index-0-lang-module_container__XKCBY {\n  height: inherit;\n  display: flex;\n  flex-direction: column;\n  font-family: \"Sora\", sans-serif;\n  width: 400px;\n  height: 600px;\n}\n\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo {\n  background-color: var(--background-primary);\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  overflow: auto;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q {\n  background-color: var(--background-primary);\n  padding: 10px 10px 0px 10px;\n  position: sticky;\n  top: 0;\n  display: flex;\n  flex: 0 0 50px;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz {\n  border-radius: 4px;\n  border: 1px solid var(--background-tertiary);\n  background: var(--background-secondary);\n  box-shadow: var(--content-shadow);\n  padding: 8px;\n  display: flex;\n  gap: 8px;\n  width: 100%;\n  overflow: hidden;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB {\n  display: flex;\n  align-items: center;\n  padding: 0px 8px;\n  font-size: 12px;\n  color: var(--content-text);\n  background: none;\n  border: none;\n  border-radius: 8px;\n  transition: 0.2s ease background;\n  font-family: inherit;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:has(.popups-vue-vue-type-style-index-0-lang-module_link__KNGSe) {\n  padding: 0px 15.5px;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:hover {\n  background-color: var(--button-hover-background);\n  padding: 0px 8px;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:focus-visible {\n  padding: 0px 8px;\n  outline: none;\n  box-shadow: inset 0 0 0 3px var(--content-text);\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB.popups-vue-vue-type-style-index-0-lang-module_sel__gxEhb {\n  padding: 0px 8px;\n  background-image: var(--gradient);\n  color: #fff;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB .popups-vue-vue-type-style-index-0-lang-module_name__qEI-i {\n  padding: 0px 0px 0px 5px;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB .popups-vue-vue-type-style-index-0-lang-module_badge__9pvlc {\n  background-color: rgba(0, 0, 0, 0.2666666667);\n  padding: 4px;\n  border-radius: 4px;\n  margin-left: 4px;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe {\n  display: none;\n  outline: none;\n  color: inherit;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB.popups-vue-vue-type-style-index-0-lang-module_sel__gxEhb .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe, .popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:focus-visible .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe, .popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:hover .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe {\n  display: flex;\n  height: 100%;\n  align-items: center;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB.popups-vue-vue-type-style-index-0-lang-module_sel__gxEhb .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe .popups-vue-vue-type-style-index-0-lang-module_popout__U4ifd, .popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:focus-visible .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe .popups-vue-vue-type-style-index-0-lang-module_popout__U4ifd, .popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:hover .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe .popups-vue-vue-type-style-index-0-lang-module_popout__U4ifd {\n  margin-left: 1px;\n  padding: 2px;\n  border-radius: 2px;\n}\n.popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB.popups-vue-vue-type-style-index-0-lang-module_sel__gxEhb .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe:hover .popups-vue-vue-type-style-index-0-lang-module_popout__U4ifd, .popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:focus-visible .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe:hover .popups-vue-vue-type-style-index-0-lang-module_popout__U4ifd, .popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo .popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q .popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz .popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB:hover .popups-vue-vue-type-style-index-0-lang-module_link__KNGSe:hover .popups-vue-vue-type-style-index-0-lang-module_popout__U4ifd {\n  background: #fff;\n  color: var(--theme);\n}\n\n/* width */\n::-webkit-scrollbar {\n  width: 7px;\n  height: 7px;\n}\n\n/* hide track */\n::-webkit-scrollbar-track,\n::-webkit-scrollbar-corner {\n  background: none;\n}\n\n/* Handle */\n::-webkit-scrollbar-thumb {\n  background: gray;\n  border-radius: 4px;\n}";
+var style0$1 = {"container":"popups-vue-vue-type-style-index-0-lang-module_container__XKCBY","popups":"popups-vue-vue-type-style-index-0-lang-module_popups__v-ONo","sticky":"popups-vue-vue-type-style-index-0-lang-module_sticky__BYh2q","tabs":"popups-vue-vue-type-style-index-0-lang-module_tabs__kEJqz","tab":"popups-vue-vue-type-style-index-0-lang-module_tab__e2KqB","link":"popups-vue-vue-type-style-index-0-lang-module_link__KNGSe","sel":"popups-vue-vue-type-style-index-0-lang-module_sel__gxEhb","name":"popups-vue-vue-type-style-index-0-lang-module_name__qEI-i","badge":"popups-vue-vue-type-style-index-0-lang-module_badge__9pvlc","popout":"popups-vue-vue-type-style-index-0-lang-module_popout__U4ifd"};
 styleInject(css_248z$1);
 
-var style0$1 = { "container": "_container_k97y6_2", "popups": "_popups_k97y6_11", "sticky": "_sticky_k97y6_17", "tabs": "_tabs_k97y6_24", "tab": "_tab_k97y6_24", "link": "_link_k97y6_45", "sel": "_sel_k97y6_57", "icon": "_icon_k97y6_62", "name": "_name_k97y6_65", "badge": "_badge_k97y6_68", "popout": "_popout_k97y6_85" };
+const cssModules$1 = {
+  "$style": style0$1
+};
+var Popups = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__cssModules", cssModules$1], ["__file", "/home/runner/work/scratchaddons-rewrite/scratchaddons-rewrite/src/popup/popups.vue"]]);
 
-const cssModules$1 = script$1.__cssModules = {};
-cssModules$1["$style"] = style0$1;
-
-
-script$1.__file = "src/popup/popups.vue";
-
-var script = /* @__PURE__ */ defineComponent({
+var _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "index",
   setup(__props) {
     return (_ctx, _cache) => {
@@ -321,10 +363,10 @@ var script = /* @__PURE__ */ defineComponent({
           class: normalizeClass(_ctx.$style.container)
         },
         [
-          createVNode(script$2),
+          createVNode(Header),
           (openBlock(), createBlock(Suspense, null, {
             default: withCtx(() => [
-              createVNode(script$1)
+              createVNode(Popups)
             ]),
             _: 1
             /* STABLE */
@@ -337,15 +379,13 @@ var script = /* @__PURE__ */ defineComponent({
   }
 });
 
-var css_248z = "._container_1mz44_2 {\n  display: flex;\n  flex-direction: column;\n  font-family: \"Sora\", sans-serif;\n  width: 400px;\n  height: 600px;\n}";
+var css_248z = ".index-vue-vue-type-style-index-0-lang-module_container__664jB {\n  display: flex;\n  flex-direction: column;\n  font-family: \"Sora\", sans-serif;\n  width: 400px;\n  height: 600px;\n}";
+var style0 = {"container":"index-vue-vue-type-style-index-0-lang-module_container__664jB"};
 styleInject(css_248z);
 
-var style0 = { "container": "_container_1mz44_2" };
+const cssModules = {
+  "$style": style0
+};
+var App = /* @__PURE__ */ _export_sfc(_sfc_main, [["__cssModules", cssModules], ["__file", "/home/runner/work/scratchaddons-rewrite/scratchaddons-rewrite/src/popup/index.vue"]]);
 
-const cssModules = script.__cssModules = {};
-cssModules["$style"] = style0;
-
-
-script.__file = "src/popup/index.vue";
-
-createApp(script).mount(document.body);
+createApp(App).mount(document.body);

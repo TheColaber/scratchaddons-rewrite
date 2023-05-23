@@ -1,7 +1,7 @@
 import { d as definePopupManifest } from './chunk._virtual__addons-19cb23e2.js';
-import { a as styleInject, d as defineComponent, r as ref, w as withDirectives, v as vShow, c as createElementBlock, b as createBaseVNode, e as createVNode, n as normalizeClass, u as unref, t as toDisplayString, f as createTextVNode, g as renderSlot, h as normalizeStyle, i as createCommentVNode, j as withCtx, k as withAsyncContext, o as openBlock, I as Icon, F as Fragment, l as renderList } from './chunk.style-inject.es-cbd22147.js';
+import { a as styleInject, _ as _export_sfc, c as createVueComponent, d as defineComponent, r as ref, o as openBlock, b as createElementBlock, u as unref, n as normalizeClass, e as createTextVNode, f as createBaseVNode, g as normalizeStyle, h as createCommentVNode, i as createVNode, w as withCtx, j as withAsyncContext, t as toDisplayString, F as Fragment, k as renderList, m as withDirectives, v as vShow, I as Icon, p as renderSlot } from './chunk.createVueComponent-bde6c1e7.js';
 
-var script$2 = /* @__PURE__ */ defineComponent({
+var _sfc_main$2 = /* @__PURE__ */ defineComponent({
   __name: "section",
   props: {
     noRowGap: { type: Boolean, required: false },
@@ -34,7 +34,7 @@ var script$2 = /* @__PURE__ */ defineComponent({
                 {
                   class: normalizeClass(_ctx.$style.text)
                 },
-                toDisplayString(__props.title),
+                toDisplayString(_ctx.title),
                 3
                 /* TEXT, CLASS */
               ),
@@ -46,10 +46,10 @@ var script$2 = /* @__PURE__ */ defineComponent({
                 [
                   createVNode(unref(Icon), {
                     class: normalizeClass(_ctx.$style.icon),
-                    icon: "uil:" + __props.icon
+                    icon: "uil:" + _ctx.icon
                   }, null, 8, ["class", "icon"]),
                   createTextVNode(
-                    " " + toDisplayString(__props.length),
+                    " " + toDisplayString(_ctx.length),
                     1
                     /* TEXT */
                   )
@@ -64,7 +64,7 @@ var script$2 = /* @__PURE__ */ defineComponent({
           withDirectives(createBaseVNode(
             "div",
             {
-              class: normalizeClass([_ctx.$style.list, { [_ctx.$style.noRowGap]: __props.noRowGap }])
+              class: normalizeClass([_ctx.$style.list, { [_ctx.$style.noRowGap]: _ctx.noRowGap }])
             },
             [
               renderSlot(_ctx.$slots, "default")
@@ -78,22 +78,20 @@ var script$2 = /* @__PURE__ */ defineComponent({
         2
         /* CLASS */
       )), [
-        [vShow, __props.length]
+        [vShow, _ctx.length]
       ]);
     };
   }
 });
 
-var css_248z$1 = "._message-type_16sfz_2 {\n  border-radius: 4px;\n  border: 1px solid var(--background-tertiary);\n  background: var(--background-secondary);\n  margin: 0px 10px;\n  box-shadow: var(--content-shadow);\n}\n._message-type_16sfz_2 ._title_16sfz_9 {\n  font-size: 12px;\n  color: var(--content-text);\n  padding: 6px;\n  padding-inline-end: 9px;\n  cursor: default;\n  display: flex;\n  align-items: center;\n  user-select: none;\n}\n._message-type_16sfz_2 ._title_16sfz_9 ._text_16sfz_19 {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  flex: 1;\n  margin-left: 6px;\n}\n._message-type_16sfz_2 ._title_16sfz_9 ._right_16sfz_27 {\n  white-space: nowrap;\n  font-size: 12px;\n}\n._message-type_16sfz_2 ._title_16sfz_9 ._right_16sfz_27 ._icon_16sfz_30 {\n  font-size: 14px;\n  vertical-align: text-bottom;\n}\n._message-type_16sfz_2 ._title_16sfz_9 ._dropdown_16sfz_36 {\n  transition: background 0.2s;\n  padding: 4px;\n  border-radius: 4px;\n  font-size: 24px;\n}\n._message-type_16sfz_2 ._title_16sfz_9:hover ._dropdown_16sfz_36 {\n  background: var(--hover-highlight);\n}\n._message-type_16sfz_2 ._list_16sfz_48 {\n  color: var(--description-text);\n  font-size: 12px;\n  padding: 5px 16px 16px 16px;\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n}\n._message-type_16sfz_2 ._list_16sfz_48._noRowGap_16sfz_55 {\n  gap: 0px 10px;\n}";
+var css_248z$1 = ".section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 {\n  border-radius: 4px;\n  border: 1px solid var(--background-tertiary);\n  background: var(--background-secondary);\n  margin: 0px 10px;\n  box-shadow: var(--content-shadow);\n}\n.section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 .section-vue-vue-type-style-index-0-lang-module_title__zdmLO {\n  font-size: 12px;\n  color: var(--content-text);\n  padding: 6px;\n  padding-inline-end: 9px;\n  cursor: default;\n  display: flex;\n  align-items: center;\n  user-select: none;\n}\n.section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 .section-vue-vue-type-style-index-0-lang-module_title__zdmLO .section-vue-vue-type-style-index-0-lang-module_text__TY55C {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  flex: 1;\n  margin-left: 6px;\n}\n.section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 .section-vue-vue-type-style-index-0-lang-module_title__zdmLO .section-vue-vue-type-style-index-0-lang-module_right__VVitn {\n  white-space: nowrap;\n  font-size: 12px;\n}\n.section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 .section-vue-vue-type-style-index-0-lang-module_title__zdmLO .section-vue-vue-type-style-index-0-lang-module_right__VVitn .section-vue-vue-type-style-index-0-lang-module_icon__GDsdT {\n  font-size: 14px;\n  vertical-align: text-bottom;\n}\n.section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 .section-vue-vue-type-style-index-0-lang-module_title__zdmLO .section-vue-vue-type-style-index-0-lang-module_dropdown__7us8c {\n  transition: background 0.2s;\n  padding: 4px;\n  border-radius: 4px;\n  font-size: 24px;\n}\n.section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 .section-vue-vue-type-style-index-0-lang-module_title__zdmLO:hover .section-vue-vue-type-style-index-0-lang-module_dropdown__7us8c {\n  background: var(--hover-highlight);\n}\n.section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 .section-vue-vue-type-style-index-0-lang-module_list__z5Nei {\n  color: var(--description-text);\n  font-size: 12px;\n  padding: 5px 16px 16px 16px;\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px;\n}\n.section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9 .section-vue-vue-type-style-index-0-lang-module_list__z5Nei.section-vue-vue-type-style-index-0-lang-module_noRowGap__h3WcD {\n  gap: 0px 10px;\n}";
+var style0$1 = {"message-type":"section-vue-vue-type-style-index-0-lang-module_message-type__Xkta9","title":"section-vue-vue-type-style-index-0-lang-module_title__zdmLO","text":"section-vue-vue-type-style-index-0-lang-module_text__TY55C","right":"section-vue-vue-type-style-index-0-lang-module_right__VVitn","icon":"section-vue-vue-type-style-index-0-lang-module_icon__GDsdT","dropdown":"section-vue-vue-type-style-index-0-lang-module_dropdown__7us8c","list":"section-vue-vue-type-style-index-0-lang-module_list__z5Nei","noRowGap":"section-vue-vue-type-style-index-0-lang-module_noRowGap__h3WcD"};
 styleInject(css_248z$1);
 
-var style0$1 = { "message-type": "_message-type_16sfz_2", "title": "_title_16sfz_9", "text": "_text_16sfz_19", "right": "_right_16sfz_27", "icon": "_icon_16sfz_30", "dropdown": "_dropdown_16sfz_36", "list": "_list_16sfz_48", "noRowGap": "_noRowGap_16sfz_55" };
-
-const cssModules$1 = script$2.__cssModules = {};
-cssModules$1["$style"] = style0$1;
-
-
-script$2.__file = "src/popup/popups/scratch-messaging/section.vue";
+const cssModules$1 = {
+  "$style": style0$1
+};
+var Section = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__cssModules", cssModules$1], ["__file", "/home/runner/work/scratchaddons-rewrite/scratchaddons-rewrite/src/popup/popups/scratch-messaging/section.vue"]]);
 
 const _hoisted_1$1 = { key: 0 };
 const _hoisted_2 = { key: 1 };
@@ -109,10 +107,10 @@ const _hoisted_11 = ["href"];
 const _hoisted_12 = ["href"];
 const _hoisted_13 = ["href"];
 const _hoisted_14 = ["href"];
-var script$1 = /* @__PURE__ */ defineComponent({
+var _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "component",
   props: {
-    addon: { type: null, required: true }
+    addon: { type: Object, required: true }
   },
   setup(__props) {
     const { addon } = __props;
@@ -251,7 +249,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             2
             /* CLASS */
           )) : createCommentVNode("v-if", true),
-          createVNode(script$2, {
+          createVNode(Section, {
             length: unref(follows).length,
             title: "Follows",
             icon: "user-plus",
@@ -275,7 +273,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             _: 1
             /* STABLE */
           }, 8, ["length"]),
-          createVNode(script$2, {
+          createVNode(Section, {
             length: unref(studioInvites).length,
             title: "Studio Invites",
             icon: "envelope-add"
@@ -306,7 +304,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             _: 1
             /* STABLE */
           }, 8, ["length"]),
-          createVNode(script$2, {
+          createVNode(Section, {
             length: unref(studioPromotions).length,
             title: "Studio promotions",
             icon: "shield-plus"
@@ -337,7 +335,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             _: 1
             /* STABLE */
           }, 8, ["length"]),
-          createVNode(script$2, {
+          createVNode(Section, {
             length: unref(studioPromotions).length,
             title: "Studio host transfers",
             icon: "users-alt"
@@ -369,7 +367,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             _: 1
             /* STABLE */
           }, 8, ["length"]),
-          createVNode(script$2, {
+          createVNode(Section, {
             length: unref(forumActivity).length,
             title: "Forum activity",
             icon: "comments-alt"
@@ -395,7 +393,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             _: 1
             /* STABLE */
           }, 8, ["length"]),
-          createVNode(script$2, {
+          createVNode(Section, {
             length: unref(studioActivity).length,
             title: "Studio activity",
             icon: "folder-exclamation"
@@ -421,7 +419,7 @@ var script$1 = /* @__PURE__ */ defineComponent({
             _: 1
             /* STABLE */
           }, 8, ["length"]),
-          createVNode(script$2, {
+          createVNode(Section, {
             length: unref(remixes).length,
             title: "Remixes",
             icon: "arrow-random"
@@ -465,19 +463,17 @@ var script$1 = /* @__PURE__ */ defineComponent({
   }
 });
 
-var css_248z = "._container_1hq45_2 {\n  flex: 1;\n  display: flex;\n  gap: 10px;\n  flex-direction: column;\n  background: var(--background-primary);\n  color: var(--content-text);\n  padding-bottom: 10px;\n}\n\n._link_1hq45_12 {\n  color: var(--blue-text);\n  text-decoration: none;\n}\n._link_1hq45_12:hover {\n  text-decoration: underline;\n}\n\n._loader_1hq45_21 {\n  position: absolute;\n  left: 50%;\n  transform: translate(-50%, 10%);\n  padding: 15px 20px;\n  overflow: hidden;\n  background-color: var(--button-hover-background);\n  border-radius: 8px;\n  box-shadow: var(--large-shadow);\n  font-weight: 600;\n}\n._loader_1hq45_21 ._bar_1hq45_31 {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 0;\n  height: 4px;\n  background-image: var(--gradient);\n}";
+var css_248z = ".component-vue-vue-type-style-index-0-lang-module_container__ND083 {\n  flex: 1;\n  display: flex;\n  gap: 10px;\n  flex-direction: column;\n  background: var(--background-primary);\n  color: var(--content-text);\n  padding-bottom: 10px;\n  margin-top: 10px;\n}\n\n.component-vue-vue-type-style-index-0-lang-module_link__nuOuD {\n  color: var(--blue-text);\n  text-decoration: none;\n}\n.component-vue-vue-type-style-index-0-lang-module_link__nuOuD:hover {\n  text-decoration: underline;\n}\n\n.component-vue-vue-type-style-index-0-lang-module_loader__GkFSv {\n  position: absolute;\n  left: 50%;\n  transform: translate(-50%, 10%);\n  padding: 15px 20px;\n  overflow: hidden;\n  background-color: var(--button-hover-background);\n  border-radius: 8px;\n  box-shadow: var(--large-shadow);\n  font-weight: 600;\n}\n.component-vue-vue-type-style-index-0-lang-module_loader__GkFSv .component-vue-vue-type-style-index-0-lang-module_bar__OH59n {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  width: 0;\n  height: 4px;\n  background-image: var(--gradient);\n}";
+var style0 = {"container":"component-vue-vue-type-style-index-0-lang-module_container__ND083","link":"component-vue-vue-type-style-index-0-lang-module_link__nuOuD","loader":"component-vue-vue-type-style-index-0-lang-module_loader__GkFSv","bar":"component-vue-vue-type-style-index-0-lang-module_bar__OH59n"};
 styleInject(css_248z);
 
-var style0 = { "container": "_container_1hq45_2", "link": "_link_1hq45_12", "loader": "_loader_1hq45_21", "bar": "_bar_1hq45_31" };
-
-const cssModules = script$1.__cssModules = {};
-cssModules["$style"] = style0;
-
-
-script$1.__file = "src/popup/popups/scratch-messaging/component.vue";
+const cssModules = {
+  "$style": style0
+};
+var component = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__cssModules", cssModules], ["__file", "/home/runner/work/scratchaddons-rewrite/scratchaddons-rewrite/src/popup/popups/scratch-messaging/component.vue"]]);
 
 const _hoisted_1 = { key: 0 };
-var script = /* @__PURE__ */ defineComponent({
+var _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "badge",
   props: {
     addon: { type: null, required: true }
@@ -500,7 +496,23 @@ var script = /* @__PURE__ */ defineComponent({
   }
 });
 
-script.__file = "src/popup/popups/scratch-messaging/badge.vue";
+var badge = /* @__PURE__ */ _export_sfc(_sfc_main, [["__file", "/home/runner/work/scratchaddons-rewrite/scratchaddons-rewrite/src/popup/popups/scratch-messaging/badge.vue"]]);
+
+/**
+ * @tabler/icons-vue v2.20.0 - MIT
+ */
+
+
+var IconMail = createVueComponent("mail", "IconMail", [
+  [
+    "path",
+    {
+      d: "M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z",
+      key: "svg-0"
+    }
+  ],
+  ["path", { d: "M3 7l9 6l9 -6", key: "svg-1" }]
+]);
 
 var addon = definePopupManifest({
   name: "Scratch Messaging",
@@ -514,10 +526,10 @@ var addon = definePopupManifest({
     }
   ],
   popup: {
-    component: script$1,
+    component,
     name: "Messages",
-    icon: "mail",
-    badge: script
+    icon: IconMail,
+    badge
   },
   versionAdded: "1.0.0",
   tags: ["recommended"],

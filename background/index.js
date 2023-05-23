@@ -1,6 +1,6 @@
-import { s as storage$1 } from '../chunk.style-inject.es-cbd22147.js';
+import { s as syncStorage, l as localStorage } from '../chunk.createVueComponent-bde6c1e7.js';
 import { a as addons } from '../chunk._virtual__addons-19cb23e2.js';
-import { p as popups } from '../chunk._virtual__popups-11514f3e.js';
+import { p as popups } from '../chunk._virtual__popups-ed3e2cce.js';
 import { A as Addon } from '../chunk.index-b6ece9ed.js';
 
 chrome.commands.onCommand.addListener((command) => {
@@ -95,7 +95,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, { url }) => {
   if (status !== "loading")
     return;
   const l10nUrls = await getL10NURLs(url);
-  const { addonsEnabled } = await storage$1.get("addonsEnabled");
+  const { addonsEnabled } = await syncStorage.get("addonsEnabled");
   await chrome.scripting.executeScript({
     target: { tabId },
     injectImmediately: true,
@@ -130,7 +130,7 @@ async function getL10NURLs(url) {
 chrome.runtime.onInstalled.addListener(async (details) => {
   const { version } = chrome.runtime.getManifest();
   if (details.reason === "install" || details.reason === "update" && details.previousVersion !== version) {
-    storage$1.set({ installedDetails: details });
+    localStorage.set({ installedDetails: details });
     chrome.runtime.openOptionsPage();
   }
 });
@@ -143,14 +143,14 @@ chrome.management.getSelf().then((info) => {
     chrome.runtime.setUninstallURL(url);
   }
 });
-storage$1.get("addonsEnabled").then(({ addonsEnabled = {} }) => {
+syncStorage.get("addonsEnabled").then(({ addonsEnabled = {} }) => {
   const allAddons = { ...addons, ...popups };
   for (const id in allAddons) {
     const manifest = allAddons[id];
     if (addonsEnabled[id] === void 0)
       addonsEnabled[id] = !!manifest.enabledByDefault;
   }
-  storage$1.set({ addonsEnabled });
+  syncStorage.set({ addonsEnabled });
 });
 
 class Auth extends EventTarget {
